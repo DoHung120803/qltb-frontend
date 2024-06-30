@@ -1,0 +1,16 @@
+.wrapper {
+    height: var(--default-layout-header-height);
+    padding: 0;
+    border: 1px solid #eff0f6;
+    background: #ffffff;
+
+    .user-info {
+        .avatar {
+            width: 5rem;
+            height: 5rem;
+            border-radius: 50%;
+            margin-left: 10px;
+            margin-right: 5px;
+        }
+    }
+}
