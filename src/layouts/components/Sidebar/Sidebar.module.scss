@@ -1,0 +1,18 @@
+.wrapper {
+    height: 100%;
+    background-color: #344054;
+
+    .top-rectangle {
+        height: var(--default-layout-header-height);
+        width: 100%;
+        background-color: #98a2b3;
+
+        .menu-icon {
+            position: relative;
+            top: 40%;
+            left: 80%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+        }
+    }
+}

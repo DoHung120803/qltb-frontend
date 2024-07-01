@@ -1,6 +1,6 @@
 import classNames from "classnames/bind";
 import styles from "./Header.module.scss";
-import { CaretDownIcon } from "~/components/Icons";
+import { AvatarIcon, CaretDownIcon } from "~/components/Icons";
 
 const cx = classNames.bind(styles);
 
@@ -16,11 +16,9 @@ function Header() {
                 <span>
                     <b>Admin</b>
                 </span>
-                <img
-                    className={cx("avatar")}
-                    alt="avatar"
-                    src="https://freesvg.org/storage/img/thumb/abstract-user-flat-4.png"
-                />
+                <span className={cx("avatar")}>
+                    <AvatarIcon />
+                </span>
                 <span>
                     <CaretDownIcon />
                 </span>
