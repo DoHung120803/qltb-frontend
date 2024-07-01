@@ -1,4 +1,5 @@
 import config from "~/config";
+import DoanhMucGiaoVien from "~/pages/DoanhMucGiaoVien";
 
 // Layouts
 // import { HeaderOnly } from "~/layouts";
@@ -19,16 +20,7 @@ import Home from "~/pages/Home";
 // Public routes
 const privateRoutes = [
     { path: config.routes.home, component: Home },
-    // { path: config.routes.following, component: Following },
-    // { path: config.routes.live, component: Live },
-    // { path: config.routes.profile, component: Profile },
-    // { path: config.routes.upload, component: Upload },
-    // { path: config.routes.search, component: Search, layout: null },
-    // { path: config.routes.anime, component: AnimePlayer },
-    // { path: config.routes.animes, component: AnimeList },
-    // { path: config.routes.update, component: Update },
-    // { path: config.routes.login, component: Login, layout: null },
-    // { path: config.routes.register, component: Register, layout: null },
+    { path: config.routes.doanh_muc_giao_vien, component: DoanhMucGiaoVien },
 ];
 
 export { privateRoutes };

@@ -1,15 +1,6 @@
 const routes = {
     home: "/",
-    // following: "/following",
-    // profile: "/:nickname",
-    // upload: "/upload",
-    // search: "/search",
-    // live: "/live",
-    // anime: "/animes/:id",
-    // animes: "/animes",
-    // update: "/animes/:id/update",
-    // login: "/auth/login",
-    // register: "/register",
+    doanh_muc_giao_vien: "/quan-ly-doanh-muc/doanh-muc-giao-vien",
 };
 
 export default routes;

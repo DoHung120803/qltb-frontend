@@ -1,8 +1,19 @@
+.wrapper {
+    height: 100%;
+    overflow: hidden;
+    background-color: #e5e5e5;
+}
+
 .title {
-    padding: 5rem 7rem;
+    padding: 3rem 7rem;
     font-size: 36px;
     font-weight: 700;
     line-height: 43.57px;
     letter-spacing: -0.15399999916553497px;
     text-align: left;
+}
+
+.analysis {
+    height: 100%;
+    margin-left: 12rem;
 }
