@@ -36,7 +36,12 @@ export const AvatarIcon = ({
     </svg>
 );
 
-export const MenuIcon = ({ width = "4rem", height = "4rem", className }) => (
+export const MenuIcon = ({
+    width = "4rem",
+    height = "4rem",
+    className,
+    fill = "white",
+}) => (
     <svg
         width={width}
         height={height}
@@ -46,7 +51,7 @@ export const MenuIcon = ({ width = "4rem", height = "4rem", className }) => (
     >
         <path
             d="M0.951172 27H10.1202V23.8333H0.951172V27ZM0.951172 8V11.1667H28.4581V8H0.951172ZM0.951172 19.0833H19.2892V15.9167H0.951172V19.0833Z"
-            fill="white"
+            fill={fill}
         />
     </svg>
 );
@@ -145,6 +150,81 @@ export const QuanLyMuonTraIcon = ({
             fill="white"
             stroke="white"
             stroke-width="0.4"
+        />
+    </svg>
+);
+
+export const PencilIcon = ({ width = "2rem", height = "2rem", className }) => (
+    <svg
+        width={width}
+        height={height}
+        viewBox="0 0 20 20"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+    >
+        <path
+            d="M14.5 1.62132C14.8978 1.2235 15.4374 1 16 1C16.2786 1 16.5544 1.05487 16.8118 1.16148C17.0692 1.26808 17.303 1.42434 17.5 1.62132C17.697 1.8183 17.8532 2.05216 17.9598 2.30953C18.0665 2.5669 18.1213 2.84274 18.1213 3.12132C18.1213 3.3999 18.0665 3.67574 17.9598 3.93311C17.8532 4.19048 17.697 4.42434 17.5 4.62132L5 17.1213L1 18.1213L2 14.1213L14.5 1.62132Z"
+            stroke="#5C73DB"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+        />
+    </svg>
+);
+
+export const LineIcon = ({ width = "1rem", height = "1rem", className }) => (
+    <svg
+        width={width}
+        height={height}
+        viewBox="0 0 11 3"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+    >
+        <path
+            d="M1 1.12109H10"
+            stroke="#5C73DB"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+        />
+    </svg>
+);
+
+export const DeleteIcon = ({ width = "2rem", height = "2rem", className }) => (
+    <svg
+        width={width}
+        height={height}
+        viewBox="0 0 20 22"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+    >
+        <path
+            d="M1 5H3H19"
+            stroke="#DC2626"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+        />
+        <path
+            d="M6 5V3C6 2.46957 6.21071 1.96086 6.58579 1.58579C6.96086 1.21071 7.46957 1 8 1H12C12.5304 1 13.0391 1.21071 13.4142 1.58579C13.7893 1.96086 14 2.46957 14 3V5M17 5V19C17 19.5304 16.7893 20.0391 16.4142 20.4142C16.0391 20.7893 15.5304 21 15 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5H17Z"
+            stroke="#DC2626"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+        />
+        <path
+            d="M8 10V16"
+            stroke="#DC2626"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+        />
+        <path
+            d="M12 10V16"
+            stroke="#DC2626"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
         />
     </svg>
 );
