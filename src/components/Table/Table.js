@@ -1,10 +1,11 @@
 import classNames from "classnames/bind";
 import styles from "./Table.module.scss";
 import { DeleteIcon, LineIcon, MenuIcon, PencilIcon } from "../Icons";
+import { Link } from "react-router-dom";
 
 const cx = classNames.bind(styles);
 
-function Table({ fields = [] }) {
+function Table({ fields = [], teachers = [] }) {
     return (
         <form
             name="container-form"
@@ -30,183 +31,43 @@ function Table({ fields = [] }) {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>GV00001</td>
-                        <td>Nguyễn Văn A</td>
-                        <td>Nam</td>
-                        <td>Toán Lý Hóa</td>
-                        <td>
-                            <span className={cx("update-icon")}>
-                                <PencilIcon />
-                                <span className={cx("line-icon")}>
-                                    <LineIcon />
+                    {teachers.map((teacher, index) => (
+                        <tr key={index}>
+                            <td>{teacher.maGV}</td>
+                            <td>{teacher.tenGV}</td>
+                            <td>{teacher.gioiTinh}</td>
+                            <td>
+                                {teacher.maToCM === "TCM00001"
+                                    ? "Toán Lý"
+                                    : teacher.maToCM === "TCM00002"
+                                    ? "Văn Sử"
+                                    : "Tổng Hợp"}
+                            </td>
+                            <td>
+                                <span className={cx("update-icon")}>
+                                    <PencilIcon />
+                                    <span className={cx("line-icon")}>
+                                        <LineIcon />
+                                    </span>
                                 </span>
-                            </span>
-                            <span>
-                                <DeleteIcon />
-                            </span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>GV00001</td>
-                        <td>Nguyễn Văn A</td>
-                        <td>Nam</td>
-                        <td>Toán Lý Hóa</td>
-                        <td>
-                            <span className={cx("update-icon")}>
-                                <PencilIcon />
-                                <span className={cx("line-icon")}>
-                                    <LineIcon />
+                                <span>
+                                    <DeleteIcon />
                                 </span>
-                            </span>
-                            <span>
-                                <DeleteIcon />
-                            </span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>GV00001</td>
-                        <td>Nguyễn Văn A</td>
-                        <td>Nam</td>
-                        <td>Toán Lý Hóa</td>
-                        <td>
-                            <span className={cx("update-icon")}>
-                                <PencilIcon />
-                                <span className={cx("line-icon")}>
-                                    <LineIcon />
-                                </span>
-                            </span>
-                            <span>
-                                <DeleteIcon />
-                            </span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>GV00001</td>
-                        <td>Nguyễn Văn A</td>
-                        <td>Nam</td>
-                        <td>Toán Lý Hóa</td>
-                        <td>
-                            <span className={cx("update-icon")}>
-                                <PencilIcon />
-                                <span className={cx("line-icon")}>
-                                    <LineIcon />
-                                </span>
-                            </span>
-                            <span>
-                                <DeleteIcon />
-                            </span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>GV00001</td>
-                        <td>Nguyễn Văn A</td>
-                        <td>Nam</td>
-                        <td>Toán Lý Hóa</td>
-                        <td>
-                            <span className={cx("update-icon")}>
-                                <PencilIcon />
-                                <span className={cx("line-icon")}>
-                                    <LineIcon />
-                                </span>
-                            </span>
-                            <span>
-                                <DeleteIcon />
-                            </span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>GV00001</td>
-                        <td>Nguyễn Văn A</td>
-                        <td>Nam</td>
-                        <td>Toán Lý Hóa</td>
-                        <td>
-                            <span className={cx("update-icon")}>
-                                <PencilIcon />
-                                <span className={cx("line-icon")}>
-                                    <LineIcon />
-                                </span>
-                            </span>
-                            <span>
-                                <DeleteIcon />
-                            </span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>GV00001</td>
-                        <td>Nguyễn Văn A</td>
-                        <td>Nam</td>
-                        <td>Toán Lý Hóa</td>
-                        <td>
-                            <span className={cx("update-icon")}>
-                                <PencilIcon />
-                                <span className={cx("line-icon")}>
-                                    <LineIcon />
-                                </span>
-                            </span>
-                            <span>
-                                <DeleteIcon />
-                            </span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>GV00001</td>
-                        <td>Nguyễn Văn A</td>
-                        <td>Nam</td>
-                        <td>Toán Lý Hóa</td>
-                        <td>
-                            <span className={cx("update-icon")}>
-                                <PencilIcon />
-                                <span className={cx("line-icon")}>
-                                    <LineIcon />
-                                </span>
-                            </span>
-                            <span>
-                                <DeleteIcon />
-                            </span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>GV00001</td>
-                        <td>Nguyễn Văn A</td>
-                        <td>Nam</td>
-                        <td>Toán Lý Hóa</td>
-                        <td>
-                            <span className={cx("update-icon")}>
-                                <PencilIcon />
-                                <span className={cx("line-icon")}>
-                                    <LineIcon />
-                                </span>
-                            </span>
-                            <span>
-                                <DeleteIcon />
-                            </span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>GV00001</td>
-                        <td>Nguyễn Văn A</td>
-                        <td>Nam</td>
-                        <td>Toán Lý Hóa</td>
-                        <td>
-                            <span className={cx("update-icon")}>
-                                <PencilIcon />
-                                <span className={cx("line-icon")}>
-                                    <LineIcon />
-                                </span>
-                            </span>
-                            <span>
-                                <DeleteIcon />
-                            </span>
-                        </td>
-                    </tr>
+                            </td>
+                        </tr>
+                    ))}
+
                     {/* nếu không có giáo viên nào */}
-                    {/* <tr>
-                <td colspan="5" class="text-center">
-                    Bạn chưa đăng khóa học nào.
-                    <a href="/courses/create">Đăng khóa học</a>
-                </td>
-            </tr> */}
+                    {teachers.length == 0 && (
+                        <tr>
+                            <td colspan="5" class="text-center">
+                                {"Không có giáo viên nào. "}
+                                <Link to="/quan-ly-doanh-muc/them-giao-vien">
+                                    Thêm giáo viên
+                                </Link>
+                            </td>
+                        </tr>
+                    )}
                 </tbody>
             </table>
         </form>

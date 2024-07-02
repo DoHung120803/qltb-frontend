@@ -6,6 +6,7 @@ import DoanhMucGiaoVien from "~/pages/DoanhMucGiaoVien";
 
 // Pages
 import Home from "~/pages/Home";
+import ThemGiaoVien from "~/pages/ThemGiaoVien";
 // import Following from "~/pages/Following";
 // import Profile from "~/pages/Profile";
 // import Upload from "~/pages/Upload";
@@ -21,6 +22,7 @@ import Home from "~/pages/Home";
 const privateRoutes = [
     { path: config.routes.home, component: Home },
     { path: config.routes.doanh_muc_giao_vien, component: DoanhMucGiaoVien },
+    { path: config.routes.them_giao_vien, component: ThemGiaoVien },
 ];
 
 export { privateRoutes };
