@@ -37,7 +37,7 @@ function ThemGiaoVien() {
             <h1 className={cx("title")}>Thêm Giáo Viên</h1>
 
             <div className="row">
-                <span className="col-lg-5 col-md-5 mt-5 d-flex flex-column">
+                <span className="col-lg-6 col-md-5 mt-5 d-flex flex-column">
                     <label className="">Tên giáo viên</label>
                     <input
                         className={cx("input")}
@@ -46,7 +46,7 @@ function ThemGiaoVien() {
                         onChange={(e) => handleChange(e, "tenGV")}
                     />
                 </span>
-                <span className="col-lg-5 col-md-5 mt-5 d-flex flex-column">
+                <span className="col-lg-6 col-md-5 mt-5 d-flex flex-column">
                     <label className="">Giới tính</label>
                     <select
                         value={request.gioiTinh}
@@ -57,7 +57,7 @@ function ThemGiaoVien() {
                         <option value="Nữ">Nữ</option>
                     </select>
                 </span>
-                <span className="col-lg-5 col-md-5 mt-5 d-flex flex-column">
+                <span className="col-lg-6 col-md-5 mt-5 d-flex flex-column">
                     <label className="">Ngày sinh</label>
                     <input
                         className={cx("input")}
@@ -66,7 +66,7 @@ function ThemGiaoVien() {
                         onChange={(e) => handleChange(e, "ngaySinh")}
                     />
                 </span>
-                <span className="col-lg-5 col-md-5 mt-5 d-flex flex-column">
+                <span className="col-lg-6 col-md-5 mt-5 d-flex flex-column">
                     <label className="">Số điện thoại</label>
                     <input
                         className={cx("input")}
@@ -75,7 +75,7 @@ function ThemGiaoVien() {
                         onChange={(e) => handleChange(e, "soDienThoai")}
                     />
                 </span>
-                <span className="col-lg-5 col-md-5 mt-5 d-flex flex-column">
+                <span className="col-lg-6 col-md-5 mt-5 d-flex flex-column">
                     <label className="">Địa chỉ</label>
                     <input
                         className={cx("input")}
@@ -84,7 +84,7 @@ function ThemGiaoVien() {
                         onChange={(e) => handleChange(e, "diaChi")}
                     />
                 </span>
-                <span className="col-lg-5 col-md-5 mt-5 d-flex flex-column">
+                <span className="col-lg-6 col-md-5 mt-5 d-flex flex-column">
                     <label className="">Tổ chuyên môn</label>
                     <select
                         value={request.maToCM}

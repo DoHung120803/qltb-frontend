@@ -1,6 +1,10 @@
+.dashboard-link {
+    text-decoration: none;
+}
+
 .item {
     text-decoration: none;
-    margin-left: 2rem;
+    padding-left: 2rem;
     margin-top: 4rem;
 
     .icon {
@@ -25,10 +29,31 @@
 }
 
 .title {
-    letter-spacing: 2px;
     font-size: 1.8rem;
     font-weight: 400;
     line-height: 27px;
     text-align: left;
     color: #ffffff;
+}
+
+.more {
+    color: white;
+}
+
+.sub-item {
+    padding: 0.7rem 0rem 0.7rem 3rem;
+    margin-top: 0;
+    .more,
+    .title {
+        font-weight: 300;
+        font-size: 1.5rem;
+    }
+
+    &:hover {
+        background-color: #919aa9;
+    }
+}
+
+.click {
+    background-color: #919aa9;
 }

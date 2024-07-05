@@ -1,6 +1,7 @@
 .wrapper {
     height: 100%;
     background-color: #344054;
+    // overflow-y: scroll;
 
     .top-rectangle {
         height: var(--default-layout-header-height);
