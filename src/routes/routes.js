@@ -21,7 +21,7 @@ import ThemGiaoVien from "~/pages/ThemGiaoVien";
 // Public routes
 const privateRoutes = [
     { path: config.routes.home, component: Home },
-    { path: config.routes.doanh_muc_giao_vien, component: DanhMucGiaoVien },
+    { path: config.routes.danh_muc_giao_vien, component: DanhMucGiaoVien },
     { path: config.routes.them_giao_vien, component: ThemGiaoVien },
 ];
 
