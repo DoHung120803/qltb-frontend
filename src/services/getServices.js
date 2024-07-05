@@ -1,4 +1,4 @@
-import * as httpRequest from "../utils/httpRequest";
+import * as httpRequest from '../utils/httpRequest';
 
 export const getGiaoVien = async (page, size) => {
     try {
