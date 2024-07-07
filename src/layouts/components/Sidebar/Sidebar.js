@@ -52,12 +52,6 @@ function Sidebar() {
                         selected={selected}
                         handleSelected={handleSelected}
                     />
-                    <DashBoardItem
-                        icon={<QuanLyDoanhMucIcon />}
-                        title="Doanh mục kho phòng"
-                        subItem
-                        to={config.routes.danh_muc_kho_phong}
-                    />
                 </DashBoardItem>
 
                 <DashBoardItem

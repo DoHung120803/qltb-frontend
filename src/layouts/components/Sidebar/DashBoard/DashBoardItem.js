@@ -54,7 +54,7 @@ function DashBoardItem({
                 </div>
                 {subItem || (
                     <span className={cx("more", "col-2")}>
-                        {!isChoose ? more : ""}
+                        {selected !== title ? more : ""}
                     </span>
                 )}
             </NavLink>

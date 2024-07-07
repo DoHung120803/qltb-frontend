@@ -1,11 +1,14 @@
 import classNames from "classnames/bind";
 import styles from "./ThemThietBi.module.scss";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import * as createServices from "~/services/createServices";
+import { useNavigate } from "react-router-dom";
+import * as updateServices from "~/services/updateServices";
+import config from "~/config";
 
 const cx = classNames.bind(styles);
 
-function ThemThietBi() {
+function ThemThietBi({ updateData = false, title }) {
     const requestDefault = {
         tenTB: "",
         maDVT: "",
@@ -18,6 +21,15 @@ function ThemThietBi() {
     };
 
     const [request, setRequest] = useState(requestDefault);
+
+    const navigator = useNavigate();
+
+    useEffect(() => {
+        console.log(updateData);
+        if (updateData) {
+            setRequest(updateData);
+        }
+    }, []);
 
     const handleChange = (e, field) => {
         if (field === "tbTuLam") {
@@ -38,18 +50,41 @@ function ThemThietBi() {
     };
 
     const handleSubmit = async () => {
-        const response = await createServices.createThietBi(request);
+        let response = null;
+        if (request.slToiThieu <= 0) {
+            alert("Số lượng tối thiểu phải lớn hơn 0");
+            return;
+        }
+        if (updateData) {
+            response = await updateServices.updateThietBi(
+                "dm-thiet-bi/update",
+                updateData.maTB,
+                request
+            );
 
-        if (response && response.status === 200) {
-            alert("Thêm thiết bị thành công");
+            if (response && response.status === 200) {
+                alert("Cập nhật thiết bị thành công");
+                navigator(config.routes.danh_muc_thiet_bi);
+            } else {
+                alert("Cập nhật thiết bị thất bại");
+            }
         } else {
-            alert("Thêm thiết bị thất bại");
+            response = await createServices.createThietBi(request);
+
+            if (response && response.status === 200) {
+                alert("Thêm thiết bị thành công");
+                navigator(config.routes.danh_muc_thiet_bi);
+            } else {
+                alert(
+                    "Thêm thiết bị thất bại (Hãy kiểm tra lại và điền đầy đủ thông tin)"
+                );
+            }
         }
     };
 
     return (
         <div className={cx("wrapper", "col-lg-9 col-sm-12")}>
-            <h1 className={cx("title")}>Thêm Thiết Bị</h1>
+            <h1 className={cx("title")}>{title || "Thêm Thiết Bị"}</h1>
 
             <div className="row">
                 <span className="col-lg-6 col-md-5 mt-5 d-flex flex-column">
@@ -128,6 +163,7 @@ function ThemThietBi() {
                         name="radio"
                         type="radio"
                         // value={request.tbTieuHao}
+                        checked={request.tbTieuHao}
                         onChange={(e) => handleChange(e, "tbTieuHao")}
                     />
                 </span>
@@ -143,6 +179,7 @@ function ThemThietBi() {
                         name="radio"
                         type="radio"
                         // value={request.tbTuLam}
+                        checked={request.tbTuLam}
                         onChange={(e) => handleChange(e, "tbTuLam")}
                     />
                 </span>
@@ -164,7 +201,7 @@ function ThemThietBi() {
                     )}
                     onClick={handleSubmit}
                 >
-                    Thêm
+                    {updateData ? "Cập nhật" : "Thêm"}
                 </div>
 
                 <div
@@ -172,7 +209,7 @@ function ThemThietBi() {
                         "cancel-btn",
                         "col-2 col-2 d-flex align-items-center justify-content-center"
                     )}
-                    onClick={() => setRequest(requestDefault)}
+                    onClick={() => navigator(config.routes.danh_muc_thiet_bi)}
                 >
                     Hủy
                 </div>

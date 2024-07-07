@@ -5,6 +5,8 @@ const routes = {
     danh_muc_thiet_bi: "/quan-ly-danh-muc/danh-muc-thiet-bi",
     them_thiet_bi: "/quan-ly-danh-muc/them-thiet-bi",
     danh_muc_kho_phong: "/quan-ly-danh-muc/danh-muc-kho-phong",
+    update_giao_vien: "/quan-ly-danh-muc/update-giao-vien",
+    update_thiet_bi: "/quan-ly-danh-muc/update-thiet-bi",
 };
 
 export default routes;

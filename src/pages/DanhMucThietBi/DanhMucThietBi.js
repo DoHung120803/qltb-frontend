@@ -1,26 +1,26 @@
 import classNames from "classnames/bind";
-import styles from "./DanhMucGiaoVien.module.scss";
+import styles from "./DanhMucThietBi.module.scss";
 import Table from "~/components/Table";
 import { useEffect, useState } from "react";
 import * as getServices from "~/services/getServices";
 import Search from "~/components/Search/Search";
-import { Link } from "react-router-dom";
 import config from "~/config";
+import { Link } from "react-router-dom";
 
 const cx = classNames.bind(styles);
 
-function DanhMucGiaoVien() {
+function DanhMucThietBi() {
     const tableColumnsName = [
-        "Mã giáo viên",
-        "Tên giáo viên",
-        "Giới tính",
-        "Tổ chuyên môn",
+        "Mã thiết bị",
+        "Tên tên thiết bị",
+        "Loại thiết bị",
+        "Môn học",
         "Hành động",
     ];
 
-    const fields = ["maGV", "tenGV", "gioiTinh", "toCM"];
+    const fields = ["maTB", "tenTB", "loaiTB", "tenMonHoc"];
 
-    const [teachers, setTeachers] = useState([]);
+    const [devices, setDevices] = useState([]);
     const [page, setPage] = useState(0);
     const [size, setSize] = useState(10);
     const [totalPages, setTotalPages] = useState(1);
@@ -37,16 +37,16 @@ function DanhMucGiaoVien() {
     }, [isSearching]);
 
     useEffect(() => {
-        const fetchTeachers = async () => {
+        const fetchDevices = async () => {
             if (!isSearching) {
-                const dataResponse = await getServices.getGiaoVien(page, size);
-                setTeachers(dataResponse.content);
+                const dataResponse = await getServices.getDevices(page, size);
+                setDevices(dataResponse.content);
                 setTotalPages(dataResponse.totalPages);
                 setTotalItems(dataResponse.totalElements);
             }
         };
 
-        fetchTeachers();
+        fetchDevices();
     }, [page, size, isSearching, reload]);
 
     const handlePageChange = (newPage) => {
@@ -63,12 +63,12 @@ function DanhMucGiaoVien() {
     return (
         <div className={cx("wrapper", "col-11")}>
             <h2>Quản lý danh mục</h2>
-            <p>Quản lý danh mục &gt; Quản lý giáo viên</p>
+            <p>Quản lý danh mục &gt; Quản lý thiết bị</p>
 
             <div className="row m-0">
                 <Search
-                    endpoint="/giao-vien/search"
-                    setSearchResult={setTeachers}
+                    endpoint="/dm-thiet-bi/search"
+                    setSearchResult={setDevices}
                     setIsSearching={setIsSearching}
                     page={page}
                     size={size}
@@ -77,26 +77,26 @@ function DanhMucGiaoVien() {
                     reload={reload}
                 />
                 <Link
-                    to={config.routes.them_giao_vien}
                     className={cx(
                         "add-btn",
                         "col-lg-2 col-sm-4 mt-3 text-center ms-auto"
                     )}
+                    to={config.routes.them_thiet_bi}
                 >
-                    Thêm giáo viên
+                    <div>Thêm thiết bị</div>
                 </Link>
                 <Table
                     tableColumnsName={tableColumnsName}
                     fields={fields}
-                    datasTable={teachers}
+                    datasTable={devices}
                     page={page}
                     size={size}
                     totalPages={totalPages}
                     totalItems={totalItems}
                     onPageChange={handlePageChange}
                     onSizeChange={handleSizeChange}
-                    linkUpdate={config.routes.update_giao_vien}
-                    deleteEndpoint="giao-vien/delete"
+                    linkUpdate={config.routes.update_thiet_bi}
+                    deleteEndpoint="dm-thiet-bi/delete"
                     handleReload={handleReload}
                 />
             </div>
@@ -104,4 +104,4 @@ function DanhMucGiaoVien() {
     );
 }
 
-export default DanhMucGiaoVien;
+export default DanhMucThietBi;

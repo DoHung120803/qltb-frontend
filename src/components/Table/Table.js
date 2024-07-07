@@ -1,26 +1,46 @@
-import { useState } from "react";
 import classNames from "classnames/bind";
+import { Link } from "react-router-dom";
 import styles from "./Table.module.scss";
 import { DeleteIcon, LineIcon, MenuIcon, PencilIcon } from "../Icons";
-import { Link } from "react-router-dom";
+import * as deleteServices from "~/services/deleteServices";
+import config from "~/config";
 
 const cx = classNames.bind(styles);
 
 function Table({
+    tableColumnsName = [],
     fields = [],
-    teachers = [],
+    datasTable = [],
     page,
     size,
     totalPages,
     totalItems,
     onPageChange,
     onSizeChange,
+    linkUpdate,
+    deleteEndpoint,
+    handleReload,
 }) {
     const startItem = page * size + 1;
     const endItem = Math.min((page + 1) * size, totalItems);
 
+    const handleDelete = async (id) => {
+        // eslint-disable-next-line no-restricted-globals
+        if (confirm("Bạn có chắc chắn muốn xóa?")) {
+            const response = await deleteServices._delete(deleteEndpoint, id);
+
+            console.log(response);
+            if (response.status === 204) {
+                alert("Xóa thành công ^^");
+                handleReload();
+            } else {
+                alert("Xóa thất bại :((");
+            }
+        }
+    };
+
     return (
-        <div>
+        <div className="p-0">
             <form
                 name="container-form"
                 className="mt-4 container-fluid p-0"
@@ -30,9 +50,9 @@ function Table({
                 <table className={cx("table-container", "table mt-5 col-12")}>
                     <thead>
                         <tr className="table-primary">
-                            {fields.map((field, index) => (
+                            {tableColumnsName.map((columnName, index) => (
                                 <th scope="col" key={index}>
-                                    {field}
+                                    {columnName}
                                     <span className={cx("sort-icon")}>
                                         <MenuIcon
                                             height="2rem"
@@ -45,39 +65,37 @@ function Table({
                         </tr>
                     </thead>
                     <tbody>
-                        {teachers.map((teacher, index) => (
+                        {datasTable.map((data, index) => (
                             <tr key={index}>
-                                <td>{teacher.maGV}</td>
-                                <td>{teacher.tenGV}</td>
-                                <td>{teacher.gioiTinh}</td>
+                                {fields.map((field, index) => {
+                                    return <td key={index}>{data[field]}</td>;
+                                })}
+
                                 <td>
-                                    {teacher.maToCM === "TCM00001"
-                                        ? "Toán Lý"
-                                        : teacher.maToCM === "TCM00002"
-                                        ? "Văn Sử"
-                                        : "Tổng Hợp"}
-                                </td>
-                                <td>
-                                    <span className={cx("update-icon")}>
-                                        <PencilIcon />
-                                        <span className={cx("line-icon")}>
-                                            <LineIcon />
+                                    <Link to={linkUpdate} state={data}>
+                                        <span className={cx("update-icon")}>
+                                            <PencilIcon />
+                                            <span className={cx("line-icon")}>
+                                                <LineIcon />
+                                            </span>
                                         </span>
-                                    </span>
-                                    <span>
+                                    </Link>
+                                    <span
+                                        className={cx("delete-icon")}
+                                        onClick={() =>
+                                            handleDelete(data[[fields[0]]])
+                                        }
+                                    >
                                         <DeleteIcon />
                                     </span>
                                 </td>
                             </tr>
                         ))}
 
-                        {teachers.length === 0 && (
+                        {datasTable.length === 0 && (
                             <tr>
                                 <td colSpan="5" className="text-center">
-                                    {"Không có giáo viên nào. "}
-                                    <Link to="/quan-ly-danh-muc/them-giao-vien">
-                                        Thêm giáo viên
-                                    </Link>
+                                    {"Không có có dữ liệu!"}
                                 </td>
                             </tr>
                         )}
@@ -105,7 +123,7 @@ function Table({
                     </button>
                     <button
                         onClick={() => onPageChange(page + 1)}
-                        disabled={page === totalPages}
+                        disabled={page === totalPages - 1}
                     >
                         {">"}
                     </button>

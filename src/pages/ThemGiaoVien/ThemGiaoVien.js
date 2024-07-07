@@ -1,11 +1,14 @@
 import classNames from "classnames/bind";
 import styles from "./ThemGiaoVien.module.scss";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import * as createServices from "~/services/createServices";
+import * as updateServices from "~/services/updateServices";
+import { useNavigate } from "react-router-dom";
+import config from "~/config";
 
 const cx = classNames.bind(styles);
 
-function ThemGiaoVien() {
+function ThemGiaoVien({ updateData = false, title }) {
     const requestDefault = {
         tenGV: "",
         gioiTinh: "",
@@ -15,6 +18,15 @@ function ThemGiaoVien() {
         maToCM: "",
     };
 
+    const navigator = useNavigate();
+
+    useEffect(() => {
+        console.log(updateData);
+        if (updateData) {
+            setRequest(updateData);
+        }
+    }, []);
+
     const [request, setRequest] = useState(requestDefault);
 
     const handleChange = (e, field) => {
@@ -22,20 +34,35 @@ function ThemGiaoVien() {
     };
 
     const handleSubmit = async () => {
-        const response = await createServices.createGiaoVien(request);
+        let response = null;
+        if (updateData) {
+            response = await updateServices.updateGiaoVien(
+                "giao-vien/update",
+                updateData.maGV,
+                request
+            );
 
-        if (response && response.status === 200) {
-            alert("Thêm giáo viên thành công");
+            if (response && response.status === 200) {
+                alert("Cập nhật giáo viên thành công");
+                navigator(config.routes.danh_muc_giao_vien);
+            } else {
+                alert("Cập nhật giáo viên thất bại");
+            }
         } else {
-            alert("Thêm giáo viên thất bại");
+            response = await createServices.createGiaoVien(request);
+
+            if (response && response.status === 200) {
+                alert("Thêm giáo viên thành công");
+                navigator(config.routes.danh_muc_giao_vien);
+            } else {
+                alert("Thêm giáo viên thất bại (Hãy kiểm tra lại thông tin)");
+            }
         }
-        console.log(request);
     };
 
     return (
         <div className={cx("wrapper", "col-lg-9 col-sm-12")}>
-            <h1 className={cx("title")}>Thêm Giáo Viên</h1>
-
+            <h1 className={cx("title")}>{title || "Thêm Giáo Viên"}</h1>
             <div className="row">
                 <span className="col-lg-6 col-md-5 mt-5 d-flex flex-column">
                     <label className="">Tên giáo viên</label>
@@ -105,7 +132,7 @@ function ThemGiaoVien() {
                     )}
                     onClick={handleSubmit}
                 >
-                    Thêm
+                    {updateData ? "Cập nhật" : "Thêm"}
                 </div>
 
                 <div
@@ -113,7 +140,7 @@ function ThemGiaoVien() {
                         "cancel-btn",
                         "col-2 col-2 d-flex align-items-center justify-content-center"
                     )}
-                    onClick={() => setRequest(requestDefault)}
+                    onClick={() => navigator(config.routes.danh_muc_giao_vien)}
                 >
                     Hủy
                 </div>
