@@ -25,11 +25,10 @@ function ThemThietBi({ updateData = false, title }) {
     const navigator = useNavigate();
 
     useEffect(() => {
-        console.log(updateData);
         if (updateData) {
             setRequest(updateData);
         }
-    }, []);
+    }, [updateData]);
 
     const handleChange = (e, field) => {
         if (field === "tbTuLam") {
@@ -162,7 +161,6 @@ function ThemThietBi({ updateData = false, title }) {
                         className={cx("input")}
                         name="radio"
                         type="radio"
-                        // value={request.tbTieuHao}
                         checked={request.tbTieuHao}
                         onChange={(e) => handleChange(e, "tbTieuHao")}
                     />
@@ -178,7 +176,6 @@ function ThemThietBi({ updateData = false, title }) {
                         className={cx("input")}
                         name="radio"
                         type="radio"
-                        // value={request.tbTuLam}
                         checked={request.tbTuLam}
                         onChange={(e) => handleChange(e, "tbTuLam")}
                     />

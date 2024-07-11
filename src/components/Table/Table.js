@@ -1,42 +1,61 @@
 import classNames from "classnames/bind";
-import { Link } from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import styles from "./Table.module.scss";
-import { DeleteIcon, LineIcon, MenuIcon, PencilIcon } from "../Icons";
+import {DeleteIcon, LineIcon, MenuIcon, PencilIcon} from "../Icons";
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
 import * as deleteServices from "~/services/deleteServices";
-import config from "~/config";
 
 const cx = classNames.bind(styles);
 
 function Table({
-    tableColumnsName = [],
-    fields = [],
-    datasTable = [],
-    page,
-    size,
-    totalPages,
-    totalItems,
-    onPageChange,
-    onSizeChange,
-    linkUpdate,
-    deleteEndpoint,
-    handleReload,
-}) {
+                   tableColumnsName = [],
+                   fields = [],
+                   datasTable = [],
+                   page,
+                   size,
+                   totalPages,
+                   totalItems,
+                   onPageChange,
+                   onSizeChange,
+                   linkDetail,
+                   linkUpdate, // Add linkUpdate prop
+                   deleteEndpoint,
+                   handleReload,
+               }) {
+    const navigate = useNavigate();
     const startItem = page * size + 1;
     const endItem = Math.min((page + 1) * size, totalItems);
 
     const handleDelete = async (id) => {
-        // eslint-disable-next-line no-restricted-globals
-        if (confirm("Bạn có chắc chắn muốn xóa?")) {
-            const response = await deleteServices._delete(deleteEndpoint, id);
+        confirmAlert({
+            title: 'Xác nhận xóa',
+            message: 'Bạn có chắc chắn muốn xóa?',
+            buttons: [
+                {
+                    label: 'Có',
+                    onClick: async () => {
+                        const response = await deleteServices._delete(deleteEndpoint, id);
 
-            console.log(response);
-            if (response.status === 204) {
-                alert("Xóa thành công ^^");
-                handleReload();
-            } else {
-                alert("Xóa thất bại :((");
-            }
-        }
+                        console.log(response);
+                        if (response.status === 204) {
+                            alert("Xóa thành công ^^");
+                            handleReload();
+                        } else {
+                            alert("Xóa thất bại :((");
+                        }
+                    }
+                },
+                {
+                    label: 'Không',
+                    onClick: () => {}
+                }
+            ]
+        });
+    };
+
+    const handleRowClick = (data) => {
+        navigate(linkDetail, { state: data });
     };
 
     return (
@@ -49,56 +68,53 @@ function Table({
             >
                 <table className={cx("table-container", "table mt-5 col-12")}>
                     <thead>
-                        <tr className="table-primary">
-                            {tableColumnsName.map((columnName, index) => (
-                                <th scope="col" key={index}>
-                                    {columnName}
-                                    <span className={cx("sort-icon")}>
-                                        <MenuIcon
-                                            height="2rem"
-                                            width="2rem"
-                                            fill="black"
-                                        />
-                                    </span>
-                                </th>
-                            ))}
-                        </tr>
+                    <tr className="table-primary">
+                        {tableColumnsName.map((columnName, index) => (
+                            <th scope="col" key={index}>
+                                {columnName}
+                                <span className={cx("sort-icon")}>
+                                    <MenuIcon
+                                        height="2rem"
+                                        width="2rem"
+                                        fill="black"
+                                    />
+                                </span>
+                            </th>
+                        ))}
+                    </tr>
                     </thead>
                     <tbody>
-                        {datasTable.map((data, index) => (
-                            <tr key={index}>
-                                {fields.map((field, index) => {
-                                    return <td key={index}>{data[field]}</td>;
-                                })}
-
-                                <td>
-                                    <Link to={linkUpdate} state={data}>
-                                        <span className={cx("update-icon")}>
-                                            <PencilIcon />
-                                            <span className={cx("line-icon")}>
-                                                <LineIcon />
-                                            </span>
+                    {datasTable.map((data, index) => (
+                        <tr key={index} onDoubleClick={() => handleRowClick(data)}>
+                            {fields.map((field, index) => (
+                                <td key={index}>{data[field]}</td>
+                            ))}
+                            <td>
+                                <Link to={linkUpdate} state={data}>
+                                    <span className={cx("update-icon")}>
+                                        <PencilIcon/>
+                                        <span className={cx("line-icon")}>
+                                            <LineIcon/>
                                         </span>
-                                    </Link>
-                                    <span
-                                        className={cx("delete-icon")}
-                                        onClick={() =>
-                                            handleDelete(data[[fields[0]]])
-                                        }
-                                    >
-                                        <DeleteIcon />
                                     </span>
-                                </td>
-                            </tr>
-                        ))}
+                                </Link>
+                                <span
+                                    className={cx("delete-icon")}
+                                    onClick={() => handleDelete(data[fields[0]])}
+                                >
+                                    <DeleteIcon/>
+                                </span>
+                            </td>
+                        </tr>
+                    ))}
 
-                        {datasTable.length === 0 && (
-                            <tr>
-                                <td colSpan="5" className="text-center">
-                                    {"Không có có dữ liệu!"}
-                                </td>
-                            </tr>
-                        )}
+                    {datasTable.length === 0 && (
+                        <tr>
+                            <td colSpan="5" className="text-center">
+                                {"Không có dữ liệu!"}
+                            </td>
+                        </tr>
+                    )}
                     </tbody>
                 </table>
             </form>

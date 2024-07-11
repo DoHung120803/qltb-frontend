@@ -95,7 +95,8 @@ function DanhMucGiaoVien() {
                     totalItems={totalItems}
                     onPageChange={handlePageChange}
                     onSizeChange={handleSizeChange}
-                    linkUpdate={config.routes.update_giao_vien}
+                    linkDetail={config.routes.xem_giao_vien}
+                    linkUpdate={config.routes.cap_nhat_giao_vien} // Pass linkUpdate prop
                     deleteEndpoint="giao-vien/delete"
                     handleReload={handleReload}
                 />

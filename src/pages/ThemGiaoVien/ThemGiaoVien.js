@@ -8,7 +8,7 @@ import config from "~/config";
 
 const cx = classNames.bind(styles);
 
-function ThemGiaoVien({ updateData = false, title }) {
+function ThemGiaoVien({ updateData = false, title, viewOnly = false }) {
     const requestDefault = {
         tenGV: "",
         gioiTinh: "",
@@ -21,11 +21,10 @@ function ThemGiaoVien({ updateData = false, title }) {
     const navigator = useNavigate();
 
     useEffect(() => {
-        console.log(updateData);
         if (updateData) {
             setRequest(updateData);
         }
-    }, []);
+    }, [updateData]);
 
     const [request, setRequest] = useState(requestDefault);
 
@@ -71,6 +70,7 @@ function ThemGiaoVien({ updateData = false, title }) {
                         type="text"
                         value={request.tenGV}
                         onChange={(e) => handleChange(e, "tenGV")}
+                        disabled={viewOnly}
                     />
                 </span>
                 <span className="col-lg-6 col-md-5 mt-5 d-flex flex-column">
@@ -78,6 +78,7 @@ function ThemGiaoVien({ updateData = false, title }) {
                     <select
                         value={request.gioiTinh}
                         onChange={(e) => handleChange(e, "gioiTinh")}
+                        disabled={viewOnly}
                     >
                         <option value="">Chọn giới tính</option>
                         <option value="Nam">Nam</option>
@@ -91,6 +92,7 @@ function ThemGiaoVien({ updateData = false, title }) {
                         type="date"
                         value={request.ngaySinh}
                         onChange={(e) => handleChange(e, "ngaySinh")}
+                        disabled={viewOnly}
                     />
                 </span>
                 <span className="col-lg-6 col-md-5 mt-5 d-flex flex-column">
@@ -100,6 +102,7 @@ function ThemGiaoVien({ updateData = false, title }) {
                         type="text"
                         value={request.soDienThoai}
                         onChange={(e) => handleChange(e, "soDienThoai")}
+                        disabled={viewOnly}
                     />
                 </span>
                 <span className="col-lg-6 col-md-5 mt-5 d-flex flex-column">
@@ -109,6 +112,7 @@ function ThemGiaoVien({ updateData = false, title }) {
                         type="text"
                         value={request.diaChi}
                         onChange={(e) => handleChange(e, "diaChi")}
+                        disabled={viewOnly}
                     />
                 </span>
                 <span className="col-lg-6 col-md-5 mt-5 d-flex flex-column">
@@ -116,6 +120,7 @@ function ThemGiaoVien({ updateData = false, title }) {
                     <select
                         value={request.maToCM}
                         onChange={(e) => handleChange(e, "maToCM")}
+                        disabled={viewOnly}
                     >
                         <option value="">Chọn tổ chuyển môn</option>
                         <option value="TCM00001">Toán Lý</option>
@@ -124,27 +129,29 @@ function ThemGiaoVien({ updateData = false, title }) {
                     </select>
                 </span>
             </div>
-            <div className="row mt-5 gap-3 m-0">
-                <div
-                    className={cx(
-                        "create-btn",
-                        "col-2 d-flex align-items-center justify-content-center"
-                    )}
-                    onClick={handleSubmit}
-                >
-                    {updateData ? "Cập nhật" : "Thêm"}
-                </div>
+            {!viewOnly && (
+                <div className="row mt-5 gap-3 m-0">
+                    <div
+                        className={cx(
+                            "create-btn",
+                            "col-2 d-flex align-items-center justify-content-center"
+                        )}
+                        onClick={handleSubmit}
+                    >
+                        {updateData ? "Cập nhật" : "Thêm"}
+                    </div>
 
-                <div
-                    className={cx(
-                        "cancel-btn",
-                        "col-2 col-2 d-flex align-items-center justify-content-center"
-                    )}
-                    onClick={() => navigator(config.routes.danh_muc_giao_vien)}
-                >
-                    Hủy
+                    <div
+                        className={cx(
+                            "cancel-btn",
+                            "col-2 col-2 d-flex align-items-center justify-content-center"
+                        )}
+                        onClick={() => navigator(config.routes.danh_muc_giao_vien)}
+                    >
+                        Hủy
+                    </div>
                 </div>
-            </div>
+            )}
         </div>
     );
 }

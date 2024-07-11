@@ -1,21 +1,21 @@
 import classNames from "classnames/bind";
 import styles from "./Search.module.scss";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDebounce } from "~/hooks";
 import * as searchServices from "~/services/searchServices";
 
 const cx = classNames.bind(styles);
 
 function Search({
-    endpoint,
-    setSearchResult,
-    setIsSearching,
-    page,
-    size,
-    setTotalPages,
-    setTotalItems,
-    reload,
-}) {
+                    endpoint,
+                    setSearchResult,
+                    setIsSearching,
+                    page,
+                    size,
+                    setTotalPages,
+                    setTotalItems,
+                    reload,
+                }) {
     const [searchValue, setSearchValue] = useState("");
 
     const debouncedValue = useDebounce(searchValue, 500);
@@ -54,7 +54,8 @@ function Search({
         };
 
         fetchApi();
-    }, [debouncedValue, page, size, reload]);
+    }, [debouncedValue, page, size, reload, endpoint, setIsSearching, setSearchResult, setTotalPages, setTotalItems]);
+
     return (
         <input
             type="text"

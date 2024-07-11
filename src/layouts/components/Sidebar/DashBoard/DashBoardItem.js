@@ -1,21 +1,20 @@
 import { NavLink } from "react-router-dom";
 import classNames from "classnames/bind";
 import styles from "./DashBoard.module.scss";
-import { useEffect, useState } from "react";
-import * as jQueryUtils from "~/utils/jQueryUltis";
+import { useState } from "react";
 
 const cx = classNames.bind(styles);
 
 function DashBoardItem({
-    children,
-    to,
-    subItem = false,
-    icon,
-    title,
-    more = "",
-    selected,
-    handleSelected,
-}) {
+                           children,
+                           to,
+                           subItem = false,
+                           icon,
+                           title,
+                           more = "",
+                           selected,
+                           handleSelected,
+                       }) {
     const [isChoose, setIsChoose] = useState(false);
 
     const handleOnClick = () => {
