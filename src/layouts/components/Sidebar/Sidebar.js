@@ -46,7 +46,7 @@ function Sidebar() {
                     />
                     <DashBoardItem
                         icon={<QuanLyDoanhMucIcon />}
-                        title="Doanh mục thiết bị"
+                        title="Danh mục thiết bị"
                         subItem
                         to={config.routes.danh_muc_thiet_bi}
                         selected={selected}
@@ -57,7 +57,6 @@ function Sidebar() {
                 <DashBoardItem
                     icon={<QuanLyThietBiIcon />}
                     title="Quản lý thiết bị"
-                    // to={"/quan-ly-doanh-muc"}
                     more=">"
                     selected={selected}
                     handleSelected={handleSelected}
@@ -66,11 +65,11 @@ function Sidebar() {
                         icon={<QuanLyDoanhMucIcon />}
                         title="Danh sách thiết bị"
                         subItem
-                        to={config.routes.danh_muc_giao_vien}
+                        to={config.routes.danh_sach_thiet_bi}
                         selected={selected}
                         handleSelected={handleSelected}
                     />
-                    <DashBoardItem
+                    {/* <DashBoardItem
                         icon={<QuanLyDoanhMucIcon />}
                         title="Tăng thiết bị"
                         subItem
@@ -84,6 +83,7 @@ function Sidebar() {
                         selected={selected}
                         handleSelected={handleSelected}
                     />
+                    
                     <DashBoardItem
                         icon={<QuanLyDoanhMucIcon />}
                         title="Theo dõi hỏng mất"
@@ -103,6 +103,22 @@ function Sidebar() {
                         icon={<QuanLyDoanhMucIcon />}
                         title="Thanh lý thiết bị"
                         subItem
+                    /> */}
+                    <DashBoardItem
+                        to={config.routes.ghi_giam}
+                        icon={<QuanLyDoanhMucIcon />}
+                        title="Ghi Giảm"
+                        subItem
+                        selected={selected}
+                        handleSelected={handleSelected}
+                    />
+                    <DashBoardItem
+                        to={config.routes.ghi_tang}
+                        icon={<QuanLyDoanhMucIcon />}
+                        title="Ghi Tăng"
+                        subItem
+                        selected={selected}
+                        handleSelected={handleSelected}
                     />
                 </DashBoardItem>
                 <DashBoardItem

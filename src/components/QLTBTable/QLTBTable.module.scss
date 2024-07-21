@@ -46,12 +46,24 @@
 
 .chon-TBKB-custom {
     form {
-        max-height: 348px;
+        max-height: 300px;
         overflow-y: scroll;
     }
 
     .table-container {
         margin-top: 0 !important;
         margin-bottom: 0;
+    }
+}
+
+.ghi-giam-custom {
+    form {
+        max-height: 20rem;
+    }
+}
+
+.ghi-tang-custom {
+    form {
+        max-height: 16rem;
     }
 }

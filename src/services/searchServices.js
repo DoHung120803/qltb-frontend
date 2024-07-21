@@ -14,3 +14,16 @@ export const search = async (endpoint, name, page, size) => {
         console.log(error);
     }
 };
+
+export const searchAll = async (endpoint, name) => {
+    try {
+        const res = await httpRequest.get(endpoint, {
+            params: {
+                name,
+            },
+        });
+        return res;
+    } catch (error) {
+        console.log(error);
+    }
+};

@@ -1,0 +1,14 @@
+.wrapper {
+    height: 100%;
+    margin: 0 auto;
+    position: relative;
+    top: 4%;
+
+    .add-btn {
+        background-color: var(--sidebar-background-color);
+        color: white;
+        border-radius: 5px;
+        padding: 5px;
+        text-decoration: none;
+    }
+}

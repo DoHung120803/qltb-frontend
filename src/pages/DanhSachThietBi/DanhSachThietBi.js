@@ -1,5 +1,5 @@
 import classNames from "classnames/bind";
-import styles from "./DanhMucThietBi.module.scss";
+import styles from "./DanhSachThietBi.module.scss";
 import Table from "~/components/Table";
 import { useEffect, useState } from "react";
 import * as getServices from "~/services/getServices";
@@ -9,16 +9,28 @@ import { Link } from "react-router-dom";
 
 const cx = classNames.bind(styles);
 
-function DanhMucThietBi() {
+function DanhSachThietBi() {
     const tableColumnsName = [
         "Mã thiết bị",
         "Tên thiết bị",
-        "Loại thiết bị",
-        "Môn học",
-        "Hành động",
+        "Kho/Phòng",
+        "Số lượng",
+        "Trong kho",
+        "Đang mượn",
+        "Hỏng",
+        "Mất",
     ];
 
-    const fields = ["maTB", "tenTB", "loaiTB", "tenMonHoc"];
+    const fields = [
+        "maTB",
+        "tenTB",
+        "tenKP",
+        "soLuong",
+        "trongKho",
+        "muon",
+        "hong",
+        "mat",
+    ];
 
     const [devices, setDevices] = useState([]);
     const [page, setPage] = useState(0);
@@ -39,7 +51,7 @@ function DanhMucThietBi() {
     useEffect(() => {
         const fetchDevices = async () => {
             if (!isSearching) {
-                const dataResponse = await getServices.getDevices(page, size);
+                const dataResponse = await getServices.getDSThietBi(page, size);
                 setDevices(dataResponse.content);
                 setTotalPages(dataResponse.totalPages);
                 setTotalItems(dataResponse.totalElements);
@@ -62,12 +74,12 @@ function DanhMucThietBi() {
 
     return (
         <div className={cx("wrapper", "col-11")}>
-            <h2>Quản lý danh mục</h2>
-            <p>Quản lý danh mục &gt; Quản lý thiết bị</p>
+            <h2>Quản lý thiết bị</h2>
+            <p>Quản lý thiết bị &gt; Danh sách thiết bị</p>
 
             <div className="row m-0">
                 <Search
-                    endpoint="/dm-thiet-bi/search"
+                    endpoint="/ds-thiet-bi/search"
                     setSearchResult={setDevices}
                     setIsSearching={setIsSearching}
                     page={page}
@@ -79,11 +91,11 @@ function DanhMucThietBi() {
                 <Link
                     className={cx(
                         "add-btn",
-                        "col-lg-2 col-sm-4 mt-3 text-center ms-auto"
+                        "col-lg-1 col-sm-3 mt-3 text-center ms-auto"
                     )}
-                    to={config.routes.them_thiet_bi}
+                    to={config.routes.khai_bao_thiet_bi}
                 >
-                    <div>Thêm thiết bị</div>
+                    <div>Khai báo</div>
                 </Link>
                 <Table
                     tableColumnsName={tableColumnsName}
@@ -96,12 +108,12 @@ function DanhMucThietBi() {
                     onPageChange={handlePageChange}
                     onSizeChange={handleSizeChange}
                     linkUpdate={config.routes.update_thiet_bi}
-                    deleteEndpoint="dm-thiet-bi/delete"
                     handleReload={handleReload}
+                    nonAction
                 />
             </div>
         </div>
     );
 }
 
-export default DanhMucThietBi;
+export default DanhSachThietBi;

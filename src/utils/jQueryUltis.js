@@ -13,3 +13,11 @@ export const unClickDashBoardSubItem = (setIsChoose) => {
         });
     });
 };
+
+export const getGhiGiamTenTBSelectTags = () => {
+    return $(".ghi-giam-tenTB-select-tag");
+};
+
+export const getGhiGiamKPSelectTags = () => {
+    return $(".ghi-giam-KP-select-tag");
+};

@@ -14,7 +14,7 @@ function DashBoard({ children, onClick }) {
                     <span className={cx("dashboard-icon")}>
                         <DashboardIcon />
                     </span>
-                    <span className={cx("dashboard-text")}>DashBoard</span>
+                    <span className={cx("dashboard-text")}>Dashboard</span>
                 </div>
             </Link>
 

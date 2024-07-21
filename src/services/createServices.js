@@ -17,3 +17,30 @@ export const createThietBi = async (request) => {
         console.log(error);
     }
 };
+
+export const createDSTB = async (request) => {
+    try {
+        const response = await httpRequest.post("/ds-thiet-bi/create", request);
+        return response;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const createGiam = async (request) => {
+    try {
+        const response = await httpRequest.post("/giam-tb/create", request);
+        return response;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const createTang = async (request) => {
+    try {
+        const response = await httpRequest.post("/tang-tb/create", request);
+        return response;
+    } catch (error) {
+        console.log(error);
+    }
+};

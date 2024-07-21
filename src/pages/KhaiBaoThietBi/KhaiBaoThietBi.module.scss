@@ -1,0 +1,32 @@
+.wrapper {
+    height: 100%;
+    margin: 0 auto;
+    position: relative;
+    top: 4%;
+
+    .add-btn,
+    .add-row-btn {
+        padding: 3px 2rem;
+        margin-right: 10px;
+    }
+
+    .create-btn,
+    .cancel-btn {
+        text-decoration: none;
+        border-radius: 10px;
+        height: 4rem;
+        color: white;
+        background-color: var(--sidebar-background-color);
+        cursor: pointer;
+    }
+
+    .cancel-btn {
+        background-color: white;
+        color: black;
+        border: 1px solid rgb(166, 158, 158);
+    }
+
+    .total-selected {
+        color: rgb(23, 165, 212);
+    }
+}

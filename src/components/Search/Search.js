@@ -3,6 +3,7 @@ import styles from "./Search.module.scss";
 import { useEffect, useRef, useState } from "react";
 import { useDebounce } from "~/hooks";
 import * as searchServices from "~/services/searchServices";
+import ChonTBKB from "~/pages/ChonTBKB";
 
 const cx = classNames.bind(styles);
 
@@ -15,6 +16,7 @@ function Search({
     setTotalPages,
     setTotalItems,
     reload,
+    chonTBKBCustom,
 }) {
     const [searchValue, setSearchValue] = useState("");
 
@@ -41,16 +43,25 @@ function Search({
         setIsSearching(true);
 
         const fetchApi = async () => {
-            const response = await searchServices.search(
-                endpoint,
-                debouncedValue.trim(),
-                page,
-                size
-            );
-            setSearchResult(response.data.content);
-            setTotalPages(response.data.totalPages);
-            setTotalItems(response.data.totalElements);
-            console.log(response);
+            if (!chonTBKBCustom) {
+                const response = await searchServices.search(
+                    endpoint,
+                    debouncedValue.trim(),
+                    page,
+                    size
+                );
+                setSearchResult(response.data.content);
+                setTotalPages(response.data.totalPages);
+                setTotalItems(response.data.totalElements);
+                console.log(response);
+            } else {
+                const response = await searchServices.searchAll(
+                    endpoint,
+                    debouncedValue.trim()
+                );
+                console.log(response.data);
+                setSearchResult(response.data);
+            }
         };
 
         fetchApi();
@@ -59,7 +70,7 @@ function Search({
         <input
             type="text"
             className="col-lg-3 col-sm-3 mt-3"
-            placeholder="Nhập tên giáo viên"
+            placeholder="Nhập tên cần tìm kiếm"
             value={searchValue}
             onChange={handleChange}
         />
