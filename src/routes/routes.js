@@ -13,6 +13,7 @@ import GhiTang from "~/pages/GhiTang";
 // Pages
 import Home from "~/pages/Home";
 import KhaiBaoThietBi from "~/pages/KhaiBaoThietBi";
+import TangThietBi from "~/pages/TangThietBi";
 import ThemGiaoVien from "~/pages/ThemGiaoVien";
 import ThemThietBi from "~/pages/ThemThietBi";
 import UpdateGiaoVien from "~/pages/UpdateGiaoVien/UpdateGiaoVien";
@@ -33,6 +34,7 @@ const privateRoutes = [
     { path: config.routes.khai_bao_thiet_bi, component: KhaiBaoThietBi },
     { path: config.routes.ghi_giam, component: GhiGiam },
     { path: config.routes.ghi_tang, component: GhiTang },
+    { path: config.routes.tang_thiet_bi, component: TangThietBi },
 ];
 
 export { privateRoutes };

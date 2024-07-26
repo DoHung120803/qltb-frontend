@@ -113,7 +113,7 @@ function Sidebar() {
                         handleSelected={handleSelected}
                     />
                     <DashBoardItem
-                        to={config.routes.ghi_tang}
+                        to={config.routes.tang_thiet_bi}
                         icon={<QuanLyDoanhMucIcon />}
                         title="Ghi Tăng"
                         subItem

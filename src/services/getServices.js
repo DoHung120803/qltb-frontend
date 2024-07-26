@@ -82,3 +82,14 @@ export const getAllDSThietBi = async () => {
         console.log(error);
     }
 };
+
+export const getTangTB = async (page, size) => {
+    try {
+        const response = await httpRequest.get(
+            `/tang-tb/page?page=${page}&size=${size}`
+        );
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+};
