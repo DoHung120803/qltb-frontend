@@ -11,14 +11,14 @@ const cx = classNames.bind(styles);
 
 function DanhMucThietBi() {
     const tableColumnsName = [
-        "Mã thiết bị",
-        "Tên thiết bị",
+        "Mã nhóm thiết bị",
+        "Tên nhóm thiết bị",
         "Loại thiết bị",
         "Môn học",
         "Hành động",
     ];
 
-    const fields = ["maTB", "tenTB", "loaiTB", "tenMonHoc"];
+    const fields = ["maNTB", "tenNTB", "loaiTB", "tenMonHoc"];
 
     const [devices, setDevices] = useState([]);
     const [page, setPage] = useState(0);

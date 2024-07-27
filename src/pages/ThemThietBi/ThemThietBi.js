@@ -10,7 +10,7 @@ const cx = classNames.bind(styles);
 
 function ThemThietBi({ updateData = false, title }) {
     const requestDefault = {
-        tenTB: "",
+        tenNTB: "",
         maDVT: "",
         maMonHoc: "",
         maLoaiTB: "",
@@ -51,14 +51,14 @@ function ThemThietBi({ updateData = false, title }) {
 
     const handleSubmit = async () => {
         let response = null;
-        if (request.slToiThieu <= 0) {
-            alert("Số lượng tối thiểu phải lớn hơn 0");
-            return;
-        }
+        // if (request.slToiThieu <= 0) {
+        //     alert("Số lượng tối thiểu phải lớn hơn 0");
+        //     return;
+        // }
         if (updateData) {
             response = await updateServices.updateThietBi(
                 "dm-thiet-bi/update",
-                updateData.maTB,
+                updateData.maNTB,
                 request
             );
 
@@ -92,8 +92,8 @@ function ThemThietBi({ updateData = false, title }) {
                     <input
                         className={cx("input")}
                         type="text"
-                        value={request.tenTB}
-                        onChange={(e) => handleChange(e, "tenTB")}
+                        value={request.tenNTB}
+                        onChange={(e) => handleChange(e, "tenNTB")}
                     />
                 </span>
                 <span className="col-lg-6 col-md-5 mt-5 d-flex flex-column">
@@ -138,13 +138,14 @@ function ThemThietBi({ updateData = false, title }) {
                         <option value="MH00004">Sinh</option>
                         <option value="MH00005">Sử</option>
                         <option value="MH00006">Địa</option>
+                        <option value="MH00007">Tin</option>
                     </select>
                 </span>
                 <span className="col-lg-6 col-md-5 mt-5 d-flex flex-column">
                     <label className="">Số lượng tối thiểu</label>
                     <input
                         className={cx("input")}
-                        placeholder="Nhập số lượng tối thiểu > 0"
+                        // placeholder="Nhập số lượng tối thiểu > 0"
                         type="number"
                         min={1}
                         value={request.slToiThieu}
