@@ -12,16 +12,16 @@ const cx = classNames.bind(styles);
 function ChonTBKB() {
     const tableColumnsName = [
         "#",
-        "Mã thiết bị",
-        "Tên thiết bị",
+        "Mã nhóm thiết bị",
+        "Tên nhóm thiết bị",
         "Loại thiết bị",
     ];
 
-    const fields = ["#", "maTB", "tenTB", "loaiTB"];
+    const fields = ["#", "maNTB", "tenNTB", "loaiTB"];
 
     const [devices, setDevices] = useState([]);
     const state = useLocation().state;
-    const [selectedDevices, setSelectedDevices] = useState(state.array || []);
+    const [selectedDevices, setSelectedDevices] = useState(state?.array || []);
     const [isSearching, setIsSearching] = useState(false);
     const [reload, setReload] = useState(false);
 
@@ -37,7 +37,7 @@ function ChonTBKB() {
         const fetchDevices = async () => {
             if (!isSearching) {
                 // eslint-disable-next-line react-hooks/rules-of-hooks
-                if (state.from === config.routes.ghi_giam) {
+                if (state?.from === config.routes.ghi_giam) {
                     const dataResponse = await getServices.getInDSThietBi();
                     setDevices(dataResponse);
                     return;
@@ -98,7 +98,7 @@ function ChonTBKB() {
 
                 <div className="row mt-5 gap-3 m-0 p-0">
                     <Link
-                        to={state.from}
+                        to={state?.from}
                         state={selectedDevices}
                         className={cx(
                             "create-btn",

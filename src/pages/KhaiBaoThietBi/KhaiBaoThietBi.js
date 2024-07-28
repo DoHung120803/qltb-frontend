@@ -5,19 +5,29 @@ import * as getServices from "~/services/getServices";
 import config from "~/config";
 import { Link, useLocation } from "react-router-dom";
 import QLTBTable from "~/components/QLTBTable";
-import { createDSTB } from "~/services/createServices";
+import { createTB } from "~/services/createServices";
 
 const cx = classNames.bind(styles);
 
 function KhaiBaoThietBi() {
     const tableColumnsName = [
-        "Mã thiết bị",
-        "Tên thiết bị",
+        "Mã nhóm thiết bị",
+        "Tên nhóm thiết bị",
         "Số lượng",
         "Kho phòng",
+        "Ngày nhập",
+        "Hạn sử dụng",
+        "",
     ];
 
-    const fields = ["maTB", "tenTB", "soLuong", "maKP"];
+    const fields = [
+        "maNTB",
+        "tenNTB",
+        "soLuong",
+        "maKP",
+        "ngayNhap",
+        "hanSuDung",
+    ];
 
     const [devices, setDevices] = useState([]);
     const [selectedDevices, setSelectedDevices] = useState(
@@ -47,17 +57,27 @@ function KhaiBaoThietBi() {
 
     function createTBKBArray() {
         const TBKB = [];
-        // Lọc selectedDevices để loại bỏ các phần tử có maTB bằng null hoặc chuỗi rỗng
+        // Lọc selectedDevices để loại bỏ các phần tử có maNTB bằng null hoặc chuỗi rỗng
         const filteredDevices = selectedDevices.filter((device) => {
             if (device.maKP === undefined) {
                 device.maKP = "KP00001";
             }
-            return !!device.maTB && !!device.soLuong;
+            if (device.ngayNhap === undefined) {
+                device.ngayNhap = new Date().toISOString().split("T")[0];
+            }
+            if (device.hanSuDung === undefined) {
+                device.hanSuDung = new Date(
+                    new Date().setFullYear(new Date().getFullYear() + 10)
+                )
+                    .toISOString()
+                    .split("T")[0];
+            }
+            return !!device.maNTB && !!device.soLuong;
         });
 
         filteredDevices.forEach((device) => {
             const existingDeviceIndex = TBKB.findIndex(
-                (tb) => tb.maTB === device.maTB && tb.maKP === device.maKP
+                (tb) => tb.maNTB === device.maNTB && tb.maKP === device.maKP
             );
 
             if (existingDeviceIndex !== -1) {
@@ -75,7 +95,7 @@ function KhaiBaoThietBi() {
                 // Đặt số lượng cho thiết bị mới
                 newDevice.soLuong = device.soLuong;
                 // Thêm thiết bị mới vào TBKB
-                // delete newDevice["tenTB"];
+                // delete newDevice["tenNTB"];
                 TBKB.push(newDevice);
             }
         });
@@ -85,16 +105,23 @@ function KhaiBaoThietBi() {
         setMerged(true);
     }
 
-    const handleSubmit = () => {
-        TBKB.forEach((tb) => {
-            const fetch = async () => {
-                await createDSTB(tb);
-            };
-            fetch();
-        });
+    const handleSubmit = async () => {
+        for (const tb of TBKB) {
+            try {
+                const response = await createTB(tb);
+                if (response.status !== 200) {
+                    alert("Khai báo thất bại :((");
+                    return;
+                }
+            } catch (error) {
+                alert("Khai báo thất bại :((");
+                return;
+            }
+        }
+        alert("Khai báo thành công ^^");
     };
 
-    console.log(selectedDevices);
+    console.log(TBKB);
 
     return (
         <div className={cx("wrapper", "col-11")}>
@@ -108,13 +135,11 @@ function KhaiBaoThietBi() {
                         from: config.routes.khai_bao_thiet_bi,
                     }}
                 >
-                    <button className={cx("add-btn")}>
-                        Thêm nhiều thiết bị +
-                    </button>
+                    <button className={cx("add-btn")}>Thêm thiết bị +</button>
                 </Link>
-                <button onClick={handleAddRow} className={cx("add-row-btn")}>
+                {/* <button onClick={handleAddRow} className={cx("add-row-btn")}>
                     Thêm dòng +
-                </button>
+                </button> */}
                 <div className="mt-5">Danh sách thiết bị</div>
 
                 <QLTBTable

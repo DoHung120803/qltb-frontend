@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import styles from "./Table.module.scss";
 import { DeleteIcon, LineIcon, MenuIcon, PencilIcon } from "../Icons";
 import * as deleteServices from "~/services/deleteServices";
+import { useState } from "react";
 
 const cx = classNames.bind(styles);
 
@@ -22,7 +23,10 @@ function Table({
     chonTBKBCustom = false,
     handleSelectedDevices,
     nonAction,
+    handleCheckBox,
 }) {
+    const [reRender, setReRender] = useState(false);
+
     const startItem = page * size + 1;
     const endItem = Math.min((page + 1) * size, totalItems);
 
@@ -41,8 +45,10 @@ function Table({
         }
     };
 
+    const handleReRender = () => setReRender(!reRender);
+
     // console.log(fields);
-    // console.log(datasTable);
+    console.log(datasTable);
 
     return (
         <div
@@ -76,9 +82,27 @@ function Table({
                         </tr>
                     </thead>
                     <tbody>
-                        {datasTable.map((data, index) => (
-                            <tr key={index}>
+                        {datasTable.map((data, _index) => (
+                            <tr key={_index}>
                                 {fields.map((field, index) => {
+                                    if (field === "dangHoatDong") {
+                                        return (
+                                            <td key={index}>
+                                                <input
+                                                    className="col-8 ms-auto"
+                                                    type="checkbox"
+                                                    checked={data[field]}
+                                                    onChange={(e) => {
+                                                        handleCheckBox(
+                                                            field,
+                                                            _index
+                                                        );
+                                                        handleReRender();
+                                                    }}
+                                                />
+                                            </td>
+                                        );
+                                    }
                                     if (field === "#") {
                                         return (
                                             <td key={index}>

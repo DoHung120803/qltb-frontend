@@ -219,7 +219,7 @@ function GhiGiam({ updateData = false, title }) {
                 to={config.routes.chon_thiet_bi_khai_bao}
                 state={{ array: selectedDevices, from: config.routes.ghi_giam }}
             >
-                <button className={cx("add-btn")}>Thêm nhiều thiết bị +</button>
+                <button className={cx("add-btn")}>Thêm thiết bị +</button>
             </Link>
             <button onClick={handleAddRow} className={cx("add-row-btn")}>
                 Thêm dòng +

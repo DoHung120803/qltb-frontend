@@ -81,9 +81,9 @@ function TangThietBi() {
                         "add-btn",
                         "col-lg-2 col-sm-4 mt-3 text-center ms-auto"
                     )}
-                    to={config.routes.them_thiet_bi}
+                    to={config.routes.ghi_tang}
                 >
-                    <div>Thêm thiết bị</div>
+                    <div>Ghi tăng</div>
                 </Link>
                 <Table
                     tableColumnsName={tableColumnsName}

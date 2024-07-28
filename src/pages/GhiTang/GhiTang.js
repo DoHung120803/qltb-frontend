@@ -11,8 +11,8 @@ const cx = classNames.bind(styles);
 
 function GhiTang({ updateData = false, title }) {
     const tableColumnsName = [
-        "Mã thiết bị",
-        "Tên thiết bị",
+        "Mã nhóm thiết bị",
+        "Tên nhóm thiết bị",
         "Kho phòng",
         "Số lượng",
         "Đơn vị tính",
@@ -224,7 +224,7 @@ function GhiTang({ updateData = false, title }) {
                 to={config.routes.chon_thiet_bi_khai_bao}
                 state={{ array: selectedDevices, from: config.routes.ghi_tang }}
             >
-                <button className={cx("add-btn")}>Thêm nhiều thiết bị +</button>
+                <button className={cx("add-btn")}>Thêm thiết bị +</button>
             </Link>
             <button onClick={handleAddRow} className={cx("add-row-btn")}>
                 Thêm dòng +

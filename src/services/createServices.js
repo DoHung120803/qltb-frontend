@@ -18,9 +18,9 @@ export const createThietBi = async (request) => {
     }
 };
 
-export const createDSTB = async (request) => {
+export const createTB = async (request) => {
     try {
-        const response = await httpRequest.post("/ds-thiet-bi/create", request);
+        const response = await httpRequest.post("/thiet-bi/create", request);
         return response;
     } catch (error) {
         console.log(error);

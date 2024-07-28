@@ -46,7 +46,7 @@ export const getInDSThietBi = async () => {
 export const getDSThietBi = async (page, size) => {
     try {
         const response = await httpRequest.get(
-            `/ds-thiet-bi/page?page=${page}&size=${size}`
+            `/thiet-bi/page?page=${page}&size=${size}`
         );
         return response.data;
     } catch (error) {

@@ -17,3 +17,12 @@ export const updateThietBi = async (endpoint, id, request) => {
         console.log(error);
     }
 };
+
+export const changeActivating = async (maCaBietTB) => {
+    try {
+        const response = await httpRequest.patch("thiet-bi" + "/" + maCaBietTB);
+        return response;
+    } catch (error) {
+        console.log(error);
+    }
+};

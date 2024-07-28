@@ -6,30 +6,32 @@ import * as getServices from "~/services/getServices";
 import Search from "~/components/Search/Search";
 import config from "~/config";
 import { Link } from "react-router-dom";
+import { data } from "jquery";
+import { changeActivating } from "~/services/updateServices";
 
 const cx = classNames.bind(styles);
 
 function DanhSachThietBi() {
     const tableColumnsName = [
-        "Mã thiết bị",
+        "Mã nhóm TB",
+        "Mã cá biệt TB",
         "Tên thiết bị",
         "Kho/Phòng",
-        "Số lượng",
-        "Trong kho",
-        "Đang mượn",
-        "Hỏng",
-        "Mất",
+        "Ngày nhập",
+        "Trạng thái",
+        "Tình trạng sử dụng",
+        "Đang hoạt động",
     ];
 
     const fields = [
-        "maTB",
+        "maNTB",
+        "maCaBietTB",
         "tenTB",
-        "tenKP",
-        "soLuong",
-        "trongKho",
-        "muon",
-        "hong",
-        "mat",
+        "khoPhong",
+        "ngayNhap",
+        "trangThai",
+        "tinhTrang",
+        "dangHoatDong",
     ];
 
     const [devices, setDevices] = useState([]);
@@ -72,6 +74,23 @@ function DanhSachThietBi() {
         setPage(0);
     };
 
+    const handleCheckBox = (field, _index) => {
+        const maCaBietTB = devices[_index].maCaBietTB;
+
+        const changeActive = async (maCaBietTB) => {
+            const response = await changeActivating(maCaBietTB);
+            if (response === undefined) {
+                return alert(
+                    "Có lỗi xảy ra.\nKhông thể thay đổi trạng thái hoạt động của thiết bị có mã cá biệt " +
+                        maCaBietTB
+                );
+            }
+            devices[_index][field] = !devices[_index][field];
+            handleReload();
+        };
+        changeActive(maCaBietTB);
+    };
+
     return (
         <div className={cx("wrapper", "col-11")}>
             <h2>Quản lý thiết bị</h2>
@@ -79,7 +98,7 @@ function DanhSachThietBi() {
 
             <div className="row m-0">
                 <Search
-                    endpoint="/ds-thiet-bi/search"
+                    endpoint="/thiet-bi/search"
                     setSearchResult={setDevices}
                     setIsSearching={setIsSearching}
                     page={page}
@@ -110,6 +129,7 @@ function DanhSachThietBi() {
                     linkUpdate={config.routes.update_thiet_bi}
                     handleReload={handleReload}
                     nonAction
+                    handleCheckBox={handleCheckBox}
                 />
             </div>
         </div>

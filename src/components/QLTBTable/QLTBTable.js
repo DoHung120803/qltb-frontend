@@ -17,12 +17,13 @@ function QLTBTable({
     setMerged,
     ghiGiamCustom,
     ghiTangCustom,
+    from,
 }) {
     // const [reRender, setReRender] = useState(false);
     const [khoOptions, setKhoOptions] = useState({}); // Quản lý options của kho cho mỗi
     const [reRender, setReRender] = useState(false);
 
-    // fetch dữ liệu khi thêm nhiều thiết bị và dán dữ liệu vào datatable tương ứng
+    // fetch dữ liệu khi Thêm thiết bị và dán dữ liệu vào datatable tương ứng
     useEffect(() => {
         if (!ghiGiamCustom) {
             return;
@@ -38,37 +39,37 @@ function QLTBTable({
         });
     }, []);
 
-    // Hàm fetch dữ liệu kho chứa dựa vào maTB
-    const fetchKhoOptions = async (maTB, _index) => {
-        let endpoint = `/ds-thiet-bi/kho-phong/${maTB}`; // thay đổi tùy từng component
+    // Hàm fetch dữ liệu kho chứa dựa vào maNTB
+    const fetchKhoOptions = async (maNTB, _index) => {
+        let endpoint = `/ds-thiet-bi/kho-phong/${maNTB}`; // thay đổi tùy từng component
         const response = await getServices.getKhoPhongs(endpoint);
         setKhoOptions((prev) => ({ ...prev, [_index]: response }));
         if (!dataTable[_index].maKP) {
             dataTable[_index].maKP = response[0].maKP;
         }
         if (!dataTable[_index].hong) {
-            getDSTBByMaTBAndMaKP(maTB, response[0].maKP, _index);
+            getDSTBByMaTBAndMaKP(maNTB, response[0].maKP, _index);
         }
         return response; // response là mảng các kho chứa mới fetch được
     };
 
-    const handleChangeTenTB = async (maTB, _index) => {
-        const response = await fetchKhoOptions(maTB, _index);
+    const handleChangeTenTB = async (maNTB, _index) => {
+        const response = await fetchKhoOptions(maNTB, _index);
         dataTable[_index].maKP = response[0].maKP;
-        getDSTBByMaTBAndMaKP(maTB, response[0].maKP, _index);
+        getDSTBByMaTBAndMaKP(maNTB, response[0].maKP, _index);
     };
 
-    const getDSTBByMaTBAndMaKP = async (maTB, maKP, _index) => {
-        const response = await getServices.getDSTBByMaTBAndMaKP(maTB, maKP);
+    const getDSTBByMaTBAndMaKP = async (maNTB, maKP, _index) => {
+        const response = await getServices.getDSTBByMaTBAndMaKP(maNTB, maKP);
         dataTable[_index].hong = response.hong;
         dataTable[_index].conDungDuoc = response.soLuong - response.hong;
         setReRender(!reRender);
     };
 
     // // Hàm xử lý khi kho phòng thay đổi
-    // const handleKhoChange = async (e, maTB, rowIndex) => {
+    // const handleKhoChange = async (e, maNTB, rowIndex) => {
     //     const maKP = e.target.value;
-    //     const response = await fetch(`/api/data/${maTB}/${maKP}`);
+    //     const response = await fetch(`/api/data/${maNTB}/${maKP}`);
     //     const newData = await response.json();
     //     // Cập nhật dữ liệu của dòng tương ứng trong dataTable
     //     const updatedDataTable = dataTable.map((item, index) => {
@@ -147,7 +148,7 @@ function QLTBTable({
                                                                 ghiGiamCustom,
                                                         })}
                                                         onChange={(e) => {
-                                                            data.maTB =
+                                                            data.maNTB =
                                                                 e.target.value;
                                                             data.tenTB =
                                                                 e.target.options[
@@ -159,8 +160,8 @@ function QLTBTable({
                                                                         (
                                                                             device
                                                                         ) =>
-                                                                            device.maTB ===
-                                                                            data.maTB
+                                                                            device.maNTB ===
+                                                                            data.maNTB
                                                                     ).donViTinh;
                                                             }
                                                             if (ghiGiamCustom) {
@@ -182,7 +183,7 @@ function QLTBTable({
                                                             <option
                                                                 value={
                                                                     //data.tenTB
-                                                                    data.maTB
+                                                                    data.maNTB
                                                                 }
                                                             >
                                                                 {data.tenTB}
@@ -199,8 +200,8 @@ function QLTBTable({
                                                                         data
                                                                     ).length >
                                                                         0 &&
-                                                                    device.maTB ===
-                                                                        data.maTB
+                                                                    device.maNTB ===
+                                                                        data.maNTB
                                                                 ) {
                                                                     return false;
                                                                 }
@@ -210,7 +211,7 @@ function QLTBTable({
                                                                             index
                                                                         }
                                                                         value={
-                                                                            device.maTB
+                                                                            device.maNTB
                                                                         }
                                                                     >
                                                                         {
@@ -252,6 +253,36 @@ function QLTBTable({
                                                 </td>
                                             );
                                         }
+                                        if (
+                                            field === "ngayNhap" ||
+                                            field === "hanSuDung"
+                                        ) {
+                                            return (
+                                                <td key={index}>
+                                                    <input
+                                                        style={{
+                                                            border: "none",
+                                                        }}
+                                                        type="date"
+                                                        min={1}
+                                                        value={
+                                                            data[field] ||
+                                                            new Date()
+                                                                .toISOString()
+                                                                .split("T")[0]
+                                                        }
+                                                        onChange={(e) => {
+                                                            handleReload();
+                                                            data[field] =
+                                                                e.target.value;
+
+                                                            setMerged(false);
+                                                        }}
+                                                    />
+                                                </td>
+                                            );
+                                        }
+
                                         if (field === "maKP") {
                                             if (ghiGiamCustom) {
                                                 return (
@@ -271,7 +302,7 @@ function QLTBTable({
                                                                 data.maKP =
                                                                     e.target.value;
                                                                 getDSTBByMaTBAndMaKP(
-                                                                    data.maTB,
+                                                                    data.maNTB,
                                                                     data.maKP,
                                                                     _index
                                                                 );
@@ -348,6 +379,11 @@ function QLTBTable({
                                             <td key={index}>{data[[field]]}</td>
                                         );
                                     })}
+                                    <td>
+                                        <span className={cx("delete-btn")}>
+                                            x
+                                        </span>
+                                    </td>
                                 </tr>
                             );
                         })}
@@ -355,7 +391,7 @@ function QLTBTable({
                         {dataTable.length === 0 && (
                             <tr>
                                 <td
-                                    colSpan={fields.length}
+                                    colSpan={fields.length + 1}
                                     className="text-center"
                                 >
                                     {"Không có có dữ liệu!"}

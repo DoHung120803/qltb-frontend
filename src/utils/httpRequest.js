@@ -23,3 +23,8 @@ export const put = async (path, options = {}) => {
     const response = await httpRequest.put(path, options);
     return response;
 };
+
+export const patch = async (path, options = {}) => {
+    const response = await httpRequest.patch(path, options);
+    return response;
+};
