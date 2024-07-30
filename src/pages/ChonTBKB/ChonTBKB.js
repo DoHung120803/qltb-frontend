@@ -5,25 +5,51 @@ import { useEffect, useState } from "react";
 import * as getServices from "~/services/getServices";
 import Search from "~/components/Search/Search";
 import config from "~/config";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import $ from "jquery";
 
 const cx = classNames.bind(styles);
 
 function ChonTBKB() {
-    const tableColumnsName = [
-        "#",
-        "Mã nhóm thiết bị",
-        "Tên nhóm thiết bị",
-        "Loại thiết bị",
-    ];
+    const [state, setState] = useState(useLocation().state || []);
 
-    const fields = ["#", "maNTB", "tenNTB", "loaiTB"];
+    const tableColumnsName =
+        state?.from === config.routes.ghi_giam ||
+        state?.from === config.routes.khai_bao_hong_mat
+            ? [
+                  "#",
+                  "Mã cá biệt TB",
+                  "Tên nhóm thiết bị",
+                  "Kho phòng",
+                  "Hạn sử dụng",
+                  "Trạng thái",
+                  "Tình trạng",
+                  "Đang hoạt động",
+              ]
+            : ["#", "Mã nhóm thiết bị", "Tên nhóm thiết bị", "Loại thiết bị"];
+
+    const fields =
+        state?.from === config.routes.ghi_giam ||
+        state?.from === config.routes.khai_bao_hong_mat
+            ? [
+                  "#",
+                  "maCaBietTB",
+                  "tenNTB",
+                  "khoPhong",
+                  "hanSuDung",
+                  "trangThai",
+                  "tinhTrang",
+                  "dangHoatDong",
+              ]
+            : ["#", "maNTB", "tenNTB", "loaiTB"];
 
     const [devices, setDevices] = useState([]);
-    const state = useLocation().state;
+    // const state = useLocation().state;
     const [selectedDevices, setSelectedDevices] = useState(state?.array || []);
     const [isSearching, setIsSearching] = useState(false);
     const [reload, setReload] = useState(false);
+
+    const navigator = useNavigate();
 
     const handleReload = () => {
         setReload(!reload);
@@ -37,9 +63,21 @@ function ChonTBKB() {
         const fetchDevices = async () => {
             if (!isSearching) {
                 // eslint-disable-next-line react-hooks/rules-of-hooks
-                if (state?.from === config.routes.ghi_giam) {
-                    const dataResponse = await getServices.getInDSThietBi();
-                    setDevices(dataResponse);
+                if (
+                    state?.from === config.routes.ghi_giam ||
+                    state?.from === config.routes.khai_bao_hong_mat
+                ) {
+                    const dataResponse =
+                        await getServices.getAllThietBiChuaThanhLy();
+                    const filteredDevices = dataResponse.filter(
+                        (device) =>
+                            !selectedDevices.some(
+                                (selected) =>
+                                    selected.maCaBietTB === device.maCaBietTB
+                            )
+                    );
+                    setDevices(filteredDevices);
+                    // setDevices(dataResponse);
                     return;
                 }
                 const dataResponse = await getServices.getAllDevices();
@@ -51,12 +89,30 @@ function ChonTBKB() {
     }, [isSearching, reload]);
 
     const handleSelectedDevices = (e, data) => {
-        if (e.target.checked) {
-            setSelectedDevices([...selectedDevices, data]);
+        if (state?.from === config.routes.khai_bao_hong_mat) {
+            if (e.target.checked) {
+                setSelectedDevices([data]);
+                // Dùng một bộ định danh để xác định checkbox hiện tại
+                state.request.maCaBietTB = data.maCaBietTB;
+                const checkboxes = document.querySelectorAll(".checkbox-row");
+                checkboxes.forEach((checkbox) => {
+                    if (checkbox !== e.target) {
+                        checkbox.checked = false;
+                    }
+                });
+            } else {
+                setSelectedDevices([]);
+            }
         } else {
-            setSelectedDevices(
-                selectedDevices.filter((device) => device.maTB !== data.maTB)
-            );
+            if (e.target.checked) {
+                setSelectedDevices([...selectedDevices, data]);
+            } else {
+                setSelectedDevices(
+                    selectedDevices.filter(
+                        (device) => device.maTB !== data.maTB
+                    )
+                );
+            }
         }
     };
 
@@ -94,12 +150,18 @@ function ChonTBKB() {
                     handleReload={handleReload}
                     chonTBKBCustom={true}
                     handleSelectedDevices={handleSelectedDevices}
+                    khaiBaoHongMat={
+                        state?.from === config.routes.khai_bao_hong_mat
+                    }
                 />
 
                 <div className="row mt-5 gap-3 m-0 p-0">
                     <Link
                         to={state?.from}
-                        state={selectedDevices}
+                        state={{
+                            selectedDevices,
+                            request: state?.request,
+                        }}
                         className={cx(
                             "create-btn",
                             "col-2 d-flex align-items-center justify-content-center"
@@ -113,15 +175,19 @@ function ChonTBKB() {
                         </div>
                     </Link>
 
-                    <div
+                    <Link
                         className={cx(
                             "cancel-btn",
                             "col-2 col-2 d-flex align-items-center justify-content-center"
                         )}
-                        // onClick={() => navigator(config.routes.danh_muc_giao_vien)}
+                        to={state?.from}
+                        state={{
+                            selectedDevices,
+                            request: state?.request,
+                        }}
                     >
                         Hủy
-                    </div>
+                    </Link>
                 </div>
             </div>
         </div>

@@ -29,7 +29,7 @@ export const createTB = async (request) => {
 
 export const createGiam = async (request) => {
     try {
-        const response = await httpRequest.post("/giam-tb/create", request);
+        const response = await httpRequest.post("/thanh-ly-tb/create", request);
         return response;
     } catch (error) {
         console.log(error);
@@ -39,6 +39,18 @@ export const createGiam = async (request) => {
 export const createTang = async (request) => {
     try {
         const response = await httpRequest.post("/tang-tb/create", request);
+        return response;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const createKhaiBaoHongMat = async (request) => {
+    try {
+        const response = await httpRequest.post(
+            "/theo-doi-hong-mat/create",
+            request
+        );
         return response;
     } catch (error) {
         console.log(error);

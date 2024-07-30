@@ -105,9 +105,9 @@ function Sidebar() {
                         subItem
                     /> */}
                     <DashBoardItem
-                        to={config.routes.ghi_giam}
+                        to={config.routes.thanh_ly_thiet_bi}
                         icon={<QuanLyDoanhMucIcon />}
-                        title="Ghi Giảm"
+                        title="Thanh lý thiết bị"
                         subItem
                         selected={selected}
                         handleSelected={handleSelected}
@@ -115,7 +115,15 @@ function Sidebar() {
                     <DashBoardItem
                         to={config.routes.tang_thiet_bi}
                         icon={<QuanLyDoanhMucIcon />}
-                        title="Ghi Tăng"
+                        title="Tăng thiết bị"
+                        subItem
+                        selected={selected}
+                        handleSelected={handleSelected}
+                    />
+                    <DashBoardItem
+                        to={config.routes.theo_doi_hong_mat}
+                        icon={<QuanLyDoanhMucIcon />}
+                        title="Theo dõi hỏng/mất"
                         subItem
                         selected={selected}
                         handleSelected={handleSelected}

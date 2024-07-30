@@ -15,37 +15,38 @@ function GhiTang({ updateData = false, title }) {
         "Tên nhóm thiết bị",
         "Kho phòng",
         "Số lượng",
-        "Đơn vị tính",
         "Đơn giá",
         "Thành tiền",
+        "",
     ];
 
     const fields = [
-        "maTB",
-        "tenTB",
+        "maNTB",
+        "tenNTB",
         "maKP",
         "soLuong",
-        "donViTinh",
         "donGia",
         "thanhTienString",
     ];
 
     const requestDefault = {
-        ngayLap: new Date(),
+        ngayLap: new Date().toISOString().split("T")[0],
         noiDung: "",
         maNguonCap: "NC00001",
-        chiTietTangTBs: [],
+        chiTietTangTBList: [],
     };
 
     const navigator = useNavigate();
 
-    const [request, setRequest] = useState(requestDefault);
+    const [request, setRequest] = useState(
+        useLocation().state?.request || requestDefault
+    );
     const [devices, setDevices] = useState([]);
     const [dsTB, seDsTB] = useState([]);
     const [reload, setReload] = useState(false);
     const [merged, setMerged] = useState(false);
     const [selectedDevices, setSelectedDevices] = useState(
-        useLocation().state || []
+        useLocation().state?.selectedDevices || []
     );
     const [tangDevices, setTangDevices] = useState([]);
 
@@ -86,7 +87,7 @@ function GhiTang({ updateData = false, title }) {
             if (device.maKP === undefined) {
                 device.maKP = "KP00001";
             }
-            return !!device.maTB && device.soLuong > 0 && device.donGia > 0;
+            return !!device.maNTB && device.soLuong > 0 && device.donGia > 0;
         });
 
         filteredDevices.forEach((device) => {
@@ -94,7 +95,7 @@ function GhiTang({ updateData = false, title }) {
                 device.thanhTienString.replace(/\.|₫/g, "").trim()
             );
             const existingDeviceIndex = tangDevices.findIndex(
-                (tb) => tb.maTB === device.maTB && tb.maKP === device.maKP
+                (tb) => tb.maNTB === device.maNTB && tb.maKP === device.maKP
             );
 
             if (existingDeviceIndex !== -1) {
@@ -137,6 +138,14 @@ function GhiTang({ updateData = false, title }) {
         setTangDevices(tangDevices);
 
         tangDevices.forEach((device) => {
+            device.ngayNhap = request.ngayLap;
+            device.hanSuDung = new Date(
+                new Date(request.ngayLap).setFullYear(
+                    new Date(request.ngayLap).getFullYear() + 10
+                )
+            )
+                .toISOString()
+                .split("T")[0];
             if (device.thanhTien > 1000000000) {
                 alert(
                     `Thành tiền của thiết bị ${device.tenTB} vượt quá 1 tỷ đồng`
@@ -149,7 +158,7 @@ function GhiTang({ updateData = false, title }) {
 
         setMerged(true);
 
-        request.chiTietTangTBs = tangDevices;
+        request.chiTietTangTBList = tangDevices;
     }
 
     const handleSubmit = async () => {
@@ -168,7 +177,7 @@ function GhiTang({ updateData = false, title }) {
         //         alert("Cập nhật giáo viên thất bại");
         //     }
         // } else {
-        if (request.chiTietTangTBs.length === 0) {
+        if (request.chiTietTangTBList.length === 0) {
             alert("Chưa có thiết bị nào được chọn");
             return;
         }
@@ -177,7 +186,7 @@ function GhiTang({ updateData = false, title }) {
 
         if (response && response.status === 200) {
             alert("Ghi tăng thành công");
-            // navigator(config.routes.danh_muc_giao_vien);
+            navigator(config.routes.tang_thiet_bi);
         } else {
             alert("Ghi tăng thất bại (Hãy kiểm tra lại thông tin)");
         }
@@ -195,14 +204,17 @@ function GhiTang({ updateData = false, title }) {
                         className={cx("input")}
                         type="date"
                         value={request.ngayLap}
-                        onChange={(e) => handleChange(e, "ngayLap")}
+                        onChange={(e) => {
+                            handleChange(e, "ngayLap");
+                            setMerged();
+                        }}
                     />
                 </span>
                 <span className="col-lg-6 col-md-5 mt-5 d-flex flex-column">
                     <label className="">Nguồn cấp</label>
                     <select
-                        value={request.nguonCap}
-                        onChange={(e) => handleChange(e, "nguonCap")}
+                        value={request.maNguonCap}
+                        onChange={(e) => handleChange(e, "maNguonCap")}
                     >
                         <option value="NC00001">Sở GD&DT</option>
                         <option value="NC00002">Phòng GD&DT</option>
@@ -222,13 +234,14 @@ function GhiTang({ updateData = false, title }) {
             </div>
             <Link
                 to={config.routes.chon_thiet_bi_khai_bao}
-                state={{ array: selectedDevices, from: config.routes.ghi_tang }}
+                state={{
+                    array: selectedDevices,
+                    from: config.routes.ghi_tang,
+                    request,
+                }}
             >
                 <button className={cx("add-btn")}>Thêm thiết bị +</button>
             </Link>
-            <button onClick={handleAddRow} className={cx("add-row-btn")}>
-                Thêm dòng +
-            </button>
             <div className="mt-5">Danh sách thiết bị</div>
             <QLTBTable
                 tableColumnsName={tableColumnsName}
@@ -265,7 +278,7 @@ function GhiTang({ updateData = false, title }) {
                         "cancel-btn",
                         "col-2 col-2 d-flex align-items-center justify-content-center"
                     )}
-                    onClick={() => navigator(config.routes.danh_muc_giao_vien)}
+                    onClick={() => navigator(config.routes.tang_thiet_bi)}
                 >
                     Hủy
                 </div>

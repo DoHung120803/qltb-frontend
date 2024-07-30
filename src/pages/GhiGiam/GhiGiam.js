@@ -17,49 +17,59 @@ function GhiGiam({ updateData = false, title }) {
     };
 
     const tableColumnsName = [
-        "Mã thiết bị",
-        "Tên thiết bị",
+        "Mã cá biệt TB",
+        "Tên nhóm thiết bị",
         "Kho phòng",
-        "SL hỏng",
-        "SL còn dùng được",
-        "Tổng SL giảm",
+        "Trạng thái",
+        "Tình trạng",
+        "Lý do thanh lý",
+        "",
     ];
 
-    const fields = ["maTB", "tenTB", "maKP", "hong", "conDungDuoc", "tongGiam"];
+    const fields = [
+        "maCaBietTB",
+        "tenNTB",
+        "khoPhong",
+        "trangThai",
+        "tinhTrang",
+        "lyDoThanhLy",
+    ];
 
     const requestDefault = {
-        ngayLap: new Date(),
+        ngayLap: new Date().toISOString().split("T")[0],
         noiDung: "",
-        chiTietGiamTBs: [],
+        chiTietThanhLyTBList: [],
     };
 
     const navigator = useNavigate();
 
-    const [request, setRequest] = useState(requestDefault);
+    const [request, setRequest] = useState(
+        useLocation().state?.request || requestDefault
+    );
     const [devices, setDevices] = useState([]);
     const [dsTB, seDsTB] = useState([]);
     const [reload, setReload] = useState(false);
     const [merged, setMerged] = useState(false);
     const [selectedDevices, setSelectedDevices] = useState(
-        useLocation().state || []
+        useLocation().state?.selectedDevices || []
     );
     const [giamDevices, setGiamDevices] = useState([]);
 
-    useEffect(() => {
-        const fetchDevices = async () => {
-            const dataResponse = await getServices.getInDSThietBi();
-            setDevices(dataResponse);
-        };
-        fetchDevices();
-    }, []);
+    // useEffect(() => {
+    //     const fetchDevices = async () => {
+    //         const dataResponse = await getServices.getAllThietBi();
+    //         setDevices(dataResponse);
+    //     };
+    //     fetchDevices();
+    // }, []);
 
-    useEffect(() => {
-        const fetchDevices = async () => {
-            const dataResponse = await getServices.getAllDSThietBi();
-            seDsTB(dataResponse);
-        };
-        fetchDevices();
-    }, []);
+    // useEffect(() => {
+    //     const fetchDevices = async () => {
+    //         const dataResponse = await getServices.getAllDSThietBi();
+    //         seDsTB(dataResponse);
+    //     };
+    //     fetchDevices();
+    // }, []);
 
     // useEffect(() => {
     //     console.log(updateData);
@@ -68,11 +78,11 @@ function GhiGiam({ updateData = false, title }) {
     //     }
     // }, []);
 
-    const handleAddRow = () => {
-        setSelectedDevices([...selectedDevices, {}]);
-        setMerged(false);
-        // setTBKB([...TBKB, {}]);
-    };
+    // const handleAddRow = () => {
+    //     setSelectedDevices([...selectedDevices, {}]);
+    //     setMerged(false);
+    //     // setTBKB([...TBKB, {}]);
+    // };
 
     const handleChange = (e, field) => {
         setRequest((prev) => ({ ...prev, [field]: e.target.value }));
@@ -90,73 +100,77 @@ function GhiGiam({ updateData = false, title }) {
             // if (device.maKP === undefined) {
             //     device.maKP = "KP00001";
             // }
-            return !!device.maTB && device.tongGiam > 0;
+            return !!device.maCaBietTB;
         });
 
         filteredDevices.forEach((device) => {
-            const existingDeviceIndex = giamDevices.findIndex(
-                (tb) => tb.maTB === device.maTB && tb.maKP === device.maKP
-            );
+            // const existingDeviceIndex = giamDevices.findIndex(
+            //     (tb) =>
+            //         tb.maCaBietTB === device.maCaBietTB &&
+            //         tb.maKP === device.maKP
+            // );
 
-            if (existingDeviceIndex !== -1) {
-                // Cập nhật số lượng cho thiết bị hiện tại
-                // if (!device.soLuong || device.soLuong <= 0) {
-                //     device.soLuong = 1;
-                // }
-                giamDevices[existingDeviceIndex].hong += device.hong;
-                giamDevices[existingDeviceIndex].conDungDuoc +=
-                    device.conDungDuoc;
-            } else {
-                // Tạo một đối tượng mới chỉ chứa các trường trong `fields`
-                const newDevice = fields.reduce((obj, field) => {
-                    obj[field] = device[field];
-                    return obj;
-                }, {});
-                // Đặt số lượng cho thiết bị mới
-                newDevice.soLuong = device.soLuong;
-                // Thêm thiết bị mới vào giamDevices
-                // delete newDevice["tenTB"];
-                giamDevices.push(newDevice);
-            }
+            // if (existingDeviceIndex !== -1) {
+            //     // Cập nhật số lượng cho thiết bị hiện tại
+            //     // if (!device.soLuong || device.soLuong <= 0) {
+            //     //     device.soLuong = 1;
+            //     // }
+            //     giamDevices[existingDeviceIndex].hong += device.hong;
+            //     giamDevices[existingDeviceIndex].conDungDuoc +=
+            //         device.conDungDuoc;
+            // } else {
+            // Tạo một đối tượng mới chỉ chứa các trường trong `fields`
+            const newDevice = fields.reduce((obj, field) => {
+                obj[field] = device[field];
+                return obj;
+            }, {});
+            // Đặt số lượng cho thiết bị mới
+            newDevice.soLuong = device.soLuong;
+            // Thêm thiết bị mới vào giamDevices
+            // delete newDevice["tenTB"];
+            giamDevices.push(newDevice);
+            // }
         });
         // Cập nhật selectedDevices với giamDevices đã xử lý
 
         setSelectedDevices(giamDevices);
         setGiamDevices(giamDevices);
 
-        giamDevices.forEach((tbGiam) => {
-            delete tbGiam.soLuong;
-            const index = dsTB.findIndex(
-                (tb) => tb.maTB === tbGiam.maTB && tb.maKP === tbGiam.maKP
-            );
-            if (tbGiam.hong > dsTB[index].hong) {
-                alert(
-                    `Số lượng hỏng của thiết bị ${tbGiam.tenTB} trong ${
-                        KHO_PHONG[tbGiam.maKP]
-                    } vượt quá số lượng hỏng hiện có (${dsTB[index].hong})`
-                );
-                correct = false;
-                return;
-            }
-            if (tbGiam.conDungDuoc > dsTB[index].trongKho) {
-                alert(
-                    `Số lượng còn dùng được của thiết bị ${
-                        tbGiam.tenTB
-                    } trong ${
-                        KHO_PHONG[tbGiam.maKP]
-                    } vượt quá số lượng còn dùng được hiện có (${
-                        dsTB[index].trongKho
-                    })`
-                );
-                correct = false;
-                return;
-            }
-        });
-        if (!correct) {
-            return;
-        }
+        // giamDevices.forEach((tbGiam) => {
+        //     delete tbGiam.soLuong;
+        //     const index = dsTB.findIndex(
+        //         (tb) =>
+        //             tb.maCaBietTB === tbGiam.maCaBietTB &&
+        //             tb.maKP === tbGiam.maKP
+        //     );
+        //     if (tbGiam.hong > dsTB[index].hong) {
+        //         alert(
+        //             `Số lượng hỏng của thiết bị ${tbGiam.tenTB} trong ${
+        //                 KHO_PHONG[tbGiam.maKP]
+        //             } vượt quá số lượng hỏng hiện có (${dsTB[index].hong})`
+        //         );
+        //         correct = false;
+        //         return;
+        //     }
+        //     if (tbGiam.conDungDuoc > dsTB[index].trongKho) {
+        //         alert(
+        //             `Số lượng còn dùng được của thiết bị ${
+        //                 tbGiam.tenTB
+        //             } trong ${
+        //                 KHO_PHONG[tbGiam.maKP]
+        //             } vượt quá số lượng còn dùng được hiện có (${
+        //                 dsTB[index].trongKho
+        //             })`
+        //         );
+        //         correct = false;
+        //         return;
+        //     }
+        // });
+        // if (!correct) {
+        //     return;
+        // }
         setMerged(true);
-        request.chiTietGiamTBs = giamDevices;
+        request.chiTietThanhLyTBList = giamDevices;
     }
 
     console.log(request);
@@ -177,7 +191,7 @@ function GhiGiam({ updateData = false, title }) {
         //         alert("Cập nhật giáo viên thất bại");
         //     }
         // } else {
-        if (request.chiTietGiamTBs.length === 0) {
+        if (request.chiTietThanhLyTBList.length === 0) {
             alert("Chưa có thiết bị nào được chọn");
             return;
         }
@@ -217,13 +231,14 @@ function GhiGiam({ updateData = false, title }) {
             </div>
             <Link
                 to={config.routes.chon_thiet_bi_khai_bao}
-                state={{ array: selectedDevices, from: config.routes.ghi_giam }}
+                state={{
+                    array: selectedDevices,
+                    from: config.routes.ghi_giam,
+                    request,
+                }}
             >
                 <button className={cx("add-btn")}>Thêm thiết bị +</button>
             </Link>
-            <button onClick={handleAddRow} className={cx("add-row-btn")}>
-                Thêm dòng +
-            </button>
             <div className="mt-5">Danh sách thiết bị</div>
             <QLTBTable
                 tableColumnsName={tableColumnsName}

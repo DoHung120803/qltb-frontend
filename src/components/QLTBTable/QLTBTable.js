@@ -130,6 +130,31 @@ function QLTBTable({
                                         //         </td>
                                         //     );
                                         // }
+                                        if (field === "lyDoThanhLy") {
+                                            return (
+                                                <td
+                                                    className="col-2 p-0"
+                                                    key={index}
+                                                >
+                                                    <input
+                                                        style={{
+                                                            border: "none",
+                                                        }}
+                                                        type="text"
+                                                        value={
+                                                            data[field] ||
+                                                            "Thanh lý định kỳ"
+                                                        }
+                                                        onChange={(e) => {
+                                                            handleReload();
+                                                            data[field] =
+                                                                e.target.value;
+                                                            setMerged(false);
+                                                        }}
+                                                    />
+                                                </td>
+                                            );
+                                        }
                                         if (field === "tenTB") {
                                             return (
                                                 <td
@@ -232,7 +257,7 @@ function QLTBTable({
                                             field === "donGia"
                                         ) {
                                             return (
-                                                <td key={index}>
+                                                <td className="p-0" key={index}>
                                                     <input
                                                         style={{
                                                             border: "none",
@@ -258,7 +283,7 @@ function QLTBTable({
                                             field === "hanSuDung"
                                         ) {
                                             return (
-                                                <td key={index}>
+                                                <td className="p-0" key={index}>
                                                     <input
                                                         style={{
                                                             border: "none",
@@ -291,6 +316,7 @@ function QLTBTable({
                                                             paddingLeft: "0",
                                                         }}
                                                         key={index}
+                                                        className="p-0"
                                                     >
                                                         <select
                                                             value={data[field]}
@@ -341,6 +367,7 @@ function QLTBTable({
                                                             paddingLeft: "0",
                                                         }}
                                                         key={index}
+                                                        className="p-0"
                                                     >
                                                         <select
                                                             style={{

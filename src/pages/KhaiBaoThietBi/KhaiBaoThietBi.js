@@ -31,7 +31,7 @@ function KhaiBaoThietBi() {
 
     const [devices, setDevices] = useState([]);
     const [selectedDevices, setSelectedDevices] = useState(
-        useLocation().state || []
+        useLocation().state?.selectedDevices || []
     );
     const [reload, setReload] = useState(false);
     const [TBKB, setTBKB] = useState([]);

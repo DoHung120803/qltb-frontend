@@ -23,7 +23,10 @@ function Table({
     chonTBKBCustom = false,
     handleSelectedDevices,
     nonAction,
-    handleCheckBox,
+    handleCheckBox = () => {
+        alert("Bạn không được phép thay đổi ở đây!");
+    },
+    khaiBaoHongMat = false,
 }) {
     const [reRender, setReRender] = useState(false);
 
@@ -48,7 +51,6 @@ function Table({
     const handleReRender = () => setReRender(!reRender);
 
     // console.log(fields);
-    console.log(datasTable);
 
     return (
         <div
@@ -85,6 +87,13 @@ function Table({
                         {datasTable.map((data, _index) => (
                             <tr key={_index}>
                                 {fields.map((field, index) => {
+                                    if (field === "hongMat") {
+                                        return (
+                                            <td key={index}>
+                                                {data.hong ? "Hỏng" : "Mất"}
+                                            </td>
+                                        );
+                                    }
                                     if (field === "dangHoatDong") {
                                         return (
                                             <td key={index}>
@@ -114,6 +123,7 @@ function Table({
                                                         )
                                                     }
                                                     type="checkbox"
+                                                    className="checkbox-row"
                                                 />
                                             </td>
                                         );

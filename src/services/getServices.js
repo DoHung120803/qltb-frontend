@@ -12,6 +12,15 @@ export const getGiaoVien = async (page, size) => {
     }
 };
 
+export const getAllGiaoVien = async () => {
+    try {
+        const response = await httpRequest.get(`/giao-vien`);
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
 export const getDevices = async (page, size) => {
     try {
         const response = await httpRequest.get(
@@ -37,6 +46,15 @@ export const getInDSThietBi = async () => {
         const response = await httpRequest.get(
             `/dm-thiet-bi/get-in-ds-thiet-bi`
         );
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const getAllThietBiChuaThanhLy = async () => {
+    try {
+        const response = await httpRequest.get(`/thiet-bi`);
         return response.data;
     } catch (error) {
         console.log(error);
@@ -87,6 +105,28 @@ export const getTangTB = async (page, size) => {
     try {
         const response = await httpRequest.get(
             `/tang-tb/page?page=${page}&size=${size}`
+        );
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const getThanhLyTB = async (page, size) => {
+    try {
+        const response = await httpRequest.get(
+            `/thanh-ly-tb/page?page=${page}&size=${size}`
+        );
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const getTheoDoiHongMatPage = async (page, size) => {
+    try {
+        const response = await httpRequest.get(
+            `/theo-doi-hong-mat/page?page=${page}&size=${size}`
         );
         return response.data;
     } catch (error) {

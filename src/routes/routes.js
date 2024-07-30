@@ -14,10 +14,13 @@ import GhiTang from "~/pages/GhiTang";
 import Home from "~/pages/Home";
 import KhaiBaoThietBi from "~/pages/KhaiBaoThietBi";
 import TangThietBi from "~/pages/TangThietBi";
+import ThanhLyThietBi from "~/pages/ThanhLyThietBi";
 import ThemGiaoVien from "~/pages/ThemGiaoVien";
 import ThemThietBi from "~/pages/ThemThietBi";
 import UpdateGiaoVien from "~/pages/UpdateGiaoVien/UpdateGiaoVien";
 import UpdateThietBi from "~/pages/UpdateThietBi";
+import KhaiBaoHongMat from "~/pages/KhaiBaoHongMat";
+import TheoDoiHongMat from "~/pages/TheoDoiHongMat";
 
 // private routes
 const privateRoutes = [
@@ -35,6 +38,9 @@ const privateRoutes = [
     { path: config.routes.ghi_giam, component: GhiGiam },
     { path: config.routes.ghi_tang, component: GhiTang },
     { path: config.routes.tang_thiet_bi, component: TangThietBi },
+    { path: config.routes.thanh_ly_thiet_bi, component: ThanhLyThietBi },
+    { path: config.routes.khai_bao_hong_mat, component: KhaiBaoHongMat },
+    { path: config.routes.theo_doi_hong_mat, component: TheoDoiHongMat },
 ];
 
 export { privateRoutes };
