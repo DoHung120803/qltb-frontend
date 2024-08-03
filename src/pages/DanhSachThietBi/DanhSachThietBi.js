@@ -26,7 +26,7 @@ function DanhSachThietBi() {
     const fields = [
         "maNTB",
         "maCaBietTB",
-        "tenTB",
+        "tenNTB",
         "khoPhong",
         "ngayNhap",
         "trangThai",

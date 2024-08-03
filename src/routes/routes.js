@@ -21,6 +21,10 @@ import UpdateGiaoVien from "~/pages/UpdateGiaoVien/UpdateGiaoVien";
 import UpdateThietBi from "~/pages/UpdateThietBi";
 import KhaiBaoHongMat from "~/pages/KhaiBaoHongMat";
 import TheoDoiHongMat from "~/pages/TheoDoiHongMat";
+import ThemPhieuMuon from "~/pages/ThemPhieuMuon";
+import MuonTraThietBi from "~/pages/QuanLyMuonTra/MuonTB";
+import ThemPhieuTra from "~/pages/GhiTra";
+import LichSuTra from "~/pages/LichSuTra/LichSuTra";
 
 // private routes
 const privateRoutes = [
@@ -41,6 +45,10 @@ const privateRoutes = [
     { path: config.routes.thanh_ly_thiet_bi, component: ThanhLyThietBi },
     { path: config.routes.khai_bao_hong_mat, component: KhaiBaoHongMat },
     { path: config.routes.theo_doi_hong_mat, component: TheoDoiHongMat },
+    { path: config.routes.them_phieu_muon, component: ThemPhieuMuon },
+    { path: config.routes.them_phieu_tra, component: ThemPhieuTra },
+    { path: config.routes.muon_tra_thiet_bi, component: MuonTraThietBi },
+    { path: config.routes.lich_su_tra, component: LichSuTra },
 ];
 
 export { privateRoutes };

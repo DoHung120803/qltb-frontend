@@ -16,6 +16,10 @@ const routes = {
     thanh_ly_thiet_bi: "/quan-ly-thiet-bi/thanh-ly-thiet-bi",
     khai_bao_hong_mat: "/quan-ly-thiet-bi/khai-bao-hong-mat",
     theo_doi_hong_mat: "/quan-ly-thiet-bi/theo-doi-hong-mat",
+    them_phieu_muon: "/quan-ly-muon-tra/them-phieu-muon",
+    them_phieu_tra: "/quan-ly-muon-tra/ghi-tra",
+    muon_tra_thiet_bi: "/quan-ly-muon-tra/muon-tra-thiet-bi",
+    lich_su_tra: "/quan-ly-muon-tra/lich-su-tra",
 };
 
 export default routes;

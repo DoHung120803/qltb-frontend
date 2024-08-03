@@ -133,3 +133,37 @@ export const getTheoDoiHongMatPage = async (page, size) => {
         console.log(error);
     }
 };
+
+export const getMuonTB = async (page, size) => {
+    try {
+        const response = await httpRequest.get(
+            `/muon-tb/page?page=${page}&size=${size}`
+        );
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const getLichSuTra = async (page, size) => {
+    try {
+        const response = await httpRequest.get(
+            `/tra-tb/page?page=${page}&size=${size}`
+        );
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const getAllThietBiCoTheMuon = async (page, size) => {
+    try {
+        const response = await httpRequest.get(
+            `thiet-bi/tinh-trang-hien-hoat-dong`
+        );
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+};
+

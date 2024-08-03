@@ -1,0 +1,41 @@
+.wrapper {
+  height: 100%;
+  margin: 0 auto;
+  position: relative;
+  top: 4%;
+
+  .add-btn {
+    background-color: var(--sidebar-background-color);
+    color: white;
+    border-radius: 5px;
+    padding: 5px;
+    text-decoration: none;
+    margin-right: 10px;
+  }
+  .delete-btn {
+    padding: 5px;
+    background-color: #dc3545;
+    color: white;
+    border-radius: 10px;
+    border: none;
+    margin-right:5px;
+  }
+
+  .record-loan-btn {
+    padding: 5px;
+    background-color: #344054;
+    color: white;
+    border-radius: 10px;
+    border: none;
+    margin-right:5px;
+  }
+
+  .record-btn {
+    padding: 5px;
+    background-color: #007bff;
+    color: white;
+    border-radius: 10px;
+    border: none;
+    margin-right:5px;
+  }
+}

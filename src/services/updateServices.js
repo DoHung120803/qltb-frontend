@@ -26,3 +26,12 @@ export const changeActivating = async (maCaBietTB) => {
         console.log(error);
     }
 };
+
+export const updateMuonTB = async (maPhieuMuon, updateData) => {
+    try {
+        const response = await httpRequest.put("/muon-tb/" + maPhieuMuon, updateData);
+        return response;
+    } catch (error) {
+        console.log(error);
+    }
+};

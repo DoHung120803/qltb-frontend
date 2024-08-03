@@ -1,12 +1,13 @@
 import classNames from "classnames/bind";
 import styles from "./ChonTBKB.module.scss";
 import Table from "~/components/Table";
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 import * as getServices from "~/services/getServices";
 import Search from "~/components/Search/Search";
 import config from "~/config";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import {Link, useLocation, useNavigate} from "react-router-dom";
 import $ from "jquery";
+import {getAllThietBiCoTheMuon} from "~/services/getServices";
 
 const cx = classNames.bind(styles);
 
@@ -15,32 +16,35 @@ function ChonTBKB() {
 
     const tableColumnsName =
         state?.from === config.routes.ghi_giam ||
+        state?.from === config.routes.them_phieu_muon ||
         state?.from === config.routes.khai_bao_hong_mat
             ? [
-                  "#",
-                  "Mã cá biệt TB",
-                  "Tên nhóm thiết bị",
-                  "Kho phòng",
-                  "Hạn sử dụng",
-                  "Trạng thái",
-                  "Tình trạng",
-                  "Đang hoạt động",
-              ]
+                "#",
+                "Mã cá biệt TB",
+                "Tên nhóm thiết bị",
+                "Kho phòng",
+                "Hạn sử dụng",
+                "Trạng thái",
+                "Tình trạng",
+                "Đang hoạt động",
+            ]
             : ["#", "Mã nhóm thiết bị", "Tên nhóm thiết bị", "Loại thiết bị"];
+
 
     const fields =
         state?.from === config.routes.ghi_giam ||
+        state?.from === config.routes.them_phieu_muon ||
         state?.from === config.routes.khai_bao_hong_mat
             ? [
-                  "#",
-                  "maCaBietTB",
-                  "tenNTB",
-                  "khoPhong",
-                  "hanSuDung",
-                  "trangThai",
-                  "tinhTrang",
-                  "dangHoatDong",
-              ]
+                "#",
+                "maCaBietTB",
+                "tenNTB",
+                "khoPhong",
+                "hanSuDung",
+                "trangThai",
+                "tinhTrang",
+                "dangHoatDong",
+            ]
             : ["#", "maNTB", "tenNTB", "loaiTB"];
 
     const [devices, setDevices] = useState([]);
@@ -69,6 +73,19 @@ function ChonTBKB() {
                 ) {
                     const dataResponse =
                         await getServices.getAllThietBiChuaThanhLy();
+                    const filteredDevices = dataResponse.filter(
+                        (device) =>
+                            !selectedDevices.some(
+                                (selected) =>
+                                    selected.maCaBietTB === device.maCaBietTB
+                            )
+                    );
+                    setDevices(filteredDevices);
+                    // setDevices(dataResponse);
+                    return;
+                } else if (state?.from === config.routes.them_phieu_muon) {
+                    const dataResponse =
+                        await getServices.getAllThietBiCoTheMuon();
                     const filteredDevices = dataResponse.filter(
                         (device) =>
                             !selectedDevices.some(
@@ -169,7 +186,7 @@ function ChonTBKB() {
                     >
                         <div
 
-                        // onClick={handleSubmit}
+                            // onClick={handleSubmit}
                         >
                             Thêm
                         </div>
