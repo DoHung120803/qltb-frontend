@@ -62,6 +62,15 @@ function ThemPhieuMuon({ updateData = false, title }) {
         useLocation().state?.selectedDevices || []
     );
 
+    useEffect(() => {
+        if (!request.ngayHenTra) {
+            const ngayMuonDate = new Date(request.ngayMuon);
+            ngayMuonDate.setDate(ngayMuonDate.getDate() + 7); // Add 7 days
+            const defaultNgayHenTra = ngayMuonDate.toISOString().split('T')[0]; // Format to YYYY-MM-DD
+            setRequest((prev) => ({ ...prev, ngayHenTra: defaultNgayHenTra }));
+        }
+    }, [request.ngayMuon]);
+
     const handleChange = (e, field) => {
         setRequest((prev) => ({ ...prev, [field]: e.target.value }));
     };
@@ -71,6 +80,13 @@ function ThemPhieuMuon({ updateData = false, title }) {
     };
 
     const handleSubmit = async () => {
+        let finalNgayHenTra = request.ngayHenTra;
+        if (!request.ngayHenTra) {
+            const ngayMuonDate = new Date(request.ngayMuon);
+            ngayMuonDate.setDate(ngayMuonDate.getDate() + 7); // Add 7 days
+            finalNgayHenTra = ngayMuonDate.toISOString().split('T')[0]; // Format to YYYY-MM-DD
+        }
+
         if (selectedDevices.length === 0) {
             alert("Chưa có thiết bị nào được chọn");
             return;
@@ -78,6 +94,7 @@ function ThemPhieuMuon({ updateData = false, title }) {
 
         const requestPayload = {
             ...request,
+            ngayHenTra: finalNgayHenTra,
             chiTietMuonTBList: selectedDevices.map(device => ({
                 maCaBietTB: device.maCaBietTB,
                 tinhTrangKhiMuon: device.tinhTrang,
@@ -169,10 +186,9 @@ function ThemPhieuMuon({ updateData = false, title }) {
                         "create-btn",
                         "col-2 d-flex align-items-center justify-content-center"
                     )}
+                    onClick={handleSubmit}
                 >
-                    <div onClick={handleSubmit}>
-                        <span>Thêm</span>
-                    </div>
+                    <span>Thêm</span>
                 </div>
                 <div
                     className={cx(

@@ -1,19 +1,56 @@
 .wrapper {
-    height: 100%;
-    overflow: hidden;
-    background-color: #e5e5e5;
+    padding: 2rem;
+    background-color: #f5f5f5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh; /* Ensure full height */
 }
 
 .title {
-    padding: 3rem 7rem;
-    font-size: 36px;
-    font-weight: 700;
-    line-height: 43.57px;
-    letter-spacing: -0.15399999916553497px;
-    text-align: left;
+    font-size: 2.5rem; /* Increase title font size */
+    margin-bottom: 1rem;
 }
 
 .analysis {
-    height: 100%;
-    margin-left: 12rem;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 3rem; /* Increase margin between analysis and chart */
+    width: 100%;
+    max-width: 1000px;
+    gap: 2rem; /* Increase gap between boxes */
+}
+
+.chart {
+    background-color: white;
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    height: 350px; /* Increase chart height */
+    width: 100%;
+    max-width: 1000px;
+}
+
+.box {
+    height: 10rem; /* Increase height of the boxes */
+    padding: 1.5rem; /* Increase padding inside boxes */
+    flex: 1; /* Ensure all boxes have the same width */
+    border-radius: 20px;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.box .title {
+    font-size: 1.2rem; /* Increase font size for title */
+    margin-bottom: 0.7rem; /* Increase margin below title */
+}
+
+.box .number {
+    font-size: 2.5rem; /* Increase font size for number */
+    font-weight: bold;
 }

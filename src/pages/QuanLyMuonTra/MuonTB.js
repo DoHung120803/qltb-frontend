@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 import classNames from "classnames/bind";
 import styles from "./MuonTraThietBi.module.scss";
 import Table from "~/components/Table";
@@ -7,7 +6,7 @@ import * as getServices from "~/services/getServices";
 import * as updateServices from "~/services/updateServices"; // Import update services
 import Search from "~/components/Search/Search";
 import config from "~/config";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const cx = classNames.bind(styles);
 
@@ -100,7 +99,7 @@ function MuonTraThietBi() {
         }
         return (
             <div className={cx("action-buttons")}>
-                {loan.trangThai === "quá hạn" ? (
+                {loan.trangThai === "Quá hạn" ? (
                     <button className={cx("record-btn")} onClick={() => handleRecordReturn(loan)}>Ghi trả</button>
                 ) : (
                     <>
@@ -115,6 +114,7 @@ function MuonTraThietBi() {
             </div>
         );
     };
+
 
     const renderActions = (loan) => {
         return (

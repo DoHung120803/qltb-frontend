@@ -167,3 +167,21 @@ export const getAllThietBiCoTheMuon = async (page, size) => {
     }
 };
 
+export const getDashboardData = async () => {
+    try {
+        const response = await httpRequest.get(`/thiet-bi/dashboard-data`);
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const getMonthlyBorrowedDevices = async () => {
+    try {
+        const response = await httpRequest.get(`/muon-tb/monthly-borrowed`);
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
