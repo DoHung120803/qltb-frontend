@@ -14,8 +14,7 @@ function LichSuTra() {
         "Mã phiếu trả",
         "Tên giáo viên",
         "Ngày mượn",
-        "Ngày trả",
-        "Hành Động"
+        "Ngày trả"
     ];
 
     const fields = [
@@ -84,7 +83,7 @@ function LichSuTra() {
 
             <div className="row m-0">
                 <Search
-                    endpoint="/lich-su-tra/search"
+                    endpoint="/tra-tb/search"
                     setSearchResult={setReturns}
                     setIsSearching={setIsSearching}
                     page={page}
@@ -109,6 +108,7 @@ function LichSuTra() {
                         onPageChange={handlePageChange}
                         onSizeChange={handleSizeChange}
                         handleReload={handleReload}
+                        nonAction={true}
                     />
                 </div>
             </div>

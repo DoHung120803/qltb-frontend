@@ -115,20 +115,20 @@ function MuonTraThietBi() {
         );
     };
 
-
     const renderActions = (loan) => {
-        return (
-            <div className={cx("action-buttons")}>
-                <Link to={`${config.routes.update_muon_tb}/${loan.maPhieuMuon}`} className={cx("edit-btn")}>
-                    <i className="fa fa-pencil"></i>
-                </Link>
-                {loan.trangThai !== "Đã trả" && (
+        if (loan.trangThai === "Chưa mượn") {
+            return (
+                <div className={cx("action-buttons")}>
+                    <Link to={`${config.routes.update_phieu_muon}/${loan.maPhieuMuon}`} className={cx("edit-btn")}>
+                        <i className="fa fa-pencil"></i>
+                    </Link>
                     <button className={cx("delete-icon-btn")} onClick={(e) => handleDelete(loan, e)}>
                         <i className="fa fa-trash"></i>
                     </button>
-                )}
-            </div>
-        );
+                </div>
+            );
+        }
+        return null;
     };
 
     return (
