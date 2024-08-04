@@ -18,7 +18,6 @@ function MuonTraThietBi() {
         "Ngày hẹn trả",
         "Trạng thái",
         "",
-        "Hành động",
     ];
 
     const fields = [
@@ -27,7 +26,7 @@ function MuonTraThietBi() {
         "ngayMuon",
         "ngayHenTra",
         "trangThai",
-        "muonTra"
+        "muonTra",
     ];
 
     const [loans, setLoans] = useState([]);
@@ -72,19 +71,23 @@ function MuonTraThietBi() {
     };
 
     const formatDate = (dateString) => {
-        const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+        const options = { year: "numeric", month: "2-digit", day: "2-digit" };
         return new Date(dateString).toLocaleDateString(undefined, options);
     };
 
     const handleDelete = async (loan, event) => {
         event.preventDefault();
-        await updateServices.updateMuonTB(loan.maPhieuMuon, { trangThai: "Chưa mượn" });
+        await updateServices.updateMuonTB(loan.maPhieuMuon, {
+            trangThai: "Chưa mượn",
+        });
         handleReload();
     };
 
     const handleRecordLoan = async (loan, event) => {
         event.preventDefault();
-        await updateServices.updateMuonTB(loan.maPhieuMuon, { trangThai: "Đang mượn" });
+        await updateServices.updateMuonTB(loan.maPhieuMuon, {
+            trangThai: "Đang mượn",
+        });
         handleReload();
     };
 
@@ -100,15 +103,35 @@ function MuonTraThietBi() {
         return (
             <div className={cx("action-buttons")}>
                 {loan.trangThai === "Quá hạn" ? (
-                    <button className={cx("record-btn")} onClick={() => handleRecordReturn(loan)}>Ghi trả</button>
+                    <button
+                        className={cx("record-btn")}
+                        onClick={() => handleRecordReturn(loan)}
+                    >
+                        Ghi trả
+                    </button>
                 ) : (
                     <>
                         {loan.trangThai === "Đang mượn" ? (
-                            <button className={cx("delete-btn")} onClick={(e) => handleDelete(loan, e)}>Xóa mượn</button>
+                            <button
+                                className={cx("delete-btn")}
+                                onClick={(e) => handleDelete(loan, e)}
+                            >
+                                Xóa mượn
+                            </button>
                         ) : (
-                            <button className={cx("record-loan-btn")} onClick={(e) => handleRecordLoan(loan, e)}>Ghi mượn</button>
+                            <button
+                                className={cx("record-loan-btn")}
+                                onClick={(e) => handleRecordLoan(loan, e)}
+                            >
+                                Ghi mượn
+                            </button>
                         )}
-                        <button className={cx("record-btn")} onClick={() => handleRecordReturn(loan)}>Ghi trả</button>
+                        <button
+                            className={cx("record-btn")}
+                            onClick={() => handleRecordReturn(loan)}
+                        >
+                            Ghi trả
+                        </button>
                     </>
                 )}
             </div>
@@ -119,10 +142,16 @@ function MuonTraThietBi() {
         if (loan.trangThai === "Chưa mượn") {
             return (
                 <div className={cx("action-buttons")}>
-                    <Link to={`${config.routes.update_phieu_muon}/${loan.maPhieuMuon}`} className={cx("edit-btn")}>
+                    <Link
+                        to={`${config.routes.update_phieu_muon}/${loan.maPhieuMuon}`}
+                        className={cx("edit-btn")}
+                    >
                         <i className="fa fa-pencil"></i>
                     </Link>
-                    <button className={cx("delete-icon-btn")} onClick={(e) => handleDelete(loan, e)}>
+                    <button
+                        className={cx("delete-icon-btn")}
+                        onClick={(e) => handleDelete(loan, e)}
+                    >
                         <i className="fa fa-trash"></i>
                     </button>
                 </div>
@@ -169,12 +198,12 @@ function MuonTraThietBi() {
                     <Table
                         tableColumnsName={tableColumnsName}
                         fields={fields}
-                        datasTable={loans.map(loan => ({
+                        datasTable={loans.map((loan) => ({
                             ...loan,
                             ngayMuon: formatDate(loan.ngayMuon),
                             ngayHenTra: formatDate(loan.ngayHenTra),
                             muonTra: renderMuontTra(loan),
-                            actions: renderActions(loan)
+                            actions: renderActions(loan),
                         }))}
                         page={page}
                         size={size}
@@ -183,6 +212,7 @@ function MuonTraThietBi() {
                         onPageChange={handlePageChange}
                         onSizeChange={handleSizeChange}
                         handleReload={handleReload}
+                        muonTraThietBi
                         // isMuonTraThietBi prop is not passed, default behavior is applied
                     />
                 </div>

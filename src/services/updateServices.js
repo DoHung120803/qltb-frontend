@@ -83,7 +83,10 @@ export const updatePhieuBaoHongMat = async (maPhieuBao, request) => {
 
 export const updateMuonTB = async (maPhieuMuon, updateData) => {
     try {
-        const response = await httpRequest.put("/muon-tb/" + maPhieuMuon, updateData);
+        const response = await httpRequest.put(
+            "/muon-tb/update-status/" + maPhieuMuon,
+            updateData
+        );
         return response;
     } catch (error) {
         console.log(error);

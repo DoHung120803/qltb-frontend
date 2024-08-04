@@ -32,8 +32,8 @@ function Table({
     tangThietBi = false,
     viewLink,
     qldm = false,
-    isMuonTraThietBi = false // Default value is false
-
+    isMuonTraThietBi = false, // Default value is false
+    muonTraThietBi = false,
 }) {
     const [reRender, setReRender] = useState(false);
 
@@ -226,114 +226,147 @@ function Table({
                                     }
                                 })}
 
-                                {!nonAction && !chonTBKBCustom && (
-                                    <td>
-                                        {(!isMuonTraThietBi || data.trangThai === "Chưa mượn") && (
-                                            <>
-                                                <Link to={linkUpdate} state={data}>
-                                                <span className={cx("update-icon")}>
-                                                    <PencilIcon />
-                                                    <span className={cx("line-icon")}>
-                                                        <LineIcon />
-                                                    </span>
-                                                </span>
-                                                </Link>
-                                                <span
-                                                    className={cx("delete-icon")}
-                                                    onClick={() =>
-                                                        handleDelete(data[[fields[0]]])
-                                                    }
-                                                >
-                                                <DeleteIcon />
-                                            </span>
-                                            </>
-                                        )}
-                                        {tangThietBi ? (
-                                            data.choDuyet === true ? (
-                                                <div>
-                                                    <Link
-                                                        to={
-                                                            config.routes
-                                                                .duyet_tang_tb
-                                                        }
-                                                        state={{
-                                                            request: JSON.parse(
-                                                                localStorage.getItem(
-                                                                    "choDuyetList"
-                                                                )
-                                                            )[data.maPhieuTang],
-                                                            maPhieuTang:
-                                                                data.maPhieuTang,
-                                                        }}
-                                                    >
-                                                        <div
-                                                            style={{
-                                                                marginRight:
-                                                                    "5px",
-                                                            }}
-                                                            className="btn btn-primary"
+                                {muonTraThietBi ||
+                                    (!nonAction && !chonTBKBCustom && (
+                                        <td>
+                                            {!isMuonTraThietBi ||
+                                                data.trangThai ===
+                                                    "Chưa mượn" || (
+                                                    <>
+                                                        <Link
+                                                            to={linkUpdate}
+                                                            state={data}
                                                         >
-                                                            Duyệt
+                                                            <span
+                                                                className={cx(
+                                                                    "update-icon"
+                                                                )}
+                                                            >
+                                                                <PencilIcon />
+                                                                <span
+                                                                    className={cx(
+                                                                        "line-icon"
+                                                                    )}
+                                                                >
+                                                                    <LineIcon />
+                                                                </span>
+                                                            </span>
+                                                        </Link>
+                                                        <span
+                                                            className={cx(
+                                                                "delete-icon"
+                                                            )}
+                                                            onClick={() =>
+                                                                handleDelete(
+                                                                    data[
+                                                                        [
+                                                                            fields[0],
+                                                                        ]
+                                                                    ]
+                                                                )
+                                                            }
+                                                        >
+                                                            <DeleteIcon />
+                                                        </span>
+                                                    </>
+                                                )}
+                                            {tangThietBi ? (
+                                                data.choDuyet === true ? (
+                                                    <div>
+                                                        <Link
+                                                            to={
+                                                                config.routes
+                                                                    .duyet_tang_tb
+                                                            }
+                                                            state={{
+                                                                request:
+                                                                    JSON.parse(
+                                                                        localStorage.getItem(
+                                                                            "choDuyetList"
+                                                                        )
+                                                                    )[
+                                                                        data
+                                                                            .maPhieuTang
+                                                                    ],
+                                                                maPhieuTang:
+                                                                    data.maPhieuTang,
+                                                            }}
+                                                        >
+                                                            <div
+                                                                style={{
+                                                                    marginRight:
+                                                                        "5px",
+                                                                }}
+                                                                className="btn btn-primary"
+                                                            >
+                                                                Duyệt
+                                                            </div>
+                                                        </Link>
+                                                        <div
+                                                            onClick={() =>
+                                                                huyTangTBHandler(
+                                                                    data.maPhieuTang
+                                                                )
+                                                            }
+                                                            className="btn btn-danger"
+                                                        >
+                                                            Hủy
                                                         </div>
-                                                    </Link>
-                                                    <div
-                                                        onClick={() =>
-                                                            huyTangTBHandler(
-                                                                data.maPhieuTang
-                                                            )
-                                                        }
-                                                        className="btn btn-danger"
-                                                    >
-                                                        Hủy
                                                     </div>
-                                                </div>
+                                                ) : (
+                                                    false
+                                                )
                                             ) : (
-                                                false
-                                            )
-                                        ) : (
-                                            <Link to={linkUpdate} state={data}>
-                                                <span
-                                                    className={cx(
-                                                        "update-icon"
-                                                    )}
+                                                <Link
+                                                    to={linkUpdate}
+                                                    state={data}
                                                 >
-                                                    <PencilIcon />
                                                     <span
                                                         className={cx(
-                                                            "line-icon"
+                                                            "update-icon"
                                                         )}
                                                     >
-                                                        <LineIcon />
+                                                        <PencilIcon />
+                                                        <span
+                                                            className={cx(
+                                                                "line-icon"
+                                                            )}
+                                                        >
+                                                            <LineIcon />
+                                                        </span>
                                                     </span>
-                                                </span>
-                                            </Link>
-                                        )}
-                                        {data.choDuyet || (
-                                            <span
-                                                className={cx("delete-icon")}
-                                                onClick={() =>
-                                                    handleDelete(
-                                                        data[[fields[0]]]
-                                                    )
-                                                }
-                                            >
-                                                <DeleteIcon />
-                                            </span>
-                                        )}
-                                        {data.choDuyet || (
-                                            <Link
-                                                to={viewLink}
-                                                state={{ viewData: data }}
-                                            >
+                                                </Link>
+                                            )}
+                                            {data.choDuyet || (
                                                 <span
-                                                    className={cx("view-icon")}
+                                                    className={cx(
+                                                        "delete-icon"
+                                                    )}
+                                                    onClick={() =>
+                                                        handleDelete(
+                                                            data[[fields[0]]]
+                                                        )
+                                                    }
                                                 >
-                                                    <ViewIcon />
+                                                    <DeleteIcon />
                                                 </span>
-                                            </Link>
-                                        )}
-                                    </td>
-                                )}
+                                            )}
+                                            {data.choDuyet || (
+                                                <Link
+                                                    to={viewLink}
+                                                    state={{ viewData: data }}
+                                                >
+                                                    <span
+                                                        className={cx(
+                                                            "view-icon"
+                                                        )}
+                                                    >
+                                                        <ViewIcon />
+                                                    </span>
+                                                </Link>
+                                            )}
+                                        </td>
+                                    ))}
                             </tr>
                         ))}
 

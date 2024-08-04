@@ -14,7 +14,7 @@ function ThemPhieuTra() {
         "Tên thiết bị",
         "Tình trạng khi mượn",
         "Tình trạng trả",
-        "Ghi chú"
+        "Ghi chú",
     ];
 
     const fields = [
@@ -22,11 +22,11 @@ function ThemPhieuTra() {
         "tenThietBi",
         "tinhTrangKhiMuon",
         "tinhTrangTra",
-        "ghiChu"
+        "ghiChu",
     ];
 
     const requestDefault = {
-        ngayTra: "",
+        ngayTra: new Date().toISOString().split("T")[0],
         nguoiTra: "",
         maPhieuMuon: "",
         chiTietTraTBList: [],
@@ -40,10 +40,12 @@ function ThemPhieuTra() {
         ...requestDefault,
         maPhieuMuon: loan.maPhieuMuon,
         ngayMuon: loan.ngayMuon,
-        ngayHenTra: loan.ngayHenTra
+        ngayHenTra: loan.ngayHenTra,
     });
     const [giaoViens, setGiaoViens] = useState([]);
-    const [selectedDevices, setSelectedDevices] = useState(loan.chiTietMuonTBList || []);
+    const [selectedDevices, setSelectedDevices] = useState(
+        loan.chiTietMuonTBList || []
+    );
 
     useEffect(() => {
         const getGVs = async () => {
@@ -66,6 +68,10 @@ function ThemPhieuTra() {
     };
 
     const handleSubmit = async () => {
+        if (!request.ngayTra) {
+            alert("Chưa chọn ngày trả");
+            return;
+        }
         if (selectedDevices.length === 0) {
             alert("Chưa có thiết bị nào được chọn");
             return;
@@ -73,7 +79,7 @@ function ThemPhieuTra() {
 
         const requestPayload = {
             ...request,
-            chiTietTraTBList: selectedDevices.map(device => ({
+            chiTietTraTBList: selectedDevices.map((device) => ({
                 maCaBietTB: device.maCaBietTB,
                 tenThietBi: device.tenThietBi,
                 tinhTrangTra: device.tinhTrangTra,
@@ -146,43 +152,61 @@ function ThemPhieuTra() {
             <div className="mt-5">Danh sách thiết bị</div>
             <table className={cx("table")}>
                 <thead>
-                <tr>
-                    {tableColumnsName.map((colName, index) => (
-                        <th key={index}>{colName}</th>
-                    ))}
-                </tr>
+                    <tr>
+                        {tableColumnsName.map((colName, index) => (
+                            <th key={index}>{colName}</th>
+                        ))}
+                    </tr>
                 </thead>
                 <tbody>
-                {selectedDevices.map((device, rowIndex) => (
-                    <tr key={rowIndex}>
-                        {fields.map((field, colIndex) => {
-                            if (field === "tinhTrangTra") {
+                    {selectedDevices.map((device, rowIndex) => (
+                        <tr key={rowIndex}>
+                            {fields.map((field, colIndex) => {
+                                if (field === "tinhTrangTra") {
+                                    return (
+                                        <td key={colIndex}>
+                                            <select
+                                                value={device[field]}
+                                                onChange={(e) =>
+                                                    handleDeviceChange(
+                                                        e,
+                                                        rowIndex,
+                                                        field
+                                                    )
+                                                }
+                                            >
+                                                <option value="Dùng được">
+                                                    Dùng được
+                                                </option>
+                                                <option value="Hỏng">
+                                                    Hỏng
+                                                </option>
+                                                <option value="Đã tiêu hao">
+                                                    Đã tiêu hao
+                                                </option>
+                                            </select>
+                                        </td>
+                                    );
+                                }
                                 return (
                                     <td key={colIndex}>
-                                        <select
+                                        <input
+                                            type="text"
                                             value={device[field]}
-                                            onChange={(e) => handleDeviceChange(e, rowIndex, field)}
-                                        >
-                                            <option value="Dùng được">Dùng được</option>
-                                            <option value="Hỏng">Hỏng</option>
-                                            <option value="Đã tiêu hao">Đã tiêu hao</option>
-                                        </select>
+                                            onChange={(e) =>
+                                                handleDeviceChange(
+                                                    e,
+                                                    rowIndex,
+                                                    field
+                                                )
+                                            }
+                                            readOnly={field !== "ghiChu"}
+                                        />
                                     </td>
                                 );
-                            }
-                            return (
-                                <td key={colIndex}>
-                                    <input
-                                        type="text"
-                                        value={device[field]}
-                                        onChange={(e) => handleDeviceChange(e, rowIndex, field)}
-                                        readOnly={field !== "ghiChu"}
-                                    />
-                                </td>
-                            );
-                        })}
-                    </tr>
-                ))}
+                            })}
+                        </tr>
+                    ))}
                 </tbody>
             </table>
 
