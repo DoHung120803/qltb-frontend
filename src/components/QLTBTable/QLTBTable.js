@@ -117,6 +117,11 @@ function QLTBTable({
         }
     };
 
+    const handleDeleteRow = (index) => {
+        const updatedDataTable = dataTable.filter((_, i) => i !== index);
+        handleReload(updatedDataTable);
+    };
+
     return (
         <div
             className={cx("chon-TBKB-custom", "p-0", {

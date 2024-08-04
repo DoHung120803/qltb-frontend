@@ -32,6 +32,8 @@ function Table({
     tangThietBi = false,
     viewLink,
     qldm = false,
+    isMuonTraThietBi = false // Default value is false
+
 }) {
     const [reRender, setReRender] = useState(false);
 
@@ -224,8 +226,28 @@ function Table({
                                     }
                                 })}
 
-                                {nonAction || chonTBKBCustom || (
+                                {!nonAction && !chonTBKBCustom && (
                                     <td>
+                                        {(!isMuonTraThietBi || data.trangThai === "Chưa mượn") && (
+                                            <>
+                                                <Link to={linkUpdate} state={data}>
+                                                <span className={cx("update-icon")}>
+                                                    <PencilIcon />
+                                                    <span className={cx("line-icon")}>
+                                                        <LineIcon />
+                                                    </span>
+                                                </span>
+                                                </Link>
+                                                <span
+                                                    className={cx("delete-icon")}
+                                                    onClick={() =>
+                                                        handleDelete(data[[fields[0]]])
+                                                    }
+                                                >
+                                                <DeleteIcon />
+                                            </span>
+                                            </>
+                                        )}
                                         {tangThietBi ? (
                                             data.choDuyet === true ? (
                                                 <div>

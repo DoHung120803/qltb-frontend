@@ -26,6 +26,10 @@ import Login from "~/pages/Login";
 import DuyetTangTB from "~/pages/DuyetTangTB";
 import BaoCaoThongKe from "~/pages/BaoCaoThongKe";
 import UpdateHongMat from "~/pages/UpdateHongMat";
+import ThemPhieuMuon from "~/pages/ThemPhieuMuon";
+import MuonTraThietBi from "~/pages/QuanLyMuonTra/MuonTB";
+import ThemPhieuTra from "~/pages/GhiTra";
+import LichSuTra from "~/pages/LichSuTra/LichSuTra";
 
 // private routes
 const privateRoutes = [
@@ -51,6 +55,10 @@ const privateRoutes = [
     { path: config.routes.duyet_tang_tb, component: DuyetTangTB },
     { path: config.routes.bao_cao_thong_ke, component: BaoCaoThongKe },
     { path: config.routes.update_hong_mat, component: UpdateHongMat },
+    { path: config.routes.them_phieu_muon, component: ThemPhieuMuon },
+    { path: config.routes.them_phieu_tra, component: ThemPhieuTra },
+    { path: config.routes.muon_tra_thiet_bi, component: MuonTraThietBi },
+    { path: config.routes.lich_su_tra, component: LichSuTra },
 ];
 
 export { privateRoutes };

@@ -68,3 +68,22 @@ export const createKhaiBaoHongMat = async (request) => {
         console.log(error);
     }
 };
+
+export const createMuon = async (request) => {
+    try {
+        const response = await httpRequest.post("/muon-tb/create", request);
+        return response;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const createTra = async (request) => {
+    try {
+        const response = await httpRequest.post("/tra-tb/create", request);
+        return response;
+    } catch (error) {
+        console.log(error);
+    }
+};
+

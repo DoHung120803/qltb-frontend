@@ -156,3 +156,55 @@ export const baoCaoThongKe = async (request) => {
         console.log(error);
     }
 };
+
+export const getMuonTB = async (page, size) => {
+    try {
+        const response = await httpRequest.get(
+            `/muon-tb/page?page=${page}&size=${size}`
+        );
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const getLichSuTra = async (page, size) => {
+    try {
+        const response = await httpRequest.get(
+            `/tra-tb/page?page=${page}&size=${size}`
+        );
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const getAllThietBiCoTheMuon = async (page, size) => {
+    try {
+        const response = await httpRequest.get(
+            `thiet-bi/tinh-trang-hien-hoat-dong`
+        );
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const getDashboardData = async () => {
+    try {
+        const response = await httpRequest.get(`/thiet-bi/dashboard-data`);
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const getMonthlyBorrowedDevices = async () => {
+    try {
+        const response = await httpRequest.get(`/muon-tb/monthly-borrowed`);
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+};
+

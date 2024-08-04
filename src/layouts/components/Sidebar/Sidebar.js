@@ -130,9 +130,10 @@ function Sidebar() {
                     />
                 </DashBoardItem>
                 <DashBoardItem
+                    to={config.routes.muon_tra_thiet_bi}
                     icon={<QuanLyMuonTraIcon />}
                     title="Quản lý mượn trả"
-                    // to={"/quan-ly-doanh-muc"}
+                    handleSelected={handleSelected}
                 />
                 <DashBoardItem
                     icon={<QuanLyDoanhMucIcon />}
