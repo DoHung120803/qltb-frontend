@@ -183,6 +183,7 @@ function MuonTraThietBi() {
                         onPageChange={handlePageChange}
                         onSizeChange={handleSizeChange}
                         handleReload={handleReload}
+                        // isMuonTraThietBi prop is not passed, default behavior is applied
                     />
                 </div>
             </div>

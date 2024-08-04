@@ -27,6 +27,7 @@ function Table({
                        alert("Bạn không được phép thay đổi ở đây!");
                    },
                    khaiBaoHongMat = false,
+                   isMuonTraThietBi = false // Default value is false
                }) {
     const [reRender, setReRender] = useState(false);
 
@@ -34,8 +35,7 @@ function Table({
     const endItem = Math.min((page + 1) * size, totalItems);
 
     const handleDelete = async (id) => {
-        // eslint-disable-next-line no-restricted-globals
-        if (confirm("Bạn có chắc chắn muốn xóa?")) {
+        if (window.confirm("Bạn có chắc chắn muốn xóa?")) {
             const response = await deleteServices._delete(deleteEndpoint, id);
 
             console.log(response);
@@ -70,12 +70,12 @@ function Table({
                                 {columnName}
                                 {columnName.indexOf("Tên") >= 0 ? (
                                     <span className={cx("sort-icon")}>
-                                            <MenuIcon
-                                                height="2rem"
-                                                width="2rem"
-                                                fill="black"
-                                            />
-                                        </span>
+                                        <MenuIcon
+                                            height="2rem"
+                                            width="2rem"
+                                            fill="black"
+                                        />
+                                    </span>
                                 ) : null}
                             </th>
                         ))}
@@ -134,37 +134,24 @@ function Table({
 
                             {!nonAction && !chonTBKBCustom && (
                                 <td>
-                                    {data.trangThai === "Chưa mượn" && (
+                                    {(!isMuonTraThietBi || data.trangThai === "Chưa mượn") && (
                                         <>
-                                            <Link
-                                                to={linkUpdate}
-                                                state={data}
-                                            >
-                                                    <span
-                                                        className={cx(
-                                                            "update-icon"
-                                                        )}
-                                                    >
-                                                        <PencilIcon />
-                                                        <span
-                                                            className={cx(
-                                                                "line-icon"
-                                                            )}
-                                                        >
-                                                            <LineIcon />
-                                                        </span>
+                                            <Link to={linkUpdate} state={data}>
+                                                <span className={cx("update-icon")}>
+                                                    <PencilIcon />
+                                                    <span className={cx("line-icon")}>
+                                                        <LineIcon />
                                                     </span>
+                                                </span>
                                             </Link>
                                             <span
                                                 className={cx("delete-icon")}
                                                 onClick={() =>
-                                                    handleDelete(
-                                                        data[[fields[0]]]
-                                                    )
+                                                    handleDelete(data[[fields[0]]])
                                                 }
                                             >
-                                                    <DeleteIcon />
-                                                </span>
+                                                <DeleteIcon />
+                                            </span>
                                         </>
                                     )}
                                 </td>
