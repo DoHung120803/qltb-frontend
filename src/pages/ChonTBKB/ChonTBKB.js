@@ -11,6 +11,7 @@ import $ from "jquery";
 const cx = classNames.bind(styles);
 
 function ChonTBKB() {
+    const [endpoint, setEndpoint] = useState("/dm-thiet-bi/search/all");
     const [state, setState] = useState(useLocation().state || []);
 
     const tableColumnsName =
@@ -51,6 +52,12 @@ function ChonTBKB() {
 
     const navigator = useNavigate();
 
+    useEffect(() => {
+        if (state?.from === config.routes.ghi_giam) {
+            setEndpoint("/thiet-bi/get-all-co-the-ghi-giam/search");
+        }
+    }, []);
+
     const handleReload = () => {
         setReload(!reload);
     };
@@ -63,12 +70,9 @@ function ChonTBKB() {
         const fetchDevices = async () => {
             if (!isSearching) {
                 // eslint-disable-next-line react-hooks/rules-of-hooks
-                if (
-                    state?.from === config.routes.ghi_giam ||
-                    state?.from === config.routes.khai_bao_hong_mat
-                ) {
+                if (state?.from === config.routes.ghi_giam) {
                     const dataResponse =
-                        await getServices.getAllThietBiChuaThanhLy();
+                        await getServices.getAllThietBiCoTheGhiGiam();
                     const filteredDevices = dataResponse.filter(
                         (device) =>
                             !selectedDevices.some(
@@ -80,6 +84,39 @@ function ChonTBKB() {
                     // setDevices(dataResponse);
                     return;
                 }
+
+                if (state?.from === config.routes.khai_bao_hong_mat) {
+                    const dataResponse =
+                        await getServices.getAllThietBiCoTheKBHM();
+                    const filteredDevices = dataResponse.filter(
+                        (device) =>
+                            !selectedDevices.some(
+                                (selected) =>
+                                    selected.maCaBietTB === device.maCaBietTB
+                            )
+                    );
+                    setDevices(filteredDevices);
+                    // setDevices(dataResponse);
+                    return;
+                }
+
+                // if (
+                //     state?.from === config.routes.ghi_giam ||
+                //     state?.from === config.routes.khai_bao_hong_mat
+                // ) {
+                //     const dataResponse =
+                //         await getServices.getAllThietBiChuaThanhLy();
+                //     const filteredDevices = dataResponse.filter(
+                //         (device) =>
+                //             !selectedDevices.some(
+                //                 (selected) =>
+                //                     selected.maCaBietTB === device.maCaBietTB
+                //             )
+                //     );
+                //     setDevices(filteredDevices);
+                //     // setDevices(dataResponse);
+                //     return;
+                // }
                 const dataResponse = await getServices.getAllDevices();
                 setDevices(dataResponse);
             }
@@ -124,7 +161,7 @@ function ChonTBKB() {
 
             <div className="row m-0">
                 <Search
-                    endpoint="/dm-thiet-bi/search/all"
+                    endpoint={endpoint}
                     setSearchResult={setDevices}
                     setIsSearching={setIsSearching}
                     reload={reload}

@@ -3,7 +3,7 @@ import styles from "./KhaiBaoThietBi.module.scss";
 import { useEffect, useState } from "react";
 import * as getServices from "~/services/getServices";
 import config from "~/config";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import QLTBTable from "~/components/QLTBTable";
 import { createTB } from "~/services/createServices";
 
@@ -36,6 +36,8 @@ function KhaiBaoThietBi() {
     const [reload, setReload] = useState(false);
     const [TBKB, setTBKB] = useState([]);
     const [merged, setMerged] = useState(false);
+
+    const navigator = useNavigate();
 
     const handleReload = () => {
         setReload(!reload);
@@ -119,6 +121,8 @@ function KhaiBaoThietBi() {
             }
         }
         alert("Khai báo thành công ^^");
+        localStorage.setItem("khai-bao", true);
+        navigator(config.routes.danh_sach_thiet_bi);
     };
 
     console.log(TBKB);

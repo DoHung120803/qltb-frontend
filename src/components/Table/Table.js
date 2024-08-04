@@ -1,9 +1,11 @@
 import classNames from "classnames/bind";
 import { Link } from "react-router-dom";
 import styles from "./Table.module.scss";
-import { DeleteIcon, LineIcon, MenuIcon, PencilIcon } from "../Icons";
+import { DeleteIcon, LineIcon, MenuIcon, PencilIcon, ViewIcon } from "../Icons";
 import * as deleteServices from "~/services/deleteServices";
 import { useState } from "react";
+import config from "~/config";
+import { suaChuaTB, timThayTB } from "~/services/updateServices";
 
 const cx = classNames.bind(styles);
 
@@ -27,6 +29,9 @@ function Table({
         alert("Bạn không được phép thay đổi ở đây!");
     },
     khaiBaoHongMat = false,
+    tangThietBi = false,
+    viewLink,
+    qldm = false,
 }) {
     const [reRender, setReRender] = useState(false);
 
@@ -39,7 +44,7 @@ function Table({
             const response = await deleteServices._delete(deleteEndpoint, id);
 
             console.log(response);
-            if (response.status === 204) {
+            if (response?.status === 200) {
                 alert("Xóa thành công ^^");
                 handleReload();
             } else {
@@ -50,12 +55,68 @@ function Table({
 
     const handleReRender = () => setReRender(!reRender);
 
+    const huyTangTBHandler = async (maPhieuTang) => {
+        if (
+            // eslint-disable-next-line no-restricted-globals
+            confirm(
+                "Hành động này sẽ không thể hoàn tác.\nBạn có chắc chắn muốn hủy phiếu tăng thiết bị này?"
+            )
+        ) {
+            const response = await deleteServices._delete(
+                "tang-tb/delete",
+                maPhieuTang
+            );
+
+            if (response?.status === 200) {
+                let choDuyetList = JSON.parse(
+                    localStorage.getItem("choDuyetList")
+                );
+                delete choDuyetList[maPhieuTang];
+                localStorage.setItem(
+                    "choDuyetList",
+                    JSON.stringify(choDuyetList)
+                );
+                alert("Hủy thành công ^^");
+                handleReload();
+            } else {
+                alert("Hủy thất bại :((");
+            }
+        }
+    };
+
     // console.log(fields);
+
+    const handleSuaChuaTB = async (data) => {
+        // eslint-disable-next-line no-restricted-globals
+        if (confirm("Bạn có chắc chắn muốn sửa chữa thiết bị này?")) {
+            const response = await suaChuaTB(data.maPhieuBao, data.maCaBietTB);
+            if (response?.status === 200) {
+                alert("Sửa chữa thành công ^^");
+                handleReload();
+            } else {
+                alert("Sửa chữa thất bại :((");
+            }
+        }
+    };
+
+    const handleTimThayTB = async (data) => {
+        // eslint-disable-next-line no-restricted-globals
+        if (confirm("Bạn có chắc chắn muốn xác nhận thiết bị đã tìm thấy?")) {
+            const response = await timThayTB(data.maPhieuBao, data.maCaBietTB);
+            if (response?.status === 200) {
+                alert("Xác nhận thành công ^^");
+                handleReload();
+            } else {
+                alert("Xác nhận thất bại :((");
+            }
+        }
+    };
 
     return (
         <div
             className={cx("p-0", {
                 "chon-TBKB-custom": chonTBKBCustom,
+                "qldm-table": qldm,
             })}
         >
             <form
@@ -87,6 +148,35 @@ function Table({
                         {datasTable.map((data, _index) => (
                             <tr key={_index}>
                                 {fields.map((field, index) => {
+                                    if (field === "suaChua") {
+                                        return (
+                                            <td key={index}>
+                                                {data.hong ? (
+                                                    <div
+                                                        onClick={() =>
+                                                            handleSuaChuaTB(
+                                                                data
+                                                            )
+                                                        }
+                                                        className="btn btn-primary"
+                                                    >
+                                                        Sửa chữa
+                                                    </div>
+                                                ) : (
+                                                    <div
+                                                        onClick={() =>
+                                                            handleTimThayTB(
+                                                                data
+                                                            )
+                                                        }
+                                                        className="btn btn-primary"
+                                                    >
+                                                        Tìm thấy
+                                                    </div>
+                                                )}
+                                            </td>
+                                        );
+                                    }
                                     if (field === "hongMat") {
                                         return (
                                             <td key={index}>
@@ -136,24 +226,90 @@ function Table({
 
                                 {nonAction || chonTBKBCustom || (
                                     <td>
-                                        <Link to={linkUpdate} state={data}>
-                                            <span className={cx("update-icon")}>
-                                                <PencilIcon />
+                                        {tangThietBi ? (
+                                            data.choDuyet === true ? (
+                                                <div>
+                                                    <Link
+                                                        to={
+                                                            config.routes
+                                                                .duyet_tang_tb
+                                                        }
+                                                        state={{
+                                                            request: JSON.parse(
+                                                                localStorage.getItem(
+                                                                    "choDuyetList"
+                                                                )
+                                                            )[data.maPhieuTang],
+                                                            maPhieuTang:
+                                                                data.maPhieuTang,
+                                                        }}
+                                                    >
+                                                        <div
+                                                            style={{
+                                                                marginRight:
+                                                                    "5px",
+                                                            }}
+                                                            className="btn btn-primary"
+                                                        >
+                                                            Duyệt
+                                                        </div>
+                                                    </Link>
+                                                    <div
+                                                        onClick={() =>
+                                                            huyTangTBHandler(
+                                                                data.maPhieuTang
+                                                            )
+                                                        }
+                                                        className="btn btn-danger"
+                                                    >
+                                                        Hủy
+                                                    </div>
+                                                </div>
+                                            ) : (
+                                                false
+                                            )
+                                        ) : (
+                                            <Link to={linkUpdate} state={data}>
                                                 <span
-                                                    className={cx("line-icon")}
+                                                    className={cx(
+                                                        "update-icon"
+                                                    )}
                                                 >
-                                                    <LineIcon />
+                                                    <PencilIcon />
+                                                    <span
+                                                        className={cx(
+                                                            "line-icon"
+                                                        )}
+                                                    >
+                                                        <LineIcon />
+                                                    </span>
                                                 </span>
+                                            </Link>
+                                        )}
+                                        {data.choDuyet || (
+                                            <span
+                                                className={cx("delete-icon")}
+                                                onClick={() =>
+                                                    handleDelete(
+                                                        data[[fields[0]]]
+                                                    )
+                                                }
+                                            >
+                                                <DeleteIcon />
                                             </span>
-                                        </Link>
-                                        <span
-                                            className={cx("delete-icon")}
-                                            onClick={() =>
-                                                handleDelete(data[[fields[0]]])
-                                            }
-                                        >
-                                            <DeleteIcon />
-                                        </span>
+                                        )}
+                                        {data.choDuyet || (
+                                            <Link
+                                                to={viewLink}
+                                                state={{ viewData: data }}
+                                            >
+                                                <span
+                                                    className={cx("view-icon")}
+                                                >
+                                                    <ViewIcon />
+                                                </span>
+                                            </Link>
+                                        )}
                                     </td>
                                 )}
                             </tr>

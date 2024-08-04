@@ -52,9 +52,20 @@ export const getInDSThietBi = async () => {
     }
 };
 
-export const getAllThietBiChuaThanhLy = async () => {
+export const getAllThietBiCoTheGhiGiam = async () => {
     try {
-        const response = await httpRequest.get(`/thiet-bi`);
+        const response = await httpRequest.get(
+            `/thiet-bi/get-all-co-the-ghi-giam`
+        );
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const getAllThietBiCoTheKBHM = async () => {
+    try {
+        const response = await httpRequest.get(`/thiet-bi/get-all-co-the-kbhm`);
         return response.data;
     } catch (error) {
         console.log(error);
@@ -127,6 +138,18 @@ export const getTheoDoiHongMatPage = async (page, size) => {
     try {
         const response = await httpRequest.get(
             `/theo-doi-hong-mat/page?page=${page}&size=${size}`
+        );
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const baoCaoThongKe = async (request) => {
+    try {
+        const response = await httpRequest.post(
+            `/thiet-bi/bao-cao-thong-ke`,
+            request
         );
         return response.data;
     } catch (error) {

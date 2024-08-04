@@ -6,10 +6,11 @@ import * as createServices from "~/services/createServices";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import config from "~/config";
 import QLTBTable from "~/components/QLTBTable";
+import { updatePhieuThanhLy } from "~/services/updateServices";
 
 const cx = classNames.bind(styles);
 
-function GhiGiam({ updateData = false, title }) {
+function GhiGiam({ updateDataThanhLy = false, title }) {
     const KHO_PHONG = {
         KP00001: "Kho A",
         KP00002: "Kho B",
@@ -43,15 +44,23 @@ function GhiGiam({ updateData = false, title }) {
 
     const navigator = useNavigate();
 
+    const [viewData, setViewData] = useState(useLocation().state?.viewData);
+
     const [request, setRequest] = useState(
-        useLocation().state?.request || requestDefault
+        useLocation().state?.request ||
+            viewData ||
+            updateDataThanhLy ||
+            requestDefault
     );
     const [devices, setDevices] = useState([]);
     const [dsTB, seDsTB] = useState([]);
     const [reload, setReload] = useState(false);
     const [merged, setMerged] = useState(false);
     const [selectedDevices, setSelectedDevices] = useState(
-        useLocation().state?.selectedDevices || []
+        useLocation().state?.selectedDevices ||
+            viewData?.chiTietThanhLyTBList ||
+            updateDataThanhLy?.chiTietThanhLyTBList ||
+            []
     );
     const [giamDevices, setGiamDevices] = useState([]);
 
@@ -72,9 +81,9 @@ function GhiGiam({ updateData = false, title }) {
     // }, []);
 
     // useEffect(() => {
-    //     console.log(updateData);
-    //     if (updateData) {
-    //         setRequest(updateData);
+    //     console.log(updateDataThanhLy);
+    //     if (updateDataThanhLy) {
+    //         setRequest(updateDataThanhLy);
     //     }
     // }, []);
 
@@ -85,6 +94,10 @@ function GhiGiam({ updateData = false, title }) {
     // };
 
     const handleChange = (e, field) => {
+        if (viewData) {
+            alert("Không thể chỉnh sửa thông tin ở đây");
+            return;
+        }
         setRequest((prev) => ({ ...prev, [field]: e.target.value }));
     };
 
@@ -173,14 +186,34 @@ function GhiGiam({ updateData = false, title }) {
         request.chiTietThanhLyTBList = giamDevices;
     }
 
-    console.log(request);
+    const handleUpdate = async () => {
+        const maPhieuThanhLy = request.maPhieuThanhLy;
+
+        const updateRequest = {
+            ngayLap: request.ngayLap,
+            noiDung: request.noiDung,
+        };
+
+        const response = await updatePhieuThanhLy(
+            maPhieuThanhLy,
+            updateRequest
+        );
+
+        if (response?.status !== 200) {
+            alert("Cập nhật thất bại");
+            return;
+        }
+
+        alert("Cập nhật thành công");
+        navigator(config.routes.thanh_ly_thiet_bi);
+    };
 
     const handleSubmit = async () => {
         // let response = null;
-        // if (updateData) {
+        // if (updateDataThanhLy) {
         //     response = await updateServices.updateGiaoVien(
         //         "giao-vien/update",
-        //         updateData.maGV,
+        //         updateDataThanhLy.maGV,
         //         request
         //     );
 
@@ -200,7 +233,7 @@ function GhiGiam({ updateData = false, title }) {
 
         if (response && response.status === 200) {
             alert("Ghi giảm thành công");
-            // navigator(config.routes.danh_muc_giao_vien);
+            navigator(config.routes.thanh_ly_thiet_bi);
         } else {
             alert("Ghi giảm thất bại (Hãy kiểm tra lại thông tin)");
         }
@@ -208,7 +241,11 @@ function GhiGiam({ updateData = false, title }) {
 
     return (
         <div className={cx("wrapper", "col-lg-12 col-sm-12")}>
-            <h1 className={cx("title")}>{"Thêm phiếu ghi giảm thiết bị"}</h1>
+            {!!viewData || (
+                <h1 className={cx("title")}>
+                    {"Thêm phiếu ghi giảm thiết bị"}
+                </h1>
+            )}
             <div className="row">
                 <span className="col-lg-6 col-md-5 mt-5 d-flex flex-column">
                     <label className="">Ngày lập</label>
@@ -229,16 +266,20 @@ function GhiGiam({ updateData = false, title }) {
                     />
                 </span>
             </div>
-            <Link
-                to={config.routes.chon_thiet_bi_khai_bao}
-                state={{
-                    array: selectedDevices,
-                    from: config.routes.ghi_giam,
-                    request,
-                }}
-            >
-                <button className={cx("add-btn")}>Thêm thiết bị +</button>
-            </Link>
+            {updateDataThanhLy || viewData ? (
+                false
+            ) : (
+                <Link
+                    to={config.routes.chon_thiet_bi_khai_bao}
+                    state={{
+                        array: selectedDevices,
+                        from: config.routes.ghi_giam,
+                        request,
+                    }}
+                >
+                    <button className={cx("add-btn")}>Thêm thiết bị +</button>
+                </Link>
+            )}
             <div className="mt-5">Danh sách thiết bị</div>
             <QLTBTable
                 tableColumnsName={tableColumnsName}
@@ -249,33 +290,41 @@ function GhiGiam({ updateData = false, title }) {
                 setMerged={setMerged}
                 // submitData={TBKB}
                 ghiGiamCustom // khi có option này sẽ chỉnh  logic, scss cho phù hợp với ghi giảm (fetch data trong dstb, kho phòng tương ứng với thiết bị)
+                updateDataThanhLy={updateDataThanhLy}
+                view={!!viewData}
             ></QLTBTable>
             <div className="row mt-5 gap-3 m-0">
-                <div
-                    className={cx(
-                        "create-btn",
-                        "col-2 d-flex align-items-center justify-content-center"
-                    )}
-                    // onClick={handleSubmit}
-                >
+                {viewData ? (
+                    false
+                ) : (
                     <div
-
-                    // onClick={handleSubmit}
+                        className={cx(
+                            "create-btn",
+                            "col-2 d-flex align-items-center justify-content-center"
+                        )}
                     >
-                        {!merged ? (
-                            <span onClick={createGiamArray}>Gộp</span>
+                        {updateDataThanhLy ? (
+                            <div>
+                                <span onClick={handleUpdate}>Cập nhật</span>
+                            </div>
                         ) : (
-                            <span onClick={handleSubmit}>Thêm</span>
+                            <div>
+                                {!merged ? (
+                                    <span onClick={createGiamArray}>Gộp</span>
+                                ) : (
+                                    <span onClick={handleSubmit}>Thêm</span>
+                                )}
+                            </div>
                         )}
                     </div>
-                </div>
+                )}
 
                 <div
                     className={cx(
                         "cancel-btn",
                         "col-2 col-2 d-flex align-items-center justify-content-center"
                     )}
-                    onClick={() => navigator(config.routes.danh_muc_giao_vien)}
+                    onClick={() => navigator(config.routes.thanh_ly_thiet_bi)}
                 >
                     Hủy
                 </div>

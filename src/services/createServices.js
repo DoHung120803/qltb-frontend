@@ -45,6 +45,18 @@ export const createTang = async (request) => {
     }
 };
 
+export const duyetTangTB = async (maPhieuTang, request) => {
+    try {
+        const response = await httpRequest.post(
+            "/tang-tb/duyet-tang-tb/" + maPhieuTang,
+            request
+        );
+        return response;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
 export const createKhaiBaoHongMat = async (request) => {
     try {
         const response = await httpRequest.post(

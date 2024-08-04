@@ -98,6 +98,8 @@ function DanhMucThietBi() {
                     linkUpdate={config.routes.update_thiet_bi}
                     deleteEndpoint="dm-thiet-bi/delete"
                     handleReload={handleReload}
+                    viewLink={config.routes.them_thiet_bi}
+                    qldm
                 />
             </div>
         </div>

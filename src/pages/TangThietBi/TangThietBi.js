@@ -96,8 +96,10 @@ function TangThietBi() {
                     onPageChange={handlePageChange}
                     onSizeChange={handleSizeChange}
                     linkUpdate={config.routes.update_thiet_bi}
-                    deleteEndpoint="dm-thiet-bi/delete"
+                    deleteEndpoint="tang-tb/delete"
                     handleReload={handleReload}
+                    tangThietBi
+                    viewLink={config.routes.ghi_tang}
                 />
             </div>
         </div>

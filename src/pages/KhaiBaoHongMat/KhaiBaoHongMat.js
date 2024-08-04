@@ -12,6 +12,8 @@ const cx = classNames.bind(styles);
 function KhaiBaoHongMat({ updateData = false, title }) {
     const selectedDevices = useLocation().state?.selectedDevices || [];
 
+    console.log(updateData);
+
     const requestDefault = {
         ngayBao: new Date().toISOString().split("T")[0],
         maGiaoVien: "",
@@ -21,9 +23,22 @@ function KhaiBaoHongMat({ updateData = false, title }) {
         lyDoHongMat: "",
     };
 
+    const [viewData, setViewData] = useState(useLocation().state?.viewData);
+
     const [request, setRequest] = useState(
-        useLocation().state?.request || requestDefault
+        useLocation().state?.request || viewData || updateData || requestDefault
     );
+
+    useEffect(() => {
+        if (updateData) {
+            request.isHong = updateData.hong;
+            request.isMat = updateData.mat;
+        }
+        if (viewData) {
+            request.isHong = viewData.hong;
+            request.isMat = viewData.mat;
+        }
+    }, []);
 
     // useEffect(() => {
     //     request.maCaBietTB = selectedDevices[0]?.maCaBietTB;
@@ -50,16 +65,32 @@ function KhaiBaoHongMat({ updateData = false, title }) {
         getGVs();
     }, []);
 
-    console.log(giaoViens);
-
     const handleChange = (e, field) => {
+        if (viewData) {
+            alert("Không thể chỉnh sửa thông tin ở đây");
+            return;
+        }
+
+        if (field === "khoPhong") {
+            alert("Không thể chỉnh sửa vì kho phòng cố định theo MCB");
+            return;
+        }
+
         if (field === "isHong") {
+            if (updateData) {
+                alert("Không thể chỉnh sửa thông tin này");
+                return;
+            }
             setRequest((prev) => ({
                 ...prev,
                 isHong: e.target.checked,
                 isMat: !e.target.checked,
             }));
         } else if (field === "isMat") {
+            if (updateData) {
+                alert("Không thể chỉnh sửa thông tin này");
+                return;
+            }
             setRequest((prev) => ({
                 ...prev,
                 isMat: e.target.checked,
@@ -70,6 +101,8 @@ function KhaiBaoHongMat({ updateData = false, title }) {
         }
     };
 
+    console.log(request);
+
     const handleSubmit = async () => {
         let response = null;
         // if (request.slToiThieu <= 0) {
@@ -77,17 +110,27 @@ function KhaiBaoHongMat({ updateData = false, title }) {
         //     return;
         // }
         if (updateData) {
-            response = await updateServices.updateThietBi(
-                "dm-thiet-bi/update",
-                updateData.maNTB,
-                request
+            if (request.maGiaoVien === "") {
+                alert("Chưa chọn giáo viên");
+                return;
+            }
+
+            const updateRequest = {
+                ngayBao: request.ngayBao,
+                maGiaoVien: request.maGiaoVien,
+                lyDoHongMat: request.lyDoHongMat,
+            };
+
+            response = await updateServices.updatePhieuBaoHongMat(
+                updateData.maPhieuBao,
+                updateRequest
             );
 
             if (response && response.status === 200) {
-                alert("Cập nhật thiết bị thành công");
-                navigator(config.routes.danh_muc_thiet_bi);
+                alert("Cập nhật phiếu báo thành công");
+                navigator(config.routes.theo_doi_hong_mat);
             } else {
-                alert("Cập nhật thiết bị thất bại");
+                alert("Cập nhật phiếu báo thất bại");
             }
         } else {
             if (request.maCaBietTB === "") {
@@ -104,7 +147,7 @@ function KhaiBaoHongMat({ updateData = false, title }) {
 
             if (response && response.status === 200) {
                 alert("Thêm phiếu báo hỏng/mất thành công");
-                navigator(config.routes.danh_muc_thiet_bi);
+                navigator(config.routes.theo_doi_hong_mat);
             } else {
                 alert(
                     "Thêm phiếu báo thất bại (Hãy kiểm tra lại và điền đầy đủ thông tin)"
@@ -117,9 +160,11 @@ function KhaiBaoHongMat({ updateData = false, title }) {
 
     return (
         <div className={cx("wrapper", "col-lg-9 col-sm-12")}>
-            <h1 className={cx("title")}>
-                {title || "Thêm phiếu báo hỏng/mất"}
-            </h1>
+            {!!viewData || (
+                <h1 className={cx("title")}>
+                    {title || "Thêm phiếu báo hỏng/mất"}
+                </h1>
+            )}
 
             <div className="row">
                 <span className="col-lg-6 col-md-5 mt-5 d-flex flex-column">
@@ -147,14 +192,7 @@ function KhaiBaoHongMat({ updateData = false, title }) {
                 </span>
                 <span className="col-lg-6 col-md-5 mt-5 d-flex flex-column">
                     <label className="">Mã cá biệt TB</label>
-                    <Link
-                        to={config.routes.chon_thiet_bi_khai_bao}
-                        state={{
-                            from: config.routes.khai_bao_hong_mat,
-                            array: selectedDevices,
-                            request,
-                        }}
-                    >
+                    {viewData || updateData ? (
                         <input
                             style={{ cursor: "pointer" }}
                             className={cx("input", "col-12")}
@@ -163,7 +201,25 @@ function KhaiBaoHongMat({ updateData = false, title }) {
                             placeholder="Chọn thiết bị cá biệt"
                             // onChange={(e) => handleChange(e, "maCaBietTB")}
                         />
-                    </Link>
+                    ) : (
+                        <Link
+                            to={config.routes.chon_thiet_bi_khai_bao}
+                            state={{
+                                from: config.routes.khai_bao_hong_mat,
+                                array: selectedDevices,
+                                request,
+                            }}
+                        >
+                            <input
+                                style={{ cursor: "pointer" }}
+                                className={cx("input", "col-12")}
+                                type="text"
+                                value={request.maCaBietTB}
+                                placeholder="Chọn thiết bị cá biệt"
+                                // onChange={(e) => handleChange(e, "maCaBietTB")}
+                            />
+                        </Link>
+                    )}
                     {/* <select
                         value={request.maCaBietTB}
                         onChange={(e) => handleChange(e, "maCaBietTB")}
@@ -184,7 +240,12 @@ function KhaiBaoHongMat({ updateData = false, title }) {
                         style={{ cursor: "pointer" }}
                         className={cx("input", "col-12")}
                         type="text"
-                        value={selectedDevices[0]?.khoPhong}
+                        value={
+                            updateData?.khoPhong ||
+                            viewData?.khoPhong ||
+                            selectedDevices[0]?.khoPhong
+                        }
+                        onChange={(e) => handleChange(e, "khoPhong")}
                     />
                 </span>
 
@@ -232,22 +293,24 @@ function KhaiBaoHongMat({ updateData = false, title }) {
                 </span>
             </div>
             <div className="row mt-5 gap-3 m-0">
-                <div
-                    className={cx(
-                        "create-btn",
-                        "col-2 d-flex align-items-center justify-content-center"
-                    )}
-                    onClick={handleSubmit}
-                >
-                    {updateData ? "Cập nhật" : "Thêm"}
-                </div>
+                {!!viewData || (
+                    <div
+                        className={cx(
+                            "create-btn",
+                            "col-2 d-flex align-items-center justify-content-center"
+                        )}
+                        onClick={handleSubmit}
+                    >
+                        {updateData ? "Cập nhật" : "Thêm"}
+                    </div>
+                )}
 
                 <div
                     className={cx(
                         "cancel-btn",
                         "col-2 col-2 d-flex align-items-center justify-content-center"
                     )}
-                    onClick={() => navigator(config.routes.danh_muc_thiet_bi)}
+                    onClick={() => navigator(config.routes.theo_doi_hong_mat)}
                 >
                     Hủy
                 </div>

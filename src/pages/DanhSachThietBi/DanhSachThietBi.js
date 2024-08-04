@@ -26,7 +26,7 @@ function DanhSachThietBi() {
     const fields = [
         "maNTB",
         "maCaBietTB",
-        "tenTB",
+        "tenNTB",
         "khoPhong",
         "ngayNhap",
         "trangThai",
@@ -41,6 +41,8 @@ function DanhSachThietBi() {
     const [totalItems, setTotalItems] = useState(0);
     const [isSearching, setIsSearching] = useState(false);
     const [reload, setReload] = useState(false);
+
+    const isKhaiBao = localStorage.getItem("khai-bao") === true;
 
     const handleReload = () => {
         setReload(!reload);
@@ -106,16 +108,19 @@ function DanhSachThietBi() {
                     setTotalPages={setTotalPages}
                     setTotalItems={setTotalItems}
                     reload={reload}
+                    setPage={setPage}
                 />
-                <Link
-                    className={cx(
-                        "add-btn",
-                        "col-lg-1 col-sm-3 mt-3 text-center ms-auto"
-                    )}
-                    to={config.routes.khai_bao_thiet_bi}
-                >
-                    <div>Khai báo</div>
-                </Link>
+                {isKhaiBao && (
+                    <Link
+                        className={cx(
+                            "add-btn",
+                            "col-lg-1 col-sm-3 mt-3 text-center ms-auto"
+                        )}
+                        to={config.routes.khai_bao_thiet_bi}
+                    >
+                        <div>Khai báo</div>
+                    </Link>
+                )}
                 <Table
                     tableColumnsName={tableColumnsName}
                     fields={fields}

@@ -9,7 +9,7 @@ import QLTBTable from "~/components/QLTBTable";
 
 const cx = classNames.bind(styles);
 
-function GhiTang({ updateData = false, title }) {
+function GhiTang({ duyetTangTBData = false, title }) {
     const tableColumnsName = [
         "Mã nhóm thiết bị",
         "Tên nhóm thiết bị",
@@ -29,6 +29,8 @@ function GhiTang({ updateData = false, title }) {
         "thanhTienString",
     ];
 
+    const [viewData, setViewData] = useState(useLocation().state?.viewData);
+
     const requestDefault = {
         ngayLap: new Date().toISOString().split("T")[0],
         noiDung: "",
@@ -39,16 +41,28 @@ function GhiTang({ updateData = false, title }) {
     const navigator = useNavigate();
 
     const [request, setRequest] = useState(
-        useLocation().state?.request || requestDefault
+        useLocation().state?.request ||
+            viewData ||
+            duyetTangTBData?.request ||
+            requestDefault
     );
     const [devices, setDevices] = useState([]);
     const [dsTB, seDsTB] = useState([]);
     const [reload, setReload] = useState(false);
     const [merged, setMerged] = useState(false);
     const [selectedDevices, setSelectedDevices] = useState(
-        useLocation().state?.selectedDevices || []
+        useLocation().state?.selectedDevices ||
+            viewData?.chiTietTangTBList ||
+            duyetTangTBData?.request?.chiTietTangTBList ||
+            []
     );
     const [tangDevices, setTangDevices] = useState([]);
+
+    // useEffect(() => {
+    //     if (viewData) {
+    //         // fetch data để lấy dữ liệu
+    //     }
+    // }, []);
 
     useEffect(() => {
         const fetchDevices = async () => {
@@ -72,6 +86,10 @@ function GhiTang({ updateData = false, title }) {
     };
 
     const handleChange = (e, field) => {
+        if (viewData) {
+            alert("Không thể chỉnh sửa thông tin phiếu ở đây");
+            return;
+        }
         setRequest((prev) => ({ ...prev, [field]: e.target.value }));
     };
 
@@ -148,13 +166,18 @@ function GhiTang({ updateData = false, title }) {
                 .split("T")[0];
             if (device.thanhTien > 1000000000) {
                 alert(
-                    `Thành tiền của thiết bị ${device.tenTB} vượt quá 1 tỷ đồng`
+                    `Thành tiền của thiết bị ${device.tenNTB} vượt quá 1 tỷ đồng`
                 );
                 correct = false;
+                setMerged(false);
                 return;
             }
             delete device.donViTinh;
         });
+
+        if (!correct) {
+            return;
+        }
 
         setMerged(true);
 
@@ -185,10 +208,54 @@ function GhiTang({ updateData = false, title }) {
         const response = await createServices.createTang(request);
 
         if (response && response.status === 200) {
-            alert("Ghi tăng thành công");
+            if (!localStorage.getItem("choDuyetList")) {
+                localStorage.setItem("choDuyetList", JSON.stringify({}));
+            }
+
+            let choDuyetList = JSON.parse(localStorage.getItem("choDuyetList"));
+            choDuyetList = {
+                ...choDuyetList,
+                [response.data.maPhieuTang]: request,
+            };
+            localStorage.setItem("choDuyetList", JSON.stringify(choDuyetList));
+            alert("Ghi tăng thành công.\nVui lòng chờ duyệt từ quản trị viên");
             navigator(config.routes.tang_thiet_bi);
         } else {
             alert("Ghi tăng thất bại (Hãy kiểm tra lại thông tin)");
+        }
+    };
+
+    const duyetTangTBHandler = async () => {
+        if (request.chiTietTangTBList.length === 0) {
+            alert("Chưa có thiết bị nào được chọn");
+            return;
+        }
+
+        if (
+            // eslint-disable-next-line no-restricted-globals
+            confirm(
+                "Sau khi duyệt sẽ không thể thay đổi.\nBạn có chắc chắn muốn duyệt phiếu này?"
+            )
+        ) {
+            const response = await createServices.duyetTangTB(
+                duyetTangTBData.maPhieuTang,
+                request
+            );
+
+            if (response && response.status === 200) {
+                let choDuyetList = JSON.parse(
+                    localStorage.getItem("choDuyetList")
+                );
+                delete choDuyetList[duyetTangTBData.maPhieuTang];
+                localStorage.setItem(
+                    "choDuyetList",
+                    JSON.stringify(choDuyetList)
+                );
+                alert("Duyệt phiếu thành công");
+                navigator(config.routes.tang_thiet_bi);
+            } else {
+                alert("Duyệt phiếu thất bại");
+            }
         }
     };
 
@@ -196,7 +263,11 @@ function GhiTang({ updateData = false, title }) {
 
     return (
         <div className={cx("wrapper", "col-lg-12 col-sm-12")}>
-            <h1 className={cx("title")}>{"Thêm phiếu ghi tăng thiết bị"}</h1>
+            {!!viewData || (
+                <h1 className={cx("title")}>
+                    {"Thêm phiếu ghi tăng thiết bị"}
+                </h1>
+            )}
             <div className="row">
                 <span className="col-lg-6 col-md-5 mt-5 d-flex flex-column">
                     <label className="">Ngày lập</label>
@@ -232,16 +303,20 @@ function GhiTang({ updateData = false, title }) {
                     />
                 </span>
             </div>
-            <Link
-                to={config.routes.chon_thiet_bi_khai_bao}
-                state={{
-                    array: selectedDevices,
-                    from: config.routes.ghi_tang,
-                    request,
-                }}
-            >
-                <button className={cx("add-btn")}>Thêm thiết bị +</button>
-            </Link>
+            {duyetTangTBData || viewData ? (
+                false
+            ) : (
+                <Link
+                    to={config.routes.chon_thiet_bi_khai_bao}
+                    state={{
+                        array: selectedDevices,
+                        from: config.routes.ghi_tang,
+                        request,
+                    }}
+                >
+                    <button className={cx("add-btn")}>Thêm thiết bị +</button>
+                </Link>
+            )}
             <div className="mt-5">Danh sách thiết bị</div>
             <QLTBTable
                 tableColumnsName={tableColumnsName}
@@ -252,26 +327,32 @@ function GhiTang({ updateData = false, title }) {
                 setMerged={setMerged}
                 // submitData={TBKB}
                 ghiTangCustom
+                view={!!viewData}
             ></QLTBTable>
             <div className="row mt-5 gap-3 m-0">
-                <div
-                    className={cx(
-                        "create-btn",
-                        "col-2 d-flex align-items-center justify-content-center"
-                    )}
-                    // onClick={handleSubmit}
-                >
+                {!!viewData || (
                     <div
-
-                    // onClick={handleSubmit}
+                        className={cx(
+                            "create-btn",
+                            "col-2 d-flex align-items-center justify-content-center"
+                        )}
+                        // onClick={handleSubmit}
                     >
-                        {!merged ? (
-                            <span onClick={createTangArray}>Gộp</span>
+                        {duyetTangTBData ? (
+                            <span onClick={() => duyetTangTBHandler()}>
+                                Duyệt
+                            </span>
                         ) : (
-                            <span onClick={handleSubmit}>Thêm</span>
+                            <div>
+                                {!merged ? (
+                                    <span onClick={createTangArray}>Gộp</span>
+                                ) : (
+                                    <span onClick={handleSubmit}>Thêm</span>
+                                )}
+                            </div>
                         )}
                     </div>
-                </div>
+                )}
 
                 <div
                     className={cx(

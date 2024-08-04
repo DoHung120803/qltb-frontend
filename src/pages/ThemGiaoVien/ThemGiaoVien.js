@@ -3,7 +3,7 @@ import styles from "./ThemGiaoVien.module.scss";
 import { useEffect, useState } from "react";
 import * as createServices from "~/services/createServices";
 import * as updateServices from "~/services/updateServices";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import config from "~/config";
 
 const cx = classNames.bind(styles);
@@ -27,9 +27,16 @@ function ThemGiaoVien({ updateData = false, title }) {
         }
     }, []);
 
-    const [request, setRequest] = useState(requestDefault);
+    const [viewData, setViewData] = useState(useLocation().state?.viewData);
+    const [request, setRequest] = useState(viewData || requestDefault);
+
+    console.log(viewData);
 
     const handleChange = (e, field) => {
+        if (viewData) {
+            alert("Không thể chỉnh sửa thông tin giáo viên ở đây");
+            return;
+        }
         setRequest((prev) => ({ ...prev, [field]: e.target.value }));
     };
 
@@ -62,7 +69,11 @@ function ThemGiaoVien({ updateData = false, title }) {
 
     return (
         <div className={cx("wrapper", "col-lg-9 col-sm-12")}>
-            <h1 className={cx("title")}>{title || "Thêm Giáo Viên"}</h1>
+            {viewData ? (
+                false
+            ) : (
+                <h1 className={cx("title")}>{title || "Thêm Giáo Viên"}</h1>
+            )}
             <div className="row">
                 <span className="col-lg-6 col-md-5 mt-5 d-flex flex-column">
                     <label className="">Tên giáo viên</label>
@@ -125,15 +136,19 @@ function ThemGiaoVien({ updateData = false, title }) {
                 </span>
             </div>
             <div className="row mt-5 gap-3 m-0">
-                <div
-                    className={cx(
-                        "create-btn",
-                        "col-2 d-flex align-items-center justify-content-center"
-                    )}
-                    onClick={handleSubmit}
-                >
-                    {updateData ? "Cập nhật" : "Thêm"}
-                </div>
+                {viewData ? (
+                    false
+                ) : (
+                    <div
+                        className={cx(
+                            "create-btn",
+                            "col-2 d-flex align-items-center justify-content-center"
+                        )}
+                        onClick={handleSubmit}
+                    >
+                        {updateData ? "Cập nhật" : "Thêm"}
+                    </div>
+                )}
 
                 <div
                     className={cx(

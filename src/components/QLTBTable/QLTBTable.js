@@ -5,6 +5,7 @@ import styles from "./QLTBTable.module.scss";
 import { useEffect, useState } from "react";
 import * as getServices from "~/services/getServices";
 import * as jQueryUtils from "~/utils/jQueryUltis";
+import { huyThanhLyTB } from "~/services/updateServices";
 
 const cx = classNames.bind(styles);
 
@@ -18,6 +19,8 @@ function QLTBTable({
     ghiGiamCustom,
     ghiTangCustom,
     from,
+    updateDataThanhLy = false,
+    view,
 }) {
     // const [reRender, setReRender] = useState(false);
     const [khoOptions, setKhoOptions] = useState({}); // Quản lý options của kho cho mỗi
@@ -87,6 +90,33 @@ function QLTBTable({
         currency: "VND",
     });
 
+    const handleDelete = (index) => {
+        if (view) {
+            alert("Không thể xóa trong chế độ xem!");
+            return;
+        }
+        dataTable.splice(index, 1);
+        handleReload();
+    };
+
+    const huyThanhLyHandler = async (e, _index) => {
+        e.preventDefault();
+        if (
+            // eslint-disable-next-line no-restricted-globals
+            confirm(
+                "Hành động này sẽ không thể hoàn tác.\nBạn có chắc muốn hủy thanh lý thiết bị này?"
+            )
+        ) {
+            const response = await huyThanhLyTB(dataTable[_index].maCaBietTB);
+            if (response?.status !== 200) {
+                return alert("Có lỗi xảy ra. Hủy thanh lý không thành công!");
+            }
+            alert("Hủy thanh lý thành công!");
+            dataTable.splice(_index, 1);
+            handleReload();
+        }
+    };
+
     return (
         <div
             className={cx("chon-TBKB-custom", "p-0", {
@@ -146,6 +176,11 @@ function QLTBTable({
                                                             "Thanh lý định kỳ"
                                                         }
                                                         onChange={(e) => {
+                                                            if (
+                                                                updateDataThanhLy
+                                                            ) {
+                                                                return;
+                                                            }
                                                             handleReload();
                                                             data[field] =
                                                                 e.target.value;
@@ -257,7 +292,7 @@ function QLTBTable({
                                             field === "donGia"
                                         ) {
                                             return (
-                                                <td className="p-0" key={index}>
+                                                <td className="" key={index}>
                                                     <input
                                                         style={{
                                                             border: "none",
@@ -283,7 +318,7 @@ function QLTBTable({
                                             field === "hanSuDung"
                                         ) {
                                             return (
-                                                <td className="p-0" key={index}>
+                                                <td className="" key={index}>
                                                     <input
                                                         style={{
                                                             border: "none",
@@ -367,7 +402,7 @@ function QLTBTable({
                                                             paddingLeft: "0",
                                                         }}
                                                         key={index}
-                                                        className="p-0"
+                                                        className=""
                                                     >
                                                         <select
                                                             style={{
@@ -406,11 +441,27 @@ function QLTBTable({
                                             <td key={index}>{data[[field]]}</td>
                                         );
                                     })}
-                                    <td>
-                                        <span className={cx("delete-btn")}>
-                                            x
-                                        </span>
-                                    </td>
+                                    {updateDataThanhLy ? (
+                                        <td>
+                                            <button
+                                                className="btn btn-danger"
+                                                onClick={(e) =>
+                                                    huyThanhLyHandler(e, _index)
+                                                }
+                                            >
+                                                Hủy thanh lý
+                                            </button>
+                                        </td>
+                                    ) : (
+                                        <td>
+                                            <span
+                                                onClick={handleDelete}
+                                                className={cx("delete-btn")}
+                                            >
+                                                x
+                                            </span>
+                                        </td>
+                                    )}
                                 </tr>
                             );
                         })}

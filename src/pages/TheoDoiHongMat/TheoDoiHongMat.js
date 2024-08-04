@@ -19,6 +19,8 @@ function TheoDoiHongMat() {
         "Kho/Phòng",
         "Hỏng/mất",
         "Lý do",
+        "",
+        "Hành động",
     ];
 
     const fields = [
@@ -28,6 +30,7 @@ function TheoDoiHongMat() {
         "khoPhong",
         "hongMat",
         "lyDoHongMat",
+        "suaChua",
     ];
 
     const [devices, setDevices] = useState([]);
@@ -125,10 +128,12 @@ function TheoDoiHongMat() {
                     totalItems={totalItems}
                     onPageChange={handlePageChange}
                     onSizeChange={handleSizeChange}
-                    linkUpdate={config.routes.update_thiet_bi}
+                    linkUpdate={config.routes.update_hong_mat}
+                    deleteEndpoint={"theo-doi-hong-mat/delete"}
                     handleReload={handleReload}
-                    nonAction
+                    // nonAction
                     // handleCheckBox={handleCheckBox}
+                    viewLink={config.routes.khai_bao_hong_mat}
                 />
             </div>
         </div>

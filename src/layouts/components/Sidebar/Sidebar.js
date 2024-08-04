@@ -137,7 +137,8 @@ function Sidebar() {
                 <DashBoardItem
                     icon={<QuanLyDoanhMucIcon />}
                     title="Báo cáo thống kê"
-                    // to={"/quan-ly-doanh-muc"}
+                    to={config.routes.bao_cao_thong_ke}
+                    handleSelected={handleSelected}
                 />
             </DashBoard>
         </aside>

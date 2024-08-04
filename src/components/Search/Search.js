@@ -17,10 +17,13 @@ function Search({
     setTotalItems,
     reload,
     chonTBKBCustom,
+    setPage = () => {},
 }) {
     const [searchValue, setSearchValue] = useState("");
 
     const debouncedValue = useDebounce(searchValue, 500);
+
+    const [debouncedValueCopy, setDebouncedValueCopy] = useState("");
 
     const handleChange = (e) => {
         const searchValue = e.target.value;
@@ -40,6 +43,11 @@ function Search({
             return;
         }
 
+        if (debouncedValueCopy !== debouncedValue) {
+            setPage(0);
+            setDebouncedValueCopy(debouncedValue);
+        }
+
         setIsSearching(true);
 
         const fetchApi = async () => {
@@ -53,7 +61,6 @@ function Search({
                 setSearchResult(response.data.content);
                 setTotalPages(response.data.totalPages);
                 setTotalItems(response.data.totalElements);
-                console.log(response);
             } else {
                 const response = await searchServices.searchAll(
                     endpoint,

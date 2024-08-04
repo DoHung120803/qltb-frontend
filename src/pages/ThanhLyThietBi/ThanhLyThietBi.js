@@ -66,7 +66,7 @@ function ThanhLyThietBi() {
 
             <div className="row m-0">
                 <Search
-                    endpoint="/dm-thiet-bi/search"
+                    endpoint="/thanh-ly-tb/search"
                     setSearchResult={setDevices}
                     setIsSearching={setIsSearching}
                     page={page}
@@ -82,7 +82,7 @@ function ThanhLyThietBi() {
                     )}
                     to={config.routes.ghi_giam}
                 >
-                    <div>Ghi giảm</div>
+                    <div>Thanh lý</div>
                 </Link>
                 <Table
                     tableColumnsName={tableColumnsName}
@@ -94,9 +94,10 @@ function ThanhLyThietBi() {
                     totalItems={totalItems}
                     onPageChange={handlePageChange}
                     onSizeChange={handleSizeChange}
-                    linkUpdate={config.routes.update_thiet_bi}
-                    deleteEndpoint="dm-thiet-bi/delete"
+                    linkUpdate={config.routes.update_ghi_giam}
+                    deleteEndpoint="/thanh-ly-tb"
                     handleReload={handleReload}
+                    viewLink={config.routes.ghi_giam}
                 />
             </div>
         </div>

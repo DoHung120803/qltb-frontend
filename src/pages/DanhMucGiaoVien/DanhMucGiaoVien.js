@@ -98,6 +98,8 @@ function DanhMucGiaoVien() {
                     linkUpdate={config.routes.update_giao_vien}
                     deleteEndpoint="giao-vien/delete"
                     handleReload={handleReload}
+                    viewLink={config.routes.them_giao_vien}
+                    qldm
                 />
             </div>
         </div>
