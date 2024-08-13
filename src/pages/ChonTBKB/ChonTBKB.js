@@ -27,6 +27,7 @@ function ChonTBKB() {
                 "Hạn sử dụng",
                 "Trạng thái",
                 "Tình trạng",
+                "Thiết bị tiêu hao",
                 "Đang hoạt động",
             ]
             : ["#", "Mã nhóm thiết bị", "Tên nhóm thiết bị", "Loại thiết bị"];
@@ -44,6 +45,7 @@ function ChonTBKB() {
                 "hanSuDung",
                 "trangThai",
                 "tinhTrang",
+                "thietBiTieuHao",
                 "dangHoatDong",
             ]
             : ["#", "maNTB", "tenNTB", "loaiTB"];

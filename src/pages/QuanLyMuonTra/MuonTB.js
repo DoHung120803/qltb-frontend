@@ -3,10 +3,10 @@ import styles from "./MuonTraThietBi.module.scss";
 import Table from "~/components/Table";
 import { useEffect, useState } from "react";
 import * as getServices from "~/services/getServices";
-import * as updateServices from "~/services/updateServices"; // Import update services
 import Search from "~/components/Search/Search";
 import config from "~/config";
 import { Link, useNavigate } from "react-router-dom";
+import * as updateServices from "~/services/updateServices";
 
 const cx = classNames.bind(styles);
 
@@ -17,17 +17,11 @@ function MuonTraThietBi() {
         "Ngày mượn",
         "Ngày hẹn trả",
         "Trạng thái",
-        "",
+        "Mượn/Trả",
+        "Hành động",
     ];
 
-    const fields = [
-        "maPhieuMuon",
-        "giaoVien",
-        "ngayMuon",
-        "ngayHenTra",
-        "trangThai",
-        "muonTra",
-    ];
+    const fields = ["maPhieuMuon", "giaoVien", "ngayMuon", "ngayHenTra", "trangThai"];
 
     const [loans, setLoans] = useState([]);
     const [page, setPage] = useState(0);
@@ -70,11 +64,6 @@ function MuonTraThietBi() {
         setPage(0);
     };
 
-    const formatDate = (dateString) => {
-        const options = { year: "numeric", month: "2-digit", day: "2-digit" };
-        return new Date(dateString).toLocaleDateString(undefined, options);
-    };
-
     const handleDelete = async (loan, event) => {
         event.preventDefault();
         await updateServices.updateMuonTB(loan.maPhieuMuon, {
@@ -92,9 +81,19 @@ function MuonTraThietBi() {
     };
 
     const handleRecordReturn = async (loan) => {
-        // Navigate to record return and reload the data after the return is recorded
-        navigate(config.routes.them_phieu_tra, { state: { loan } });
+        navigate(config.routes.them_phieu_tra, {
+            state: {
+                viewData: {
+                    maPhieuMuon: loan.maPhieuMuon,
+                    ngayMuon: loan.ngayMuon,
+                    ngayHenTra: loan.ngayHenTra,
+                    giaoVien: loan.giaoVien,
+                    chiTietTraTBList: loan.chiTietMuonTBList || [], // Dữ liệu chi tiết về thiết bị
+                },
+            },
+        });
     };
+
 
     const renderMuontTra = (loan) => {
         if (loan.trangThai === "Đã trả") {
@@ -138,32 +137,10 @@ function MuonTraThietBi() {
         );
     };
 
-    const renderActions = (loan) => {
-        if (loan.trangThai === "Chưa mượn") {
-            return (
-                <div className={cx("action-buttons")}>
-                    <Link
-                        to={`${config.routes.update_phieu_muon}/${loan.maPhieuMuon}`}
-                        className={cx("edit-btn")}
-                    >
-                        <i className="fa fa-pencil"></i>
-                    </Link>
-                    <button
-                        className={cx("delete-icon-btn")}
-                        onClick={(e) => handleDelete(loan, e)}
-                    >
-                        <i className="fa fa-trash"></i>
-                    </button>
-                </div>
-            );
-        }
-        return null;
-    };
-
     return (
         <div className={cx("wrapper", "col-11")}>
-            <h2>Quản lý mượn trả</h2>
-            <p>Quản lý mượn trả &gt; Mượn trả thiết bị</p>
+            <h2>Quản lý mượn thiết bị</h2>
+            <p>Quản lý mượn thiết bị &gt; Mượn thiết bị</p>
 
             <div className="row m-0">
                 <Search
@@ -176,46 +153,43 @@ function MuonTraThietBi() {
                     setTotalItems={setTotalItems}
                     reload={reload}
                 />
-                <Link
-                    className={cx(
-                        "add-btn",
-                        "col-lg-2 col-sm-4 mt-3 text-center ms-auto"
-                    )}
-                    to={config.routes.them_phieu_muon}
-                >
-                    <div>Thêm phiếu mượn</div>
-                </Link>
-                <Link
-                    className={cx(
-                        "add-btn",
-                        "col-lg-2 col-sm-4 mt-3 text-center"
-                    )}
-                    to={config.routes.lich_su_tra}
-                >
-                    <div>Lịch sử trả</div>
-                </Link>
-                <div className="table-wrapper">
-                    <Table
-                        tableColumnsName={tableColumnsName}
-                        fields={fields}
-                        datasTable={loans.map((loan) => ({
-                            ...loan,
-                            ngayMuon: formatDate(loan.ngayMuon),
-                            ngayHenTra: formatDate(loan.ngayHenTra),
-                            muonTra: renderMuontTra(loan),
-                            actions: renderActions(loan),
-                        }))}
-                        page={page}
-                        size={size}
-                        totalPages={totalPages}
-                        totalItems={totalItems}
-                        onPageChange={handlePageChange}
-                        onSizeChange={handleSizeChange}
-                        handleReload={handleReload}
-                        muonTraThietBi
-                        // isMuonTraThietBi prop is not passed, default behavior is applied
-                    />
+                <div className="col-lg-4 col-sm-8 mt-3 ms-auto d-flex justify-content-end">
+                    <Link
+                        className={cx(
+                            "add-btn",
+                            "text-center me-3"
+                        )}
+                        to={config.routes.them_phieu_muon}
+                    >
+                        <div>Thêm phiếu mượn</div>
+                    </Link>
+                    <Link
+                        className={cx(
+                            "add-btn",
+                            "text-center"
+                        )}
+                        to={config.routes.lich_su_tra}
+                    >
+                        <div>Xem lịch sử</div>
+                    </Link>
                 </div>
+                <Table
+                    tableColumnsName={tableColumnsName}
+                    fields={[...fields, "muonTra"]}
+                    datasTable={loans}
+                    page={page}
+                    size={size}
+                    totalPages={totalPages}
+                    totalItems={totalItems}
+                    onPageChange={handlePageChange}
+                    onSizeChange={handleSizeChange}
+                    linkUpdate={config.routes.update_phieu_muon}
+                    deleteEndpoint="/muon-tb"
+                    handleReload={handleReload}
+                    viewLink={config.routes.them_phieu_muon}
+                    renderMuontTra={renderMuontTra} // Custom render function for the "Mượn/Trả" column
+                    isMuonTraThietBi={true}
+                />
             </div>
         </div>
     );

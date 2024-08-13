@@ -92,3 +92,14 @@ export const updateMuonTB = async (maPhieuMuon, updateData) => {
         console.log(error);
     }
 };
+export const updatePhieuMuon = async (maPhieuMuon, updateData) => {
+    try {
+        const response = await httpRequest.put(
+            "/muon-tb/update-info/" + maPhieuMuon,
+            updateData
+        );
+        return response;
+    } catch (error) {
+        console.log(error);
+    }
+};

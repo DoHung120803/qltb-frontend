@@ -14,7 +14,8 @@ function LichSuTra() {
         "Mã phiếu trả",
         "Tên giáo viên",
         "Ngày mượn",
-        "Ngày trả"
+        "Ngày trả",
+        "Hành động"
     ];
 
     const fields = [
@@ -50,6 +51,7 @@ function LichSuTra() {
                     tenGiaoVien: item.tenGiaoVien,
                     ngayMuon: item.ngayMuon,
                     ngayTra: item.ngayTra,
+                    chiTietTraTBList: item.chiTietTraTBList, // Bao gồm thông tin chi tiết thiết bị
                 }));
                 setReturns(formattedData);
                 setTotalPages(dataResponse.totalPages);
@@ -74,6 +76,12 @@ function LichSuTra() {
     const formatDate = (dateString) => {
         const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
         return new Date(dateString).toLocaleDateString(undefined, options);
+    };
+
+    const handleView = (data) => {
+        navigate(config.routes.them_phieu_tra, {
+            state: { viewData: data },
+        });
     };
 
     return (
@@ -108,8 +116,10 @@ function LichSuTra() {
                         onPageChange={handlePageChange}
                         onSizeChange={handleSizeChange}
                         handleReload={handleReload}
-                        nonAction={true}
+                        viewLink={config.routes.them_phieu_tra} // đảm bảo bạn truyền đúng đường dẫn viewLink
+                        onView={handleView} // Pass handleView to Table
                     />
+
                 </div>
             </div>
         </div>

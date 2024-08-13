@@ -30,6 +30,7 @@ import ThemPhieuMuon from "~/pages/ThemPhieuMuon";
 import MuonTraThietBi from "~/pages/QuanLyMuonTra/MuonTB";
 import ThemPhieuTra from "~/pages/GhiTra";
 import LichSuTra from "~/pages/LichSuTra/LichSuTra";
+import UpdatePhieuMuon from "~/pages/UpdatePhieuMuon";
 
 // private routes
 const privateRoutes = [
@@ -59,6 +60,8 @@ const privateRoutes = [
     { path: config.routes.them_phieu_tra, component: ThemPhieuTra },
     { path: config.routes.muon_tra_thiet_bi, component: MuonTraThietBi },
     { path: config.routes.lich_su_tra, component: LichSuTra },
+    { path: config.routes.update_phieu_muon, component: UpdatePhieuMuon },
+
 ];
 
 export { privateRoutes };

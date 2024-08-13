@@ -1,9 +1,9 @@
+import { useNavigate, useLocation } from "react-router-dom";
 import classNames from "classnames/bind";
 import styles from "./ThemPhieuTra.module.scss";
 import { useEffect, useState } from "react";
 import * as getServices from "~/services/getServices";
 import * as createServices from "~/services/createServices";
-import { useNavigate, useLocation } from "react-router-dom";
 import config from "~/config";
 
 const cx = classNames.bind(styles);
@@ -25,26 +25,22 @@ function ThemPhieuTra() {
         "ghiChu",
     ];
 
-    const requestDefault = {
-        ngayTra: new Date().toISOString().split("T")[0],
-        nguoiTra: "",
-        maPhieuMuon: "",
-        chiTietTraTBList: [],
-    };
-
     const navigate = useNavigate();
     const location = useLocation();
-    const loan = location.state?.loan || {}; // Nhận loan từ state
+    const viewData = location.state?.viewData || {};
 
     const [request, setRequest] = useState({
-        ...requestDefault,
-        maPhieuMuon: loan.maPhieuMuon,
-        ngayMuon: loan.ngayMuon,
-        ngayHenTra: loan.ngayHenTra,
+        ngayTra: new Date().toISOString().split("T")[0],
+        nguoiTra: "",
+        maPhieuMuon: viewData.maPhieuMuon || "",
+        ngayMuon: viewData.ngayMuon || "",
+        ngayHenTra: viewData.ngayHenTra || "",
+        chiTietTraTBList: viewData.chiTietTraTBList || [],
     });
+
     const [giaoViens, setGiaoViens] = useState([]);
     const [selectedDevices, setSelectedDevices] = useState(
-        loan.chiTietMuonTBList || []
+        viewData.chiTietTraTBList || []
     );
 
     useEffect(() => {
@@ -58,6 +54,10 @@ function ThemPhieuTra() {
     }, []);
 
     const handleChange = (e, field) => {
+        if (viewData) {
+            alert("Không thể chỉnh sửa thông tin ở đây");
+            return;
+        }
         setRequest((prev) => ({ ...prev, [field]: e.target.value }));
     };
 
@@ -79,12 +79,7 @@ function ThemPhieuTra() {
 
         const requestPayload = {
             ...request,
-            chiTietTraTBList: selectedDevices.map((device) => ({
-                maCaBietTB: device.maCaBietTB,
-                tenThietBi: device.tenThietBi,
-                tinhTrangTra: device.tinhTrangTra,
-                ghiChu: device.ghiChu,
-            })),
+            chiTietTraTBList: selectedDevices,
         };
 
         try {
@@ -104,7 +99,9 @@ function ThemPhieuTra() {
 
     return (
         <div className={cx("wrapper", "col-lg-12 col-sm-12")}>
-            <h1 className={cx("title")}>{"Thêm phiếu trả thiết bị"}</h1>
+            <h1 className={cx("title")}>
+                {viewData ? "Xem phiếu trả thiết bị" : "Thêm phiếu trả thiết bị"}
+            </h1>
             <div className="row">
                 <span className="col-lg-6 col-md-5 mt-5 d-flex flex-column">
                     <label className="">Ngày mượn</label>
@@ -152,46 +149,20 @@ function ThemPhieuTra() {
             <div className="mt-5">Danh sách thiết bị</div>
             <table className={cx("table")}>
                 <thead>
-                    <tr>
-                        {tableColumnsName.map((colName, index) => (
-                            <th key={index}>{colName}</th>
-                        ))}
-                    </tr>
+                <tr>
+                    {tableColumnsName.map((colName, index) => (
+                        <th key={index}>{colName}</th>
+                    ))}
+                </tr>
                 </thead>
                 <tbody>
-                    {selectedDevices.map((device, rowIndex) => (
-                        <tr key={rowIndex}>
-                            {fields.map((field, colIndex) => {
-                                if (field === "tinhTrangTra") {
-                                    return (
-                                        <td key={colIndex}>
-                                            <select
-                                                value={device[field]}
-                                                onChange={(e) =>
-                                                    handleDeviceChange(
-                                                        e,
-                                                        rowIndex,
-                                                        field
-                                                    )
-                                                }
-                                            >
-                                                <option value="Dùng được">
-                                                    Dùng được
-                                                </option>
-                                                <option value="Hỏng">
-                                                    Hỏng
-                                                </option>
-                                                <option value="Đã tiêu hao">
-                                                    Đã tiêu hao
-                                                </option>
-                                            </select>
-                                        </td>
-                                    );
-                                }
+                {selectedDevices.map((device, rowIndex) => (
+                    <tr key={rowIndex}>
+                        {fields.map((field, colIndex) => {
+                            if (field === "tinhTrangTra") {
                                 return (
                                     <td key={colIndex}>
-                                        <input
-                                            type="text"
+                                        <select
                                             value={device[field]}
                                             onChange={(e) =>
                                                 handleDeviceChange(
@@ -200,37 +171,69 @@ function ThemPhieuTra() {
                                                     field
                                                 )
                                             }
-                                            readOnly={field !== "ghiChu"}
-                                        />
+                                        >
+                                            <option value="Dùng được">
+                                                Dùng được
+                                            </option>
+                                            <option value="Hỏng">
+                                                Hỏng
+                                            </option>
+                                            <option value="Đã tiêu hao">
+                                                Đã tiêu hao
+                                            </option>
+                                        </select>
                                     </td>
                                 );
-                            })}
-                        </tr>
-                    ))}
+                            }
+                            return (
+                                <td key={colIndex}>
+                                    <input
+                                        type="text"
+                                        value={device[field]}
+                                        onChange={(e) =>
+                                            handleDeviceChange(
+                                                e,
+                                                rowIndex,
+                                                field
+                                            )
+                                        }
+                                        readOnly={field !== "ghiChu" || !!viewData}  // Disable input nếu đang xem view hoặc không phải ghi chú
+                                    />
+                                </td>
+                            );
+                        })}
+                    </tr>
+                ))}
                 </tbody>
             </table>
 
             <div className="row mt-5 gap-3 m-0">
-                <div
-                    className={cx(
-                        "create-btn",
-                        "col-2 d-flex align-items-center justify-content-center"
-                    )}
-                >
-                    <div onClick={handleSubmit}>
-                        <span>Thêm</span>
+                {/* Nút Thêm chỉ xuất hiện khi không ở chế độ xem (viewData không tồn tại) */}
+                {!viewData || (
+                    <div
+                        className={cx(
+                            "create-btn",
+                            "col-2 d-flex align-items-center justify-content-center"
+                        )}
+                    >
+                        <div onClick={handleSubmit}>
+                            <span>Thêm</span>
+                        </div>
                     </div>
-                </div>
+                )}
+
+                {/* Nút Quay lại xuất hiện khi ở chế độ xem (viewData tồn tại) */}
                 <div
                     className={cx(
                         "cancel-btn",
                         "col-2 col-2 d-flex align-items-center justify-content-center"
                     )}
-                    onClick={() => navigate(config.routes.muon_tra_thiet_bi)}
+                    onClick={() => navigate(config.routes.lich_su_tra)}
                 >
-                    Hủy
+                    {viewData ? "Quay lại" : "Hủy"}
                 </div>
             </div>
+
         </div>
     );
 }
