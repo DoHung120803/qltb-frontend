@@ -79,7 +79,7 @@ function LichSuTra() {
     };
 
     const handleView = (data) => {
-        navigate(config.routes.them_phieu_tra, {
+        navigate(config.routes.xem_phieu_tra, {
             state: { viewData: data },
         });
     };
@@ -116,10 +116,10 @@ function LichSuTra() {
                         onPageChange={handlePageChange}
                         onSizeChange={handleSizeChange}
                         handleReload={handleReload}
-                        viewLink={config.routes.them_phieu_tra} // đảm bảo bạn truyền đúng đường dẫn viewLink
-                        onView={handleView} // Pass handleView to Table
+                        viewLink={config.routes.xem_phieu_tra} // Đảm bảo đường dẫn chính xác
+                        onView={handleView} // Sử dụng handleView để chuyển hướng
+                        isLichSuTra={true} // Đánh dấu là Lịch sử trả
                     />
-
                 </div>
             </div>
         </div>

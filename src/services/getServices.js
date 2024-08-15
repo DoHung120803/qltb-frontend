@@ -179,6 +179,16 @@ export const getLichSuTra = async (page, size) => {
     }
 };
 
+export const getPhieuTraById = async (maPhieuTra) => {
+    try {
+        const response = await httpRequest.get(`/tra-tb/${maPhieuTra}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching phieu tra by id:', error);
+        throw error;
+    }
+};
+
 export const getAllThietBiCoTheMuon = async (page, size) => {
     try {
         const response = await httpRequest.get(

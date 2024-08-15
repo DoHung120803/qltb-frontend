@@ -32,7 +32,8 @@ function Table({
                    tangThietBi = false,
                    viewLink,
                    qldm = false,
-                   isMuonTraThietBi = false, // thêm thuộc tính này để xác định chức năng MuonTraThietBi
+                   isMuonTraThietBi = false,
+                   isLichSuTra = false, // Thêm thuộc tính để xác định Lịch sử trả
                    renderMuontTra, // Custom render function
                }) {
     const [reRender, setReRender] = useState(false);
@@ -181,14 +182,12 @@ function Table({
                             {
                                 (!nonAction && !chonTBKBCustom && (
                                     <td>
-                                        {isMuonTraThietBi && data.trangThai !== "Chưa mượn" ? (  // Kiểm tra isMuonTraThietBi và trạng thái
-                                            <>
-                                                <Link to={viewLink} state={{ viewData: data }}>
-                                                    <span className={cx("view-icon")}>
-                                                        <ViewIcon />
-                                                    </span>
-                                                </Link>
-                                            </>
+                                        {isLichSuTra ? ( // Chỉ hiển thị nút "Xem" cho Lịch sử trả
+                                            <Link to={viewLink} state={{ viewData: data }}>
+                                                <span className={cx("view-icon")}>
+                                                    <ViewIcon />
+                                                </span>
+                                            </Link>
                                         ) : (
                                             <>
                                                 <Link to={linkUpdate} state={data}>

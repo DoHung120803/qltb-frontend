@@ -39,9 +39,7 @@ function ThemPhieuTra() {
     });
 
     const [giaoViens, setGiaoViens] = useState([]);
-    const [selectedDevices, setSelectedDevices] = useState(
-        viewData.chiTietTraTBList || []
-    );
+    const [selectedDevices, setSelectedDevices] = useState([]);
 
     useEffect(() => {
         const getGVs = async () => {
@@ -51,13 +49,18 @@ function ThemPhieuTra() {
             }
         };
         getGVs();
-    }, []);
+
+        // Set tình trạng trả mặc định là "Đã tiêu hao" cho thiết bị tiêu hao
+        const devicesWithTinhTrangTra = viewData.chiTietTraTBList.map((device) => {
+            if (device.thietBiTieuHao) {
+                return { ...device, tinhTrangTra: "Đã tiêu hao" };
+            }
+            return device;
+        });
+        setSelectedDevices(devicesWithTinhTrangTra);
+    }, [viewData.chiTietTraTBList]);
 
     const handleChange = (e, field) => {
-        if (viewData) {
-            alert("Không thể chỉnh sửa thông tin ở đây");
-            return;
-        }
         setRequest((prev) => ({ ...prev, [field]: e.target.value }));
     };
 
@@ -99,9 +102,7 @@ function ThemPhieuTra() {
 
     return (
         <div className={cx("wrapper", "col-lg-12 col-sm-12")}>
-            <h1 className={cx("title")}>
-                {viewData ? "Xem phiếu trả thiết bị" : "Thêm phiếu trả thiết bị"}
-            </h1>
+            <h1 className={cx("title")}>Thêm phiếu trả thiết bị</h1>
             <div className="row">
                 <span className="col-lg-6 col-md-5 mt-5 d-flex flex-column">
                     <label className="">Ngày mượn</label>
@@ -171,6 +172,7 @@ function ThemPhieuTra() {
                                                     field
                                                 )
                                             }
+                                            disabled={device.thietBiTieuHao} // Disable dropdown nếu thiết bị là thietBiTieuHao
                                         >
                                             <option value="Dùng được">
                                                 Dùng được
@@ -197,7 +199,7 @@ function ThemPhieuTra() {
                                                 field
                                             )
                                         }
-                                        readOnly={field !== "ghiChu" || !!viewData}  // Disable input nếu đang xem view hoặc không phải ghi chú
+                                        readOnly={field !== "ghiChu"}  // Disable input nếu không phải ghi chú
                                     />
                                 </td>
                             );
@@ -208,29 +210,27 @@ function ThemPhieuTra() {
             </table>
 
             <div className="row mt-5 gap-3 m-0">
-                {/* Nút Thêm chỉ xuất hiện khi không ở chế độ xem (viewData không tồn tại) */}
-                {!viewData || (
-                    <div
-                        className={cx(
-                            "create-btn",
-                            "col-2 d-flex align-items-center justify-content-center"
-                        )}
-                    >
-                        <div onClick={handleSubmit}>
-                            <span>Thêm</span>
-                        </div>
+                {/* Nút Thêm xuất hiện khi tạo mới phiếu trả */}
+                <div
+                    className={cx(
+                        "create-btn",
+                        "col-2 d-flex align-items-center justify-content-center"
+                    )}
+                >
+                    <div onClick={handleSubmit}>
+                        <span>Thêm</span>
                     </div>
-                )}
+                </div>
 
-                {/* Nút Quay lại xuất hiện khi ở chế độ xem (viewData tồn tại) */}
+                {/* Nút Quay lại */}
                 <div
                     className={cx(
                         "cancel-btn",
                         "col-2 col-2 d-flex align-items-center justify-content-center"
                     )}
-                    onClick={() => navigate(config.routes.lich_su_tra)}
+                    onClick={() => navigate(config.routes.muon_tra_thiet_bi)}
                 >
-                    {viewData ? "Quay lại" : "Hủy"}
+                    Hủy
                 </div>
             </div>
 

@@ -25,7 +25,8 @@ const routes = {
     login: "/login",
     bao_cao_thong_ke: "/bao-cao-thong-ke",
     update_hong_mat: "/quan-ly-thiet-bi/update-hong-mat",
-    update_phieu_muon: "/quan-ly-muon-tra/update-phieu-muon"
+    update_phieu_muon: "/quan-ly-muon-tra/update-phieu-muon",
+    xem_phieu_tra: "/quan-ly-muon-tra/xem_phieu_tra"
 };
 
 export default routes;
