@@ -1,5 +1,5 @@
 import classNames from "classnames/bind";
-import styles from "./ThemPhieuMuon.module.scss";
+import styles from "./ViewPhieuMuon.module.scss";
 import { useEffect, useState } from "react";
 import * as getServices from "~/services/getServices";
 import * as createServices from "~/services/createServices";
@@ -10,7 +10,7 @@ import { updatePhieuMuon } from "~/services/updateServices";
 
 const cx = classNames.bind(styles);
 
-function ThemPhieuMuon({ updateDataMuon = false }) {
+function XemPhieuMuon({ updateDataMuon = false }) {
     const tableColumnsName = [
         "Mã cá biệt TB",
         "Tên thiết bị",
@@ -28,14 +28,16 @@ function ThemPhieuMuon({ updateDataMuon = false }) {
 
     const requestDefault = {
         ngayMuon: new Date().toISOString().split("T")[0],
-        ngayHenTra: new Date(new Date().setDate(new Date().getDate() + 7)).toISOString().split("T")[0],
+        ngayHenTra: new Date(new Date().setDate(new Date().getDate() + 7)).toISOString().split("T")[0], // Ngày hẹn trả sau 1 tuần
         maGV: "",
         mucDich: "",
         chiTietMuonTBList: [],
     };
 
+
     const navigator = useNavigate();
-    const location = useLocation();
+
+    const location = useLocation();  // Sử dụng useLocation để lấy dữ liệu
     const [viewData, setViewData] = useState(location.state?.viewData);
     const [giaoViens, setGiaoViens] = useState([]);
     const [request, setRequest] = useState(
@@ -55,90 +57,55 @@ function ThemPhieuMuon({ updateDataMuon = false }) {
     );
 
     useEffect(() => {
-        const fetchGiaoViens = async () => {
-            try {
-                const response = await getServices.getAllGiaoVien();
-                if (response && Array.isArray(response)) {
-                    setGiaoViens(response);
-
-                    // Tìm giáo viên theo tên và cập nhật request để hiển thị đúng mã giáo viên
-                    if (viewData && viewData.giaoVien) {
-                        const matchedGV = response.find(gv => gv.tenGV.trim() === viewData.giaoVien.trim());
-                        if (matchedGV) {
-                            setRequest((prev) => ({
-                                ...prev,
-                                maGV: matchedGV.maGV,
-                            }));
-                        }
-                    }
-                } else {
-                    console.error("Failed to fetch Giao Viens:", response);
-                }
-            } catch (error) {
-                console.error("Error fetching Giao Viens:", error);
+        const getGVs = async () => {
+            const response = await getServices.getAllGiaoVien();
+            if (response) {
+                setGiaoViens(response);
             }
         };
-        fetchGiaoViens();
-    }, [viewData]);
+        getGVs();
+    }, []);
 
     const handleChange = (e, field) => {
         if (viewData) {
             alert("Không thể chỉnh sửa thông tin ở đây");
             return;
         }
-        const updatedRequest = { ...request, [field]: e.target.value };
-        setRequest(updatedRequest);
-        console.log("Updated request: ", updatedRequest);
+        setRequest((prev) => ({ ...prev, [field]: e.target.value }));
     };
 
     const handleReload = () => {
         setReload(!reload);
     };
 
-    const createMuonArray = () => {
+    function createMuonArray() {
         const muonDevices = selectedDevices.filter((device) => !!device.maCaBietTB);
+
         setSelectedDevices(muonDevices);
-        setRequest((prev) => ({ ...prev, chiTietMuonTBList: muonDevices }));
+        request.chiTietMuonTBList = muonDevices;
+
         setMerged(true);
-    };
+    }
 
     const handleUpdate = async () => {
-        // Tìm giáo viên theo tên và cập nhật request để hiển thị đúng mã giáo viên
-        if (viewData && viewData.giaoVien && giaoViens.length > 0) {
-            const matchedGV = giaoViens.find(gv => gv.tenGV.trim() === viewData.giaoVien.trim());
-            if (matchedGV) {
-                setRequest((prev) => ({
-                    ...prev,
-                    maGV: matchedGV.maGV,
-                }));
-            }
-        }
-
         const maPhieuMuon = request.maPhieuMuon;
 
         const updateRequest = {
             ngayMuon: request.ngayMuon,
             ngayHenTra: request.ngayHenTra,
-            maGV: request.maGV,  // Đảm bảo maGV đã được cập nhật đúng
+            maGV: request.maGV,
             mucDich: request.mucDich,
-            chiTietMuonTBList: request.chiTietMuonTBList,
         };
 
-        try {
-            console.log("Update Request:", updateRequest);  // In ra console để kiểm tra giá trị trước khi gửi
-            const response = await updatePhieuMuon(maPhieuMuon, updateRequest);
+        const response = await updatePhieuMuon(maPhieuMuon, updateRequest);
 
-            if (response?.status !== 200) {
-                alert("Cập nhật thất bại");
-                return;
-            }
-
-            alert("Cập nhật thành công");
-            navigator(config.routes.muon_tra_thiet_bi);
-        } catch (error) {
-            console.error("Update failed:", error);
+        if (response?.status !== 200) {
             alert("Cập nhật thất bại");
+            return;
         }
+
+        alert("Cập nhật thành công");
+        navigator(config.routes.muon_tra_thiet_bi);
     };
 
     const handleSubmit = async () => {
@@ -147,17 +114,12 @@ function ThemPhieuMuon({ updateDataMuon = false }) {
             return;
         }
 
-        try {
-            const response = await createServices.createMuon(request);
+        const response = await createServices.createMuon(request);
 
-            if (response && response.status === 200) {
-                alert("Ghi nhận mượn thiết bị thành công");
-                navigator(config.routes.muon_tra_thiet_bi);
-            } else {
-                alert("Ghi nhận mượn thiết bị thất bại (Hãy kiểm tra lại thông tin)");
-            }
-        } catch (error) {
-            console.error("Create request failed:", error);
+        if (response && response.status === 200) {
+            alert("Ghi nhận mượn thiết bị thành công");
+            navigator(config.routes.muon_tra_thiet_bi);
+        } else {
             alert("Ghi nhận mượn thiết bị thất bại (Hãy kiểm tra lại thông tin)");
         }
     };
@@ -175,25 +137,25 @@ function ThemPhieuMuon({ updateDataMuon = false }) {
                         type="date"
                         value={request.ngayMuon}
                         onChange={(e) => handleChange(e, "ngayMuon")}
-                        disabled={!!viewData}
+                        disabled={!!viewData}  // Disable input nếu đang xem view
                     />
                 </span>
-                <span className="col-lg-6 col-md-5 mt-5 d-flex flex-column">
+                <span className="col-lg-6 col-md-12 mt-5 d-flex flex-column">
                     <label className="">Ngày hẹn trả</label>
                     <input
                         className={cx("input")}
                         type="date"
                         value={request.ngayHenTra}
                         onChange={(e) => handleChange(e, "ngayHenTra")}
-                        disabled={!!viewData}
+                        disabled={!!viewData}  // Disable input nếu đang xem view
                     />
                 </span>
-                <span className="col-lg-6 col-md-5 mt-5 d-flex flex-column">
+                <span className="col-lg-6 col-md-12 mt-5 d-flex flex-column">
                     <label className="">Giáo viên mượn</label>
                     <select
                         value={request.maGV}
                         onChange={(e) => handleChange(e, "maGV")}
-                        disabled={!!viewData}
+                        disabled={!!viewData}  // Disable select nếu đang xem view
                     >
                         <option value="">Chọn giáo viên</option>
                         {giaoViens.map((gv, index) => (
@@ -203,14 +165,14 @@ function ThemPhieuMuon({ updateDataMuon = false }) {
                         ))}
                     </select>
                 </span>
-                <span className="col-lg-6 col-md-5 mt-5 d-flex flex-column">
+                <span className="col-lg-6 col-md-12 mt-5 d-flex flex-column">
                     <label className="">Mục đích mượn</label>
                     <input
                         className={cx("input")}
                         type="text"
                         value={request.mucDich}
                         onChange={(e) => handleChange(e, "mucDich")}
-                        disabled={!!viewData}
+                        disabled={!!viewData}  // Disable input nếu đang xem view
                     />
                 </span>
             </div>
@@ -237,7 +199,7 @@ function ThemPhieuMuon({ updateDataMuon = false }) {
                 handleReload={handleReload}
                 setMerged={setMerged}
                 updateDataMuon={updateDataMuon}
-                view={!!viewData}
+                view={!!viewData}  // Truyền view để kiểm soát giao diện hiển thị
             ></QLTBTable>
             <div className="row mt-5 gap-3 m-0">
                 {viewData ? (
@@ -279,4 +241,4 @@ function ThemPhieuMuon({ updateDataMuon = false }) {
     );
 }
 
-export default ThemPhieuMuon;
+export default XemPhieuMuon;

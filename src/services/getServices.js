@@ -218,3 +218,15 @@ export const getMonthlyBorrowedDevices = async () => {
     }
 };
 
+export const baoCaoKiemKeTB = async (request) => {
+    try {
+        const response = await httpRequest.post(
+            `/thiet-bi/bao-cao-kiem-ke-tb`,
+            request
+        );
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+};
+

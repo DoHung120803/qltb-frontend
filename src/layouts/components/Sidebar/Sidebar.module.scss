@@ -1,12 +1,13 @@
 .wrapper {
     height: 100%;
     background-color: #344054;
-    // overflow-y: scroll;
+    transition: background-color 0.3s ease-in-out;
 
     .top-rectangle {
         height: var(--default-layout-header-height);
         width: 100%;
         background-color: #98a2b3;
+        transition: background-color 0.3s ease-in-out;
 
         .menu-icon {
             position: relative;
@@ -14,6 +15,11 @@
             left: 80%;
             transform: translate(-50%, -50%);
             width: 100%;
+            transition: transform 0.3s ease-in-out;
+
+            &:hover {
+                transform: scale(1.1);
+            }
         }
     }
 }

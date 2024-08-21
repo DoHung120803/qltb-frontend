@@ -26,15 +26,14 @@ function ThemThietBi({ updateData = false, title }) {
     const navigator = useNavigate();
 
     useEffect(() => {
-        console.log(updateData);
         if (updateData) {
             setRequest(updateData);
         }
-    }, []);
+    }, [updateData]);
 
     const handleChange = (e, field) => {
         if (viewData) {
-            alert("Không thể chỉnh sửa thông tin thiết bị ở đây");
+            alert("Bạn đang ở chế độ xem, không thể chỉnh sửa thông tin thiết bị.");
             return;
         }
 
@@ -57,10 +56,7 @@ function ThemThietBi({ updateData = false, title }) {
 
     const handleSubmit = async () => {
         let response = null;
-        // if (request.slToiThieu <= 0) {
-        //     alert("Số lượng tối thiểu phải lớn hơn 0");
-        //     return;
-        // }
+
         if (updateData) {
             response = await updateServices.updateThietBi(
                 "dm-thiet-bi/update",
@@ -90,7 +86,9 @@ function ThemThietBi({ updateData = false, title }) {
 
     return (
         <div className={cx("wrapper", "col-lg-9 col-sm-12")}>
-            <h1 className={cx("title")}>{title || "Thêm Thiết Bị"}</h1>
+            <h1 className={cx("title")}>
+                {viewData ? "Xem Thiết Bị" : title || "Thêm Thiết Bị"}
+            </h1>
 
             <div className="row">
                 <span className="col-lg-6 col-md-5 mt-5 d-flex flex-column">
@@ -100,6 +98,7 @@ function ThemThietBi({ updateData = false, title }) {
                         type="text"
                         value={request.tenNTB}
                         onChange={(e) => handleChange(e, "tenNTB")}
+                        disabled={viewData} // Disable input in view mode
                     />
                 </span>
                 <span className="col-lg-6 col-md-5 mt-5 d-flex flex-column">
@@ -107,6 +106,7 @@ function ThemThietBi({ updateData = false, title }) {
                     <select
                         value={request.maDVT}
                         onChange={(e) => handleChange(e, "maDVT")}
+                        disabled={viewData} // Disable input in view mode
                     >
                         <option value="">Chọn đơn vị tính</option>
                         <option value="DVT00001">Bộ</option>
@@ -121,6 +121,7 @@ function ThemThietBi({ updateData = false, title }) {
                     <select
                         value={request.maLoaiTB}
                         onChange={(e) => handleChange(e, "maLoaiTB")}
+                        disabled={viewData} // Disable input in view mode
                     >
                         <option value="">Chọn loại thiết bị</option>
                         <option value="LTB00001">Bản đồ</option>
@@ -136,6 +137,7 @@ function ThemThietBi({ updateData = false, title }) {
                     <select
                         value={request.maMonHoc}
                         onChange={(e) => handleChange(e, "maMonHoc")}
+                        disabled={viewData} // Disable input in view mode
                     >
                         <option value="">Chọn môn học</option>
                         <option value="MH00001">Toán</option>
@@ -152,11 +154,11 @@ function ThemThietBi({ updateData = false, title }) {
                     <label className="">Số lượng tối thiểu</label>
                     <input
                         className={cx("input")}
-                        // placeholder="Nhập số lượng tối thiểu > 0"
                         type="number"
                         min={1}
                         value={request.slToiThieu}
                         onChange={(e) => handleChange(e, "slToiThieu")}
+                        disabled={viewData} // Disable input in view mode
                     />
                 </span>
                 <span
@@ -170,9 +172,9 @@ function ThemThietBi({ updateData = false, title }) {
                         className={cx("input")}
                         name="radio"
                         type="radio"
-                        // value={request.tbTieuHao}
                         checked={request.tbTieuHao}
                         onChange={(e) => handleChange(e, "tbTieuHao")}
+                        disabled={viewData} // Disable input in view mode
                     />
                 </span>
                 <span
@@ -186,9 +188,9 @@ function ThemThietBi({ updateData = false, title }) {
                         className={cx("input")}
                         name="radio"
                         type="radio"
-                        // value={request.tbTuLam}
                         checked={request.tbTuLam}
                         onChange={(e) => handleChange(e, "tbTuLam")}
+                        disabled={viewData} // Disable input in view mode
                     />
                 </span>
                 <span className="col-lg-12 col-md-12 mt-5 d-flex flex-column">
@@ -198,13 +200,12 @@ function ThemThietBi({ updateData = false, title }) {
                         type="text"
                         value={request.moTa}
                         onChange={(e) => handleChange(e, "moTa")}
+                        disabled={viewData} // Disable input in view mode
                     />
                 </span>
             </div>
             <div className="row mt-5 gap-3 m-0">
-                {viewData ? (
-                    false
-                ) : (
+                {!viewData && (
                     <div
                         className={cx(
                             "create-btn",
@@ -219,11 +220,11 @@ function ThemThietBi({ updateData = false, title }) {
                 <div
                     className={cx(
                         "cancel-btn",
-                        "col-2 col-2 d-flex align-items-center justify-content-center"
+                        "col-2 d-flex align-items-center justify-content-center"
                     )}
                     onClick={() => navigator(config.routes.danh_muc_thiet_bi)}
                 >
-                    Hủy
+                    {viewData ? "Quay lại" : "Hủy"}
                 </div>
             </div>
         </div>

@@ -5,7 +5,7 @@ import * as createServices from "~/services/createServices";
 import { useNavigate } from "react-router-dom";
 import * as updateServices from "~/services/updateServices";
 import config from "~/config";
-import { baoCaoThongKe } from "~/services/getServices";
+import { baoCaoKiemKeTB, baoCaoThongKe } from "~/services/getServices";
 import saveAs from "file-saver";
 
 const cx = classNames.bind(styles);
@@ -22,6 +22,15 @@ function BaoCaoThongKe({ updateData = false, title }) {
 
     const [request, setRequest] = useState(requestDefault);
 
+    const [requestOp8, setRequestOp8] = useState({
+        tuNgay: new Date().toISOString().split("T")[0],
+        denNgay: new Date().toISOString().split("T")[0],
+        dangHoatDong: true,
+        dungDuoc: true,
+        hong: true,
+        mat: true,
+    });
+
     const navigator = useNavigate();
 
     useEffect(() => {
@@ -32,7 +41,26 @@ function BaoCaoThongKe({ updateData = false, title }) {
     }, []);
 
     const handleChange = (e, field) => {
+        if (
+            field === "dangHoatDong" ||
+            field === "dungDuoc" ||
+            field === "hong" ||
+            field === "mat"
+        ) {
+            setRequestOp8((prev) => ({ ...prev, [field]: e.target.checked }));
+            return;
+        }
+
         setRequest((prev) => ({ ...prev, [field]: e.target.value }));
+    };
+
+    console.log(requestOp8);
+
+    const baoCaoKiemKe = async () => {
+        requestOp8.tuNgay = request.tuNgay;
+        requestOp8.denNgay = request.denNgay;
+        const response = await baoCaoKiemKeTB(requestOp8);
+        op8(response);
     };
 
     const handleSubmit = async () => {
@@ -84,6 +112,11 @@ function BaoCaoThongKe({ updateData = false, title }) {
             op7(response);
             return;
         }
+
+        if (request.option === "op8") {
+            baoCaoKiemKe();
+            return;
+        }
     };
 
     const tkslTBTheoNhomTB = (data) => {
@@ -108,7 +141,181 @@ function BaoCaoThongKe({ updateData = false, title }) {
         console.log("Đã ghi dữ liệu vào file tksltheontb.xlsx");
     };
 
+    const op8 = async (data) => {
+        if (data.length === 0) {
+            alert("Không có dữ liệu nào trong khoảng thời gian này");
+            return;
+        }
+        const spaceAdders = 0;
+        // Tạo một workbook mới
+        const wb = new ExcelJS.Workbook();
+
+        // Tạo một worksheet mới cho thông tin thêm
+        const infoSheet = wb.addWorksheet("Thông tin");
+
+        // Thêm tiêu đề và dữ liệu vào worksheet
+        infoSheet.addRow([]); // Thêm hàng trống
+        infoSheet.addRow([]);
+        infoSheet.addRow([]);
+        infoSheet.addRow([]); // Thêm hàng trống
+        infoSheet.addRow([]);
+        infoSheet.addRow([]); // Thêm hàng trống
+        infoSheet.addRow([]); // Thêm hàng trống
+        infoSheet.addRow([
+            "",
+            "STT",
+            "Mã nhóm TB",
+            "Mã cá biệt TB",
+            "Tên TB",
+            "Kho/Phòng",
+            "Trạng thái",
+            "Tình trạng sử dụng",
+            "Đang hoạt động",
+        ]); // Tiêu đề cột
+
+        // Thêm dữ liệu vào worksheet
+        data.forEach((item, index) => {
+            infoSheet.addRow([
+                "",
+                index + 1,
+                item.maNTB,
+                item.maCaBietTB,
+                item.tenNTB,
+                item.khoPhong,
+                item.trangThai,
+                item.tinhTrang,
+                item.dangHoatDong ? "Có" : "Không",
+            ]);
+        });
+
+        infoSheet.addRow([]); // Thêm hàng trống
+        infoSheet.addRow([]); // Thêm hàng trống
+        infoSheet.addRow([]); // Thêm hàng trống
+        // infoSheet.addRow(["Nam Định, ngày 5 tháng 8 năm 2024"]);
+        // infoSheet.addRow(["Người lập báo cáo"]);
+
+        // Gộp ô và đặt giá trị cho ô đầu tiên trong phạm vi gộp
+        infoSheet.getCell("A" + (2 + spaceAdders)).value =
+            "Phòng Giáo dục & Đào tạo huyện Xuân Trường";
+        infoSheet.mergeCells(
+            "A" + (2 + spaceAdders) + ":I" + (2 + spaceAdders)
+        ); // Gộp ô từ A2 đến G2
+
+        infoSheet.getCell("A" + (3 + spaceAdders)).value =
+            "Trường THCS Đặng Xuân Khu";
+        infoSheet.mergeCells(
+            "A" + (3 + spaceAdders) + ":I" + (3 + spaceAdders)
+        ); // Gộp ô từ A3 đến G3
+
+        infoSheet.getCell("A" + (5 + spaceAdders)).value =
+            "Báo cáo thiết bị mượn quá hạn";
+        infoSheet.mergeCells(
+            "A" + (5 + spaceAdders) + ":I" + (5 + spaceAdders)
+        ); // Gộp ô từ A5 đến G5
+
+        infoSheet.getCell(
+            "A" + (6 + spaceAdders)
+        ).value = `Thời gian: ${request.tuNgay} - ${request.denNgay}`;
+        infoSheet.mergeCells(
+            "A" + (6 + spaceAdders) + ":I" + (6 + spaceAdders)
+        ); // Gộp ô từ A5 đến G5
+
+        infoSheet.getCell(
+            `E${data.length + spaceAdders + 12}`
+        ).value = `Nam Định, ngày ${new Date().getDate()} tháng ${new Date().getMonth()} năm ${new Date().getFullYear()}`;
+        infoSheet.mergeCells(
+            `E${data.length + spaceAdders + 12}:H${
+                data.length + spaceAdders + 12
+            }`
+        ); // Gộp ô từ A5 đến G5
+
+        infoSheet.getCell(
+            `E${data.length + spaceAdders + 13}`
+        ).value = `Người lập báo cáo`;
+        infoSheet.mergeCells(
+            `E${data.length + spaceAdders + 13}:H${
+                data.length + spaceAdders + 13
+            }`
+        ); // Gộp ô từ A5 đến
+
+        infoSheet.getCell(`E${data.length + spaceAdders + 14}`).value = `Hiền`;
+        infoSheet.mergeCells(
+            `E${data.length + spaceAdders + 14}:H${
+                data.length + spaceAdders + 14
+            }`
+        ); // Gộp ô từ A5 đến G5
+
+        infoSheet.getCell(
+            `E${data.length + spaceAdders + 15}`
+        ).value = `Đặng Thu Hiền`;
+        infoSheet.mergeCells(
+            `E${data.length + spaceAdders + 15}:H${
+                data.length + spaceAdders + 15
+            }`
+        ); // Gộp ô từ A5 đến
+
+        // infoSheet.getCell('A6').value = "Mã NTB, Tên NTB, Số lượng";
+        // infoSheet.mergeCells('A6:E6'); // Gộp ô từ A6 đến E6
+
+        // Định dạng in đậm cho các ô cụ thể
+        const boldCells = [
+            { col: 1, row: 2 },
+            { col: 1, row: 3 },
+            { col: 1, row: 5 },
+            { col: 1, row: 6 },
+            //
+            { col: 5, row: data.length + 12 },
+            { col: 5, row: data.length + 13 },
+            { col: 5, row: data.length + 14 },
+            { col: 5, row: data.length + 15 },
+        ];
+        boldCells.forEach(({ col, row }) => {
+            const cell = infoSheet.getCell(row, col);
+            cell.font = { bold: true, size: 14 };
+            cell.alignment = { vertical: "middle", horizontal: "center" };
+        });
+
+        // Set column widths cho worksheet
+        // tất cả mọi cột có width là 20
+        infoSheet.columns.forEach((column) => {
+            column.width = 20;
+        });
+
+        const topBorder = { style: "thin" };
+        const bottomBorder = { style: "thin" };
+        const leftBorder = { style: "thin" };
+        const rightBorder = { style: "thin" };
+        const borderStyle = {
+            top: topBorder,
+            bottom: bottomBorder,
+            left: leftBorder,
+            right: rightBorder,
+        };
+
+        // viền
+        for (let row = 8; row <= 8 + data.length; row++) {
+            // nếu có tổng cộng thì + 1
+            for (let col = 2; col <= Object.keys(data[0]).length - 1; col++) {
+                // nếu thêm cột thì + 1
+                // B = 2, G = 7
+                const cell = infoSheet.getCell(row, col);
+                cell.border = borderStyle;
+            }
+        }
+
+        // Tạo buffer cho workbook và tải xuống
+        const buffer = await wb.xlsx.writeBuffer();
+        const blob = new Blob([buffer], {
+            type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        });
+        saveAs(blob, "report.xlsx");
+    };
+
     const op7 = async (data) => {
+        if (data.length === 0) {
+            alert("Không có dữ liệu nào trong khoảng thời gian này");
+            return;
+        }
         const spaceAdders = 0;
         // Tạo một workbook mới
         const wb = new ExcelJS.Workbook();
@@ -682,9 +889,9 @@ function BaoCaoThongKe({ updateData = false, title }) {
             ).value = "Tổng Cộng";
             infoSheet.mergeCells(
                 "B" +
-                    (currIndex + item.thongTins.length + 1) +
-                    ":D" +
-                    (currIndex + item.thongTins.length + 1)
+                (currIndex + item.thongTins.length + 1) +
+                ":D" +
+                (currIndex + item.thongTins.length + 1)
             );
             infoSheet.getCell(
                 "E" + (currIndex + item.thongTins.length + 1)
@@ -1362,7 +1569,7 @@ function BaoCaoThongKe({ updateData = false, title }) {
 
     /*
     const excel = async (data) => {
-        
+
 
         // Tạo một workbook mới
         const wb = new ExcelJS.Workbook();
@@ -1540,6 +1747,7 @@ function BaoCaoThongKe({ updateData = false, title }) {
                         <option value="op7">
                             Báo cáo theo dõi hỏng, mất, tiêu hao
                         </option>
+                        <option value="op8">Báo cáo kiểm kê thiết bị</option>
                     </select>
                 </span>
                 <span
@@ -1566,6 +1774,72 @@ function BaoCaoThongKe({ updateData = false, title }) {
                         onChange={(e) => handleChange(e, "denNgay")}
                     />
                 </span>
+                {request.option === "op8" && (
+                    <>
+                        <span
+                            className={cx(
+                                "check-box",
+                                "col-lg-3 col-md-5 mt-5 justify-content-center"
+                            )}
+                        >
+                            <label className="">Đang hoạt động</label>
+                            <input
+                                className={cx("input")}
+                                type="checkbox"
+                                // value={request.tbTieuHao}
+                                checked={requestOp8.dangHoatDong}
+                                onChange={(e) =>
+                                    handleChange(e, "dangHoatDong")
+                                }
+                            />
+                        </span>
+                        <span
+                            className={cx(
+                                "check-box",
+                                "col-lg-3 col-md-5 mt-5 justify-content-center"
+                            )}
+                        >
+                            <label className="">Dùng được</label>
+                            <input
+                                className={cx("input")}
+                                type="checkbox"
+                                // value={request.tbTieuHao}
+                                checked={requestOp8.dungDuoc}
+                                onChange={(e) => handleChange(e, "dungDuoc")}
+                            />
+                        </span>
+                        <span
+                            className={cx(
+                                "check-box",
+                                "col-lg-3 col-md-5 mt-5 justify-content-center"
+                            )}
+                        >
+                            <label className="">Hỏng</label>
+                            <input
+                                className={cx("input")}
+                                type="checkbox"
+                                // value={request.tbTieuHao}
+                                checked={requestOp8.hong}
+                                onChange={(e) => handleChange(e, "hong")}
+                            />
+                        </span>
+                        <span
+                            className={cx(
+                                "check-box",
+                                "col-lg-3 col-md-5 mt-5 justify-content-center"
+                            )}
+                        >
+                            <label className="">Mất</label>
+                            <input
+                                className={cx("input")}
+                                type="checkbox"
+                                // value={request.tbTieuHao}
+                                checked={requestOp8.mat}
+                                onChange={(e) => handleChange(e, "mat")}
+                            />
+                        </span>
+                    </>
+                )}
             </div>
             <div className="row mt-5 gap-3 m-0">
                 <div

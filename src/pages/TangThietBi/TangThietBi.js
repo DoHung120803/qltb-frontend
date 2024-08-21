@@ -95,7 +95,7 @@ function TangThietBi() {
                     totalItems={totalItems}
                     onPageChange={handlePageChange}
                     onSizeChange={handleSizeChange}
-                    linkUpdate={config.routes.update_thiet_bi}
+                    // linkUpdate={config.routes.update_thiet_bi}
                     deleteEndpoint="tang-tb/delete"
                     handleReload={handleReload}
                     tangThietBi

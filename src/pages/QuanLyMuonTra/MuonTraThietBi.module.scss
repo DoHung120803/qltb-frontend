@@ -5,38 +5,54 @@
     top: 4%;
 }
 
+.wrapper .add-btn,
+.wrapper .delete-btn,
+.wrapper .record-loan-btn,
+.wrapper .record-btn {
+    padding: 2px; /* 40% of 5px */
+    border-radius: 4px; /* 40% of 10px */
+    color: white;
+    border: none;
+    margin-right: 2px; /* 40% of 5px */
+    text-decoration: none;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
 .wrapper .add-btn {
     background-color: var(--sidebar-background-color);
     color: white;
-    border-radius: 2px; /* 40% of 5px */
-    padding: 2px; /* 40% of 5px */
+    border-radius: 5px;
+    padding: 5px;
     text-decoration: none;
-    margin-right: 4px; /* 40% of 10px */
 }
 
 .wrapper .delete-btn {
-    padding: 2px; /* 40% of 5px */
     background-color: #dc3545;
-    color: white;
-    border-radius: 4px; /* 40% of 10px */
-    border: none;
-    margin-right: 2px; /* 40% of 5px */
 }
 
 .wrapper .record-loan-btn {
-    padding: 2px; /* 40% of 5px */
     background-color: #344054;
-    color: white;
-    border-radius: 4px; /* 40% of 10px */
-    border: none;
-    margin-right: 2px; /* 40% of 5px */
 }
 
 .wrapper .record-btn {
-    padding: 2px; /* 40% of 5px */
     background-color: #007bff;
-    color: white;
-    border-radius: 4px; /* 40% of 10px */
-    border: none;
-    margin-right: 2px; /* 40% of 5px */
+}
+
+.wrapper .add-btn:hover {
+    background-color: #333; /* Bạn có thể chọn màu tối hơn trực tiếp tại đây */
+    transform: scale(1.05);
+}
+
+.wrapper .delete-btn:hover,
+.wrapper .record-loan-btn:hover,
+.wrapper .record-btn:hover {
+    opacity: 0.8;
+    transform: scale(1.05);
+}
+
+.wrapper .add-btn:active,
+.wrapper .delete-btn:active,
+.wrapper .record-loan-btn:active,
+.wrapper .record-btn:active {
+    transform: scale(0.95);
 }

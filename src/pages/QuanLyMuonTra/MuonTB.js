@@ -187,7 +187,7 @@ function MuonTraThietBi() {
                     deleteEndpoint="/muon-tb"
                     handleReload={handleReload}
                     viewLink={config.routes.them_phieu_muon}
-                    renderMuontTra={renderMuontTra} // Custom render function for the "Mượn/Trả" column
+                    renderMuontTra={renderMuontTra}
                     isMuonTraThietBi={true}
                 />
             </div>

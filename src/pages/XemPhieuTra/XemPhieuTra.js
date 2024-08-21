@@ -18,8 +18,8 @@ function XemPhieuTra() {
 
     const fields = [
         "maCaBietTB",
-        "tenThietBi",
-        "tinhTrangKhiMuon",
+        "tenNTB",
+        "tinhTrang",
         "tinhTrangTra",
         "ghiChu",
     ];
