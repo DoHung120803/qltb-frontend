@@ -4,13 +4,22 @@
     border: 1px solid #eff0f6;
     background: #ffffff;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    position: relative; /* Để menu thả xuống có thể định vị tương đối */
+    position: relative; // Để menu thả xuống có thể định vị tương đối
 
     .user-info {
         cursor: pointer;
         display: flex;
         align-items: center;
         position: relative;
+        padding: 10px 15px;
+        border-radius: 25px;
+        background-color: #f9f9f9;
+        transition: background-color 0.3s ease, box-shadow 0.3s ease;
+
+        &:hover {
+            background-color: #f1f1f1;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
+        }
 
         .avatar {
             width: 3rem;
@@ -18,28 +27,96 @@
             border-radius: 50%;
             margin-left: 10px;
             margin-right: 5px;
+            border: 2px solid #dde1e7;
+            transition: border-color 0.3s ease;
+
+            &:hover {
+                border-color: #b8c0ca;
+            }
         }
 
         .dropdown-menu {
             position: absolute;
-            top: 100%;
+            top: calc(100% + 10px); // Cách một khoảng từ phần tử mẹ
             right: 0;
             background-color: #ffffff;
             border: 1px solid #eff0f6;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-            border-radius: 5px;
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
             padding: 10px 0;
             z-index: 1000;
-            min-width: 150px;
+            min-width: 180px;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
 
             .menu-item {
                 padding: 10px 20px;
                 cursor: pointer;
-                transition: background-color 0.2s ease;
+                transition: background-color 0.3s ease, color 0.3s ease;
+                font-weight: 500;
+                color: #2c3e50; // Đặt màu chữ
+                text-decoration: none; // Loại bỏ gạch chân
 
                 &:hover {
                     background-color: #f0f0f0;
+                    color: #333333;
                 }
+            }
+        }
+
+        &:hover .dropdown-menu {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 2000;
+
+        .modal-content {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .confirm-btn, .cancel-btn {
+            padding: 10px 20px;
+            margin: 10px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .confirm-btn {
+            background-color: #535c67;
+            color: #ffffff;
+
+            &:hover {
+                background-color: #000000;
+            }
+        }
+
+        .cancel-btn {
+            background-color: #387c75;
+            color: #ffffff;
+
+            &:hover {
+                background-color: #253a53;
             }
         }
     }

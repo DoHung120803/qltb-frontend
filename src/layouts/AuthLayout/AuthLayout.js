@@ -1,6 +1,5 @@
 import classNames from "classnames/bind";
 import styles from "./AuthLayout.module.scss";
-import LoginForm from "~/layouts/AuthLayout/components/LoginForm";
 
 const cx = classNames.bind(styles);
 

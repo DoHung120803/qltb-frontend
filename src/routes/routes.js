@@ -32,10 +32,13 @@ import ThemPhieuTra from "~/pages/GhiTra";
 import LichSuTra from "~/pages/LichSuTra/LichSuTra";
 import UpdatePhieuMuon from "~/pages/UpdatePhieuMuon";
 import XemPhieuTra from "~/pages/XemPhieuTra";
+import RegisterForm from "~/layouts/AuthLayout/components/RegisterForm";
+import TeacherInfo from "~/pages/TeacherInfo";
+import ChangePassword from "~/pages/ChangePassword";
+import DashBoard from "~/layouts/components/Sidebar/DashBoard";
 
 // private routes
 const privateRoutes = [
-    { path: config.routes.home, component: Home },
     { path: config.routes.danh_muc_giao_vien, component: DanhMucGiaoVien },
     { path: config.routes.them_giao_vien, component: ThemGiaoVien },
     { path: config.routes.danh_muc_thiet_bi, component: DanhMucThietBi },
@@ -53,7 +56,6 @@ const privateRoutes = [
     { path: config.routes.khai_bao_hong_mat, component: KhaiBaoHongMat },
     { path: config.routes.theo_doi_hong_mat, component: TheoDoiHongMat },
     { path: config.routes.update_ghi_giam, component: UpdateGhiGiam },
-    { path: config.routes.login, component: Login, layout: null },
     { path: config.routes.duyet_tang_tb, component: DuyetTangTB },
     { path: config.routes.bao_cao_thong_ke, component: BaoCaoThongKe },
     { path: config.routes.update_hong_mat, component: UpdateHongMat },
@@ -63,6 +65,23 @@ const privateRoutes = [
     { path: config.routes.lich_su_tra, component: LichSuTra },
     { path: config.routes.update_phieu_muon, component: UpdatePhieuMuon },
     { path: config.routes.xem_phieu_tra, component: XemPhieuTra },
+
+    { path: '/', component: Home }, // Trang chủ
+    { path: '/login', component: Login, layout: null },
+    { path: '/register', component: RegisterForm, layout: null },
+
+    // Route cho user
+
+    // Route cho admin
+    { path: '/admin', component: DashBoard },
+
+    // Nhóm Route Cho Người Dùng Đăng Nhập
+    { path: config.routes.home, component: Home },
+    { path: config.routes.login, component: Login, layout: null },
+    { path: config.routes.register, component: RegisterForm, layout: null },
+
+    { path: config.routes.infor_giao_vien, component: TeacherInfo },
+    { path: config.routes.change_password, component: ChangePassword },
 
 ];
 

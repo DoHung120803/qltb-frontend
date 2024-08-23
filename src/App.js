@@ -13,10 +13,15 @@ function App() {
 
     useEffect(() => {
         const user = localStorage.getItem("user");
+
         if (!user) {
-            navigate("/login");
+            const currentPath = window.location.pathname;
+            if (currentPath !== "/register") {
+                navigate("/login");
+            }
         }
     }, [navigate]);
+
 
     return (
         <Routes>

@@ -9,7 +9,7 @@
     padding: 20px 35px;
     position: relative;
     top: 50%;
-    left: 85%;
+    left: 50%;
     transform: translate(-50%, -50%);
 
     label {
@@ -23,7 +23,6 @@
         display: block;
         height: 4rem;
         width: 100%;
-        max-width: 100%;
         background-color: rgba(255, 255, 255, 0.07);
         border-radius: 3px;
         padding: 0 10px;
@@ -54,8 +53,7 @@
     color: #dde3de;
 }
 
-.next-btn,
-.login-btn {
+.loginBtn {
     margin-top: 50px;
     width: 100%;
     background-color: #99c3d5;
@@ -70,29 +68,24 @@
         opacity: 0.7;
     }
 }
-.social {
-    margin-top: 30px;
-    display: flex;
 
-    div {
-        background: red;
-        width: 150px;
-        border-radius: 3px;
-        padding: 5px 10px 10px 5px;
-        background-color: rgba(255, 255, 255, 0.27);
-        color: #eaf0fb;
-        text-align: center;
-    }
+.switchText {
+    margin-top: 20px;
+    text-align: center;
 
-    div:hover {
-        background-color: rgba(255, 255, 255, 0.47);
-        cursor: pointer;
-    }
+    .link {
+        color: #99c3d5;
+        text-decoration: none;
 
-    .fb {
-        margin-left: 25px;
+        &:hover {
+            text-decoration: underline;
+        }
     }
-    .icon {
-        margin-right: 4px;
-    }
+}
+
+.errorMessage {
+    color: red;
+    font-size: 14px;
+    margin-top: 10px;
+    text-align: center;
 }

@@ -146,32 +146,32 @@ function BaoCaoThongKe({ updateData = false, title }) {
             alert("Không có dữ liệu nào trong khoảng thời gian này");
             return;
         }
-        const spaceAdders = 0;
-        // Tạo một workbook mới
-        const wb = new ExcelJS.Workbook();
 
-        // Tạo một worksheet mới cho thông tin thêm
+        const wb = new ExcelJS.Workbook();
         const infoSheet = wb.addWorksheet("Thông tin");
 
+        // Định nghĩa font chữ chung
+        const commonFont = { name: 'Times New Roman', size: 12 };
+
         // Thêm tiêu đề và dữ liệu vào worksheet
-        infoSheet.addRow([]); // Thêm hàng trống
-        infoSheet.addRow([]);
-        infoSheet.addRow([]);
-        infoSheet.addRow([]); // Thêm hàng trống
-        infoSheet.addRow([]);
-        infoSheet.addRow([]); // Thêm hàng trống
-        infoSheet.addRow([]); // Thêm hàng trống
+        infoSheet.addRow([]).font = commonFont; // Thêm hàng trống
+        infoSheet.addRow([]).font = commonFont;
+        infoSheet.addRow([]).font = commonFont;
+        infoSheet.addRow([]).font = commonFont; // Thêm hàng trống
+        infoSheet.addRow([]).font = commonFont;
+        infoSheet.addRow([]).font = commonFont; // Thêm hàng trống
+        infoSheet.addRow([]).font = commonFont; // Thêm hàng trống
         infoSheet.addRow([
             "",
             "STT",
-            "Mã nhóm TB",
-            "Mã cá biệt TB",
-            "Tên TB",
+            "Mã nhóm thiết bị",
+            "Mã cá biệt thiết bị",
+            "Tên thiết bị",
             "Kho/Phòng",
             "Trạng thái",
             "Tình trạng sử dụng",
             "Đang hoạt động",
-        ]); // Tiêu đề cột
+        ]).font = commonFont; // Tiêu đề cột
 
         // Thêm dữ liệu vào worksheet
         data.forEach((item, index) => {
@@ -185,85 +185,61 @@ function BaoCaoThongKe({ updateData = false, title }) {
                 item.trangThai,
                 item.tinhTrang,
                 item.dangHoatDong ? "Có" : "Không",
-            ]);
+            ]).font = commonFont;
         });
 
-        infoSheet.addRow([]); // Thêm hàng trống
-        infoSheet.addRow([]); // Thêm hàng trống
-        infoSheet.addRow([]); // Thêm hàng trống
-        // infoSheet.addRow(["Nam Định, ngày 5 tháng 8 năm 2024"]);
-        // infoSheet.addRow(["Người lập báo cáo"]);
+        infoSheet.addRow([]).font = commonFont; // Thêm hàng trống
+        infoSheet.addRow([]).font = commonFont; // Thêm hàng trống
+        infoSheet.addRow([]).font = commonFont; // Thêm hàng trống
 
         // Gộp ô và đặt giá trị cho ô đầu tiên trong phạm vi gộp
-        infoSheet.getCell("A" + (2 + spaceAdders)).value =
-            "Phòng Giáo dục & Đào tạo huyện Xuân Trường";
-        infoSheet.mergeCells(
-            "A" + (2 + spaceAdders) + ":I" + (2 + spaceAdders)
-        ); // Gộp ô từ A2 đến G2
+        infoSheet.getCell("A2").value = "Phòng Giáo dục & Đào tạo huyện Xuân Trường";
+        infoSheet.mergeCells("A2:I2");
+        infoSheet.getCell("A2").font = { ...commonFont, bold: true };
+        infoSheet.getCell("A2").alignment = { vertical: "middle", horizontal: "center" };
 
-        infoSheet.getCell("A" + (3 + spaceAdders)).value =
-            "Trường THCS Đặng Xuân Khu";
-        infoSheet.mergeCells(
-            "A" + (3 + spaceAdders) + ":I" + (3 + spaceAdders)
-        ); // Gộp ô từ A3 đến G3
+        infoSheet.getCell("A3").value = "Trường THCS Đặng Xuân Khu";
+        infoSheet.mergeCells("A3:I3");
+        infoSheet.getCell("A3").font = { ...commonFont, bold: true };
+        infoSheet.getCell("A3").alignment = { vertical: "middle", horizontal: "center" };
 
-        infoSheet.getCell("A" + (5 + spaceAdders)).value =
-            "Báo cáo thiết bị mượn quá hạn";
-        infoSheet.mergeCells(
-            "A" + (5 + spaceAdders) + ":I" + (5 + spaceAdders)
-        ); // Gộp ô từ A5 đến G5
+        infoSheet.getCell("A5").value = "Báo cáo thiết bị mượn quá hạn";
+        infoSheet.mergeCells("A5:I5");
+        infoSheet.getCell("A5").font = { ...commonFont, bold: true };
+        infoSheet.getCell("A5").alignment = { vertical: "middle", horizontal: "center" };
 
-        infoSheet.getCell(
-            "A" + (6 + spaceAdders)
-        ).value = `Thời gian: ${request.tuNgay} - ${request.denNgay}`;
-        infoSheet.mergeCells(
-            "A" + (6 + spaceAdders) + ":I" + (6 + spaceAdders)
-        ); // Gộp ô từ A5 đến G5
+        infoSheet.getCell("A6").value = `Thời gian: ${request.tuNgay} - ${request.denNgay}`;
+        infoSheet.mergeCells("A6:I6");
+        infoSheet.getCell("A6").font = commonFont;
+        infoSheet.getCell("A6").alignment = { vertical: "middle", horizontal: "center" };
 
-        infoSheet.getCell(
-            `E${data.length + spaceAdders + 12}`
-        ).value = `Nam Định, ngày ${new Date().getDate()} tháng ${new Date().getMonth()} năm ${new Date().getFullYear()}`;
-        infoSheet.mergeCells(
-            `E${data.length + spaceAdders + 12}:H${
-                data.length + spaceAdders + 12
-            }`
-        ); // Gộp ô từ A5 đến G5
+        const currentDate = new Date();
+        infoSheet.getCell(`E${data.length + 12}`).value = `Nam Định, ngày ${currentDate.getDate()} tháng ${currentDate.getMonth() + 1} năm ${currentDate.getFullYear()}`;
+        infoSheet.mergeCells(`E${data.length + 12}:H${data.length + 12}`);
+        infoSheet.getCell(`E${data.length + 12}`).font = commonFont;
+        infoSheet.getCell(`E${data.length + 12}`).alignment = { vertical: "middle", horizontal: "center" };
 
-        infoSheet.getCell(
-            `E${data.length + spaceAdders + 13}`
-        ).value = `Người lập báo cáo`;
-        infoSheet.mergeCells(
-            `E${data.length + spaceAdders + 13}:H${
-                data.length + spaceAdders + 13
-            }`
-        ); // Gộp ô từ A5 đến
+        infoSheet.getCell(`E${data.length + 13}`).value = `Người lập báo cáo`;
+        infoSheet.mergeCells(`E${data.length + 13}:H${data.length + 13}`);
+        infoSheet.getCell(`E${data.length + 13}`).font = commonFont;
+        infoSheet.getCell(`E${data.length + 13}`).alignment = { vertical: "middle", horizontal: "center" };
 
-        infoSheet.getCell(`E${data.length + spaceAdders + 14}`).value = `Hiền`;
-        infoSheet.mergeCells(
-            `E${data.length + spaceAdders + 14}:H${
-                data.length + spaceAdders + 14
-            }`
-        ); // Gộp ô từ A5 đến G5
+        infoSheet.getCell(`E${data.length + 14}`).value = `Hiền`;
+        infoSheet.mergeCells(`E${data.length + 14}:H${data.length + 14}`);
+        infoSheet.getCell(`E${data.length + 14}`).font = commonFont;
+        infoSheet.getCell(`E${data.length + 14}`).alignment = { vertical: "middle", horizontal: "center" };
 
-        infoSheet.getCell(
-            `E${data.length + spaceAdders + 15}`
-        ).value = `Đặng Thu Hiền`;
-        infoSheet.mergeCells(
-            `E${data.length + spaceAdders + 15}:H${
-                data.length + spaceAdders + 15
-            }`
-        ); // Gộp ô từ A5 đến
+        infoSheet.getCell(`E${data.length + 15}`).value = `Đặng Thu Hiền`;
+        infoSheet.mergeCells(`E${data.length + 15}:H${data.length + 15}`);
+        infoSheet.getCell(`E${data.length + 15}`).font = commonFont;
+        infoSheet.getCell(`E${data.length + 15}`).alignment = { vertical: "middle", horizontal: "center" };
 
-        // infoSheet.getCell('A6').value = "Mã NTB, Tên NTB, Số lượng";
-        // infoSheet.mergeCells('A6:E6'); // Gộp ô từ A6 đến E6
-
-        // Định dạng in đậm cho các ô cụ thể
+        // Định dạng in đậm và căn giữa cho các ô cụ thể
         const boldCells = [
             { col: 1, row: 2 },
             { col: 1, row: 3 },
             { col: 1, row: 5 },
             { col: 1, row: 6 },
-            //
             { col: 5, row: data.length + 12 },
             { col: 5, row: data.length + 13 },
             { col: 5, row: data.length + 14 },
@@ -271,33 +247,25 @@ function BaoCaoThongKe({ updateData = false, title }) {
         ];
         boldCells.forEach(({ col, row }) => {
             const cell = infoSheet.getCell(row, col);
-            cell.font = { bold: true, size: 14 };
+            cell.font = { ...commonFont, bold: true };
             cell.alignment = { vertical: "middle", horizontal: "center" };
         });
 
         // Set column widths cho worksheet
-        // tất cả mọi cột có width là 20
         infoSheet.columns.forEach((column) => {
             column.width = 20;
         });
 
-        const topBorder = { style: "thin" };
-        const bottomBorder = { style: "thin" };
-        const leftBorder = { style: "thin" };
-        const rightBorder = { style: "thin" };
         const borderStyle = {
-            top: topBorder,
-            bottom: bottomBorder,
-            left: leftBorder,
-            right: rightBorder,
+            top: { style: "thin" },
+            bottom: { style: "thin" },
+            left: { style: "thin" },
+            right: { style: "thin" },
         };
 
-        // viền
+        // Thêm viền cho bảng dữ liệu
         for (let row = 8; row <= 8 + data.length; row++) {
-            // nếu có tổng cộng thì + 1
-            for (let col = 2; col <= Object.keys(data[0]).length - 1; col++) {
-                // nếu thêm cột thì + 1
-                // B = 2, G = 7
+            for (let col = 2; col <= 9; col++) {
                 const cell = infoSheet.getCell(row, col);
                 cell.border = borderStyle;
             }
@@ -310,35 +278,34 @@ function BaoCaoThongKe({ updateData = false, title }) {
         });
         saveAs(blob, "report.xlsx");
     };
-
     const op7 = async (data) => {
         if (data.length === 0) {
             alert("Không có dữ liệu nào trong khoảng thời gian này");
             return;
         }
-        const spaceAdders = 0;
-        // Tạo một workbook mới
-        const wb = new ExcelJS.Workbook();
 
-        // Tạo một worksheet mới cho thông tin thêm
+        const wb = new ExcelJS.Workbook();
         const infoSheet = wb.addWorksheet("Thông tin");
 
+        // Định nghĩa font chữ chung
+        const commonFont = { name: 'Times New Roman', size: 12 };
+
         // Thêm tiêu đề và dữ liệu vào worksheet
-        infoSheet.addRow([]); // Thêm hàng trống
-        infoSheet.addRow([]);
-        infoSheet.addRow([]);
-        infoSheet.addRow([]); // Thêm hàng trống
-        infoSheet.addRow([]);
-        infoSheet.addRow([]); // Thêm hàng trống
-        infoSheet.addRow([]); // Thêm hàng trống
+        infoSheet.addRow([]).font = commonFont; // Thêm hàng trống
+        infoSheet.addRow([]).font = commonFont;
+        infoSheet.addRow([]).font = commonFont;
+        infoSheet.addRow([]).font = commonFont; // Thêm hàng trống
+        infoSheet.addRow([]).font = commonFont;
+        infoSheet.addRow([]).font = commonFont; // Thêm hàng trống
+        infoSheet.addRow([]).font = commonFont; // Thêm hàng trống
         infoSheet.addRow([
             "",
             "STT",
-            "Tên nhóm TB",
+            "Tên nhóm thiết bị",
             "Số lượng mất",
             "Số lượng hỏng",
             "Số lượng tiêu hao",
-        ]); // Tiêu đề cột
+        ]).font = commonFont; // Tiêu đề cột
 
         // Thêm dữ liệu vào worksheet
         data.forEach((item, index) => {
@@ -349,101 +316,57 @@ function BaoCaoThongKe({ updateData = false, title }) {
                 item.soLuongMat,
                 item.soLuongHong,
                 item.soThietBiTieuHao,
-            ]);
+            ]).font = commonFont;
         });
 
-        infoSheet.addRow([]); // Thêm hàng trống
-        infoSheet.addRow([]); // Thêm hàng trống
-        infoSheet.addRow([]); // Thêm hàng trống
-        // infoSheet.addRow(["Nam Định, ngày 5 tháng 8 năm 2024"]);
-        // infoSheet.addRow(["Người lập báo cáo"]);
+        infoSheet.addRow([]).font = commonFont; // Thêm hàng trống
+        infoSheet.addRow([]).font = commonFont; // Thêm hàng trống
+        infoSheet.addRow([]).font = commonFont; // Thêm hàng trống
 
         // Gộp ô và đặt giá trị cho ô đầu tiên trong phạm vi gộp
-        infoSheet.getCell("A" + (2 + spaceAdders)).value =
-            "Phòng Giáo dục & Đào tạo huyện Xuân Trường";
-        infoSheet.mergeCells(
-            "A" + (2 + spaceAdders) + ":G" + (2 + spaceAdders)
-        ); // Gộp ô từ A2 đến G2
+        infoSheet.getCell("A2").value = "Phòng Giáo dục & Đào tạo huyện Xuân Trường";
+        infoSheet.mergeCells("A2:G2");
+        infoSheet.getCell("A2").font = { ...commonFont, bold: true };
+        infoSheet.getCell("A2").alignment = { vertical: "middle", horizontal: "center" };
 
-        infoSheet.getCell("A" + (3 + spaceAdders)).value =
-            "Trường THCS Đặng Xuân Khu";
-        infoSheet.mergeCells(
-            "A" + (3 + spaceAdders) + ":G" + (3 + spaceAdders)
-        ); // Gộp ô từ A3 đến G3
+        infoSheet.getCell("A3").value = "Trường THCS Đặng Xuân Khu";
+        infoSheet.mergeCells("A3:G3");
+        infoSheet.getCell("A3").font = { ...commonFont, bold: true };
+        infoSheet.getCell("A3").alignment = { vertical: "middle", horizontal: "center" };
 
-        infoSheet.getCell("A" + (5 + spaceAdders)).value =
-            "Thống kê số lượng thiết bị hỏng, mất, tiêu hao";
-        infoSheet.mergeCells(
-            "A" + (5 + spaceAdders) + ":G" + (5 + spaceAdders)
-        ); // Gộp ô từ A5 đến G5
+        infoSheet.getCell("A5").value = "Thống kê số lượng thiết bị hỏng, mất, tiêu hao";
+        infoSheet.mergeCells("A5:G5");
+        infoSheet.getCell("A5").font = { ...commonFont, bold: true };
+        infoSheet.getCell("A5").alignment = { vertical: "middle", horizontal: "center" };
 
-        infoSheet.getCell(
-            `E${data.length + spaceAdders + 12}`
-        ).value = `Nam Định, ngày ${new Date().getDate()} tháng ${new Date().getMonth()} năm ${new Date().getFullYear()}`;
-        infoSheet.mergeCells(
-            `E${data.length + spaceAdders + 12}:G${
-                data.length + spaceAdders + 12
-            }`
-        ); // Gộp ô từ A5 đến G5
+        const currentDate = new Date();
+        infoSheet.getCell(`E${data.length + 12}`).value = `Nam Định, ngày ${currentDate.getDate()} tháng ${currentDate.getMonth() + 1} năm ${currentDate.getFullYear()}`;
+        infoSheet.mergeCells(`E${data.length + 12}:G${data.length + 12}`);
+        infoSheet.getCell(`E${data.length + 12}`).font = commonFont;
+        infoSheet.getCell(`E${data.length + 12}`).alignment = { vertical: "middle", horizontal: "center" };
 
-        infoSheet.getCell(
-            `E${data.length + spaceAdders + 13}`
-        ).value = `Người lập báo cáo`;
-        infoSheet.mergeCells(
-            `E${data.length + spaceAdders + 13}:G${
-                data.length + spaceAdders + 13
-            }`
-        ); // Gộp ô từ A5 đến
+        infoSheet.getCell(`E${data.length + 13}`).value = `Người lập báo cáo`;
+        infoSheet.mergeCells(`E${data.length + 13}:G${data.length + 13}`);
+        infoSheet.getCell(`E${data.length + 13}`).font = commonFont;
+        infoSheet.getCell(`E${data.length + 13}`).alignment = { vertical: "middle", horizontal: "center" };
 
-        infoSheet.getCell(`E${data.length + spaceAdders + 14}`).value = `Hiền`;
-        infoSheet.mergeCells(
-            `E${data.length + spaceAdders + 14}:G${
-                data.length + spaceAdders + 14
-            }`
-        ); // Gộp ô từ A5 đến G5
+        infoSheet.getCell(`E${data.length + 14}`).value = `Hiền`;
+        infoSheet.mergeCells(`E${data.length + 14}:G${data.length + 14}`);
+        infoSheet.getCell(`E${data.length + 14}`).font = commonFont;
+        infoSheet.getCell(`E${data.length + 14}`).alignment = { vertical: "middle", horizontal: "center" };
 
-        infoSheet.getCell(
-            `E${data.length + spaceAdders + 15}`
-        ).value = `Đặng Thu Hiền`;
-        infoSheet.mergeCells(
-            `E${data.length + spaceAdders + 15}:G${
-                data.length + spaceAdders + 15
-            }`
-        ); // Gộp ô từ A5 đến
+        infoSheet.getCell(`E${data.length + 15}`).value = `Đặng Thu Hiền`;
+        infoSheet.mergeCells(`E${data.length + 15}:G${data.length + 15}`);
+        infoSheet.getCell(`E${data.length + 15}`).font = commonFont;
+        infoSheet.getCell(`E${data.length + 15}`).alignment = { vertical: "middle", horizontal: "center" };
 
-        // tổng cộng
-        infoSheet.getCell(`B${data.length + 9}`).value = "Tổng cộng";
-        infoSheet.mergeCells(`B${data.length + 9}:C${data.length + 9}`); // Gộp ô từ A5 đến
-
-        // tổng số lượng
-        infoSheet.getCell(`D${data.length + 9}`).value = data.reduce(
-            (acc, item) => acc + item.soLuongMat,
-            0
-        );
-
-        // tổng số lượng dùng được
-        infoSheet.getCell(`E${data.length + 9}`).value = data.reduce(
-            (acc, item) => acc + item.soLuongHong,
-            0
-        );
-
-        // tổng số lượng hỏng
-        infoSheet.getCell(`F${data.length + 9}`).value = data.reduce(
-            (acc, item) => acc + item.soThietBiTieuHao,
-            0
-        );
-
-        // infoSheet.getCell('A6').value = "Mã NTB, Tên NTB, Số lượng";
-        // infoSheet.mergeCells('A6:E6'); // Gộp ô từ A6 đến E6
-
-        // Định dạng in đậm cho các ô cụ thể
+        // Định dạng in đậm và căn giữa cho các ô cụ thể
         const boldCells = [
             { col: 1, row: 2 },
             { col: 1, row: 3 },
             { col: 1, row: 5 },
             { col: 1, row: 6 },
-            { col: 2, row: data.length + 9 }, // tổng cộng
-            //
+            { col: 2, row: data.length + 9 },
             { col: 5, row: data.length + 12 },
             { col: 5, row: data.length + 13 },
             { col: 5, row: data.length + 14 },
@@ -451,40 +374,56 @@ function BaoCaoThongKe({ updateData = false, title }) {
         ];
         boldCells.forEach(({ col, row }) => {
             const cell = infoSheet.getCell(row, col);
-            cell.font = { bold: true, size: 14 };
+            cell.font = { ...commonFont, bold: true };
             cell.alignment = { vertical: "middle", horizontal: "center" };
         });
 
         // Set column widths cho worksheet
-        // tất cả mọi cột có width là 20
         infoSheet.columns.forEach((column) => {
             column.width = 20;
         });
 
-        const topBorder = { style: "thin" };
-        const bottomBorder = { style: "thin" };
-        const leftBorder = { style: "thin" };
-        const rightBorder = { style: "thin" };
         const borderStyle = {
-            top: topBorder,
-            bottom: bottomBorder,
-            left: leftBorder,
-            right: rightBorder,
+            top: { style: "thin" },
+            bottom: { style: "thin" },
+            left: { style: "thin" },
+            right: { style: "thin" },
         };
 
-        // viền
+        // Thêm viền cho bảng dữ liệu
         for (let row = 8; row <= 8 + data.length + 1; row++) {
-            // nếu có tổng cộng thì + 1
-            for (
-                let col = 2;
-                col <= 1 + Object.keys(data[0]).length + 1;
-                col++
-            ) {
-                // B = 2, G = 7
+            for (let col = 2; col <= 6; col++) {
                 const cell = infoSheet.getCell(row, col);
                 cell.border = borderStyle;
             }
         }
+
+        // Tính toán tổng số lượng
+        infoSheet.getCell(`B${data.length + 9}`).value = "Tổng cộng";
+        infoSheet.mergeCells(`B${data.length + 9}:C${data.length + 9}`);
+        infoSheet.getCell(`B${data.length + 9}`).font = { ...commonFont, bold: true };
+        infoSheet.getCell(`B${data.length + 9}`).alignment = { vertical: "middle", horizontal: "center" };
+
+        infoSheet.getCell(`D${data.length + 9}`).value = data.reduce(
+            (acc, item) => acc + item.soLuongMat,
+            0
+        ).toString();
+        infoSheet.getCell(`D${data.length + 9}`).font = commonFont;
+        infoSheet.getCell(`D${data.length + 9}`).alignment = { vertical: "middle", horizontal: "center" };
+
+        infoSheet.getCell(`E${data.length + 9}`).value = data.reduce(
+            (acc, item) => acc + item.soLuongHong,
+            0
+        ).toString();
+        infoSheet.getCell(`E${data.length + 9}`).font = commonFont;
+        infoSheet.getCell(`E${data.length + 9}`).alignment = { vertical: "middle", horizontal: "center" };
+
+        infoSheet.getCell(`F${data.length + 9}`).value = data.reduce(
+            (acc, item) => acc + item.soThietBiTieuHao,
+            0
+        ).toString();
+        infoSheet.getCell(`F${data.length + 9}`).font = commonFont;
+        infoSheet.getCell(`F${data.length + 9}`).alignment = { vertical: "middle", horizontal: "center" };
 
         // Tạo buffer cho workbook và tải xuống
         const buffer = await wb.xlsx.writeBuffer();
@@ -499,31 +438,31 @@ function BaoCaoThongKe({ updateData = false, title }) {
             alert("Không có dữ liệu nào trong khoảng thời gian này");
             return;
         }
-        const spaceAdders = 0;
-        // Tạo một workbook mới
-        const wb = new ExcelJS.Workbook();
 
-        // Tạo một worksheet mới cho thông tin thêm
+        const wb = new ExcelJS.Workbook();
         const infoSheet = wb.addWorksheet("Thông tin");
 
+        // Định nghĩa font chữ chung
+        const commonFont = { name: 'Times New Roman', size: 12 };
+
         // Thêm tiêu đề và dữ liệu vào worksheet
-        infoSheet.addRow([]); // Thêm hàng trống
-        infoSheet.addRow([]);
-        infoSheet.addRow([]);
-        infoSheet.addRow([]); // Thêm hàng trống
-        infoSheet.addRow([]);
-        infoSheet.addRow([]); // Thêm hàng trống
-        infoSheet.addRow([]); // Thêm hàng trống
+        infoSheet.addRow([]).font = commonFont; // Thêm hàng trống
+        infoSheet.addRow([]).font = commonFont;
+        infoSheet.addRow([]).font = commonFont;
+        infoSheet.addRow([]).font = commonFont; // Thêm hàng trống
+        infoSheet.addRow([]).font = commonFont;
+        infoSheet.addRow([]).font = commonFont; // Thêm hàng trống
+        infoSheet.addRow([]).font = commonFont; // Thêm hàng trống
         infoSheet.addRow([
             "",
             "STT",
-            "Mã Cá Biệt TB",
-            "Tên TB",
-            "Nguời mượn",
-            "Ngày mượn",
-            "Ngày hẹn trả",
-            "Quá hạn",
-        ]); // Tiêu đề cột
+            "Mã Cá Biệt Thiết Bị",
+            "Tên Thiết Bị",
+            "Người Mượn",
+            "Ngày Mượn",
+            "Ngày Hẹn Trả",
+            "Quá Hạn",
+        ]).font = { ...commonFont, bold: true }; // Tiêu đề cột
 
         // Thêm dữ liệu vào worksheet
         data.forEach((item, index) => {
@@ -535,86 +474,57 @@ function BaoCaoThongKe({ updateData = false, title }) {
                 item.nguoiMuon,
                 item.ngayMuon,
                 item.ngayHenTra,
-                item.quaHan,
-            ]);
+                item.quaHan ? "Có" : "Không",
+            ]).font = commonFont;
         });
 
-        infoSheet.addRow([]); // Thêm hàng trống
-        infoSheet.addRow([]); // Thêm hàng trống
-        infoSheet.addRow([]); // Thêm hàng trống
-        // infoSheet.addRow(["Nam Định, ngày 5 tháng 8 năm 2024"]);
-        // infoSheet.addRow(["Người lập báo cáo"]);
+        infoSheet.addRow([]).font = commonFont; // Thêm hàng trống
+        infoSheet.addRow([]).font = commonFont; // Thêm hàng trống
+        infoSheet.addRow([]).font = commonFont; // Thêm hàng trống
 
         // Gộp ô và đặt giá trị cho ô đầu tiên trong phạm vi gộp
-        infoSheet.getCell("A" + (2 + spaceAdders)).value =
-            "Phòng Giáo dục & Đào tạo huyện Xuân Trường";
-        infoSheet.mergeCells(
-            "A" + (2 + spaceAdders) + ":I" + (2 + spaceAdders)
-        ); // Gộp ô từ A2 đến G2
+        infoSheet.getCell("A2").value = "Phòng Giáo dục & Đào tạo huyện Xuân Trường";
+        infoSheet.mergeCells("A2:I2");
+        infoSheet.getCell("A2").font = { ...commonFont, bold: true };
+        infoSheet.getCell("A2").alignment = { vertical: "middle", horizontal: "center" };
 
-        infoSheet.getCell("A" + (3 + spaceAdders)).value =
-            "Trường THCS Đặng Xuân Khu";
-        infoSheet.mergeCells(
-            "A" + (3 + spaceAdders) + ":I" + (3 + spaceAdders)
-        ); // Gộp ô từ A3 đến G3
+        infoSheet.getCell("A3").value = "Trường THCS Đặng Xuân Khu";
+        infoSheet.mergeCells("A3:I3");
+        infoSheet.getCell("A3").font = { ...commonFont, bold: true };
+        infoSheet.getCell("A3").alignment = { vertical: "middle", horizontal: "center" };
 
-        infoSheet.getCell("A" + (5 + spaceAdders)).value =
-            "Báo cáo thiết bị mượn quá hạn";
-        infoSheet.mergeCells(
-            "A" + (5 + spaceAdders) + ":I" + (5 + spaceAdders)
-        ); // Gộp ô từ A5 đến G5
+        infoSheet.getCell("A5").value = "Báo cáo thiết bị mượn quá hạn";
+        infoSheet.mergeCells("A5:I5");
+        infoSheet.getCell("A5").font = { ...commonFont, bold: true };
+        infoSheet.getCell("A5").alignment = { vertical: "middle", horizontal: "center" };
 
-        infoSheet.getCell(
-            "A" + (6 + spaceAdders)
-        ).value = `Thời gian: ${request.tuNgay} - ${request.denNgay}`;
-        infoSheet.mergeCells(
-            "A" + (6 + spaceAdders) + ":I" + (6 + spaceAdders)
-        ); // Gộp ô từ A5 đến G5
+        const currentDate = new Date();
+        infoSheet.getCell(`E${data.length + 12}`).value = `Nam Định, ngày ${currentDate.getDate()} tháng ${currentDate.getMonth() + 1} năm ${currentDate.getFullYear()}`;
+        infoSheet.mergeCells(`E${data.length + 12}:H${data.length + 12}`);
+        infoSheet.getCell(`E${data.length + 12}`).font = commonFont;
+        infoSheet.getCell(`E${data.length + 12}`).alignment = { vertical: "middle", horizontal: "center" };
 
-        infoSheet.getCell(
-            `E${data.length + spaceAdders + 12}`
-        ).value = `Nam Định, ngày ${new Date().getDate()} tháng ${new Date().getMonth()} năm ${new Date().getFullYear()}`;
-        infoSheet.mergeCells(
-            `E${data.length + spaceAdders + 12}:H${
-                data.length + spaceAdders + 12
-            }`
-        ); // Gộp ô từ A5 đến G5
+        infoSheet.getCell(`E${data.length + 13}`).value = `Người lập báo cáo`;
+        infoSheet.mergeCells(`E${data.length + 13}:H${data.length + 13}`);
+        infoSheet.getCell(`E${data.length + 13}`).font = commonFont;
+        infoSheet.getCell(`E${data.length + 13}`).alignment = { vertical: "middle", horizontal: "center" };
 
-        infoSheet.getCell(
-            `E${data.length + spaceAdders + 13}`
-        ).value = `Người lập báo cáo`;
-        infoSheet.mergeCells(
-            `E${data.length + spaceAdders + 13}:H${
-                data.length + spaceAdders + 13
-            }`
-        ); // Gộp ô từ A5 đến
+        infoSheet.getCell(`E${data.length + 14}`).value = `Hiền`;
+        infoSheet.mergeCells(`E${data.length + 14}:H${data.length + 14}`);
+        infoSheet.getCell(`E${data.length + 14}`).font = commonFont;
+        infoSheet.getCell(`E${data.length + 14}`).alignment = { vertical: "middle", horizontal: "center" };
 
-        infoSheet.getCell(`E${data.length + spaceAdders + 14}`).value = `Hiền`;
-        infoSheet.mergeCells(
-            `E${data.length + spaceAdders + 14}:H${
-                data.length + spaceAdders + 14
-            }`
-        ); // Gộp ô từ A5 đến G5
+        infoSheet.getCell(`E${data.length + 15}`).value = `Đặng Thu Hiền`;
+        infoSheet.mergeCells(`E${data.length + 15}:H${data.length + 15}`);
+        infoSheet.getCell(`E${data.length + 15}`).font = commonFont;
+        infoSheet.getCell(`E${data.length + 15}`).alignment = { vertical: "middle", horizontal: "center" };
 
-        infoSheet.getCell(
-            `E${data.length + spaceAdders + 15}`
-        ).value = `Đặng Thu Hiền`;
-        infoSheet.mergeCells(
-            `E${data.length + spaceAdders + 15}:H${
-                data.length + spaceAdders + 15
-            }`
-        ); // Gộp ô từ A5 đến
-
-        // infoSheet.getCell('A6').value = "Mã NTB, Tên NTB, Số lượng";
-        // infoSheet.mergeCells('A6:E6'); // Gộp ô từ A6 đến E6
-
-        // Định dạng in đậm cho các ô cụ thể
+        // Định dạng in đậm và căn giữa cho các ô cụ thể
         const boldCells = [
             { col: 1, row: 2 },
             { col: 1, row: 3 },
             { col: 1, row: 5 },
             { col: 1, row: 6 },
-            //
             { col: 5, row: data.length + 12 },
             { col: 5, row: data.length + 13 },
             { col: 5, row: data.length + 14 },
@@ -622,37 +532,25 @@ function BaoCaoThongKe({ updateData = false, title }) {
         ];
         boldCells.forEach(({ col, row }) => {
             const cell = infoSheet.getCell(row, col);
-            cell.font = { bold: true, size: 14 };
+            cell.font = { ...commonFont, bold: true };
             cell.alignment = { vertical: "middle", horizontal: "center" };
         });
 
         // Set column widths cho worksheet
-        // tất cả mọi cột có width là 20
         infoSheet.columns.forEach((column) => {
             column.width = 20;
         });
 
-        const topBorder = { style: "thin" };
-        const bottomBorder = { style: "thin" };
-        const leftBorder = { style: "thin" };
-        const rightBorder = { style: "thin" };
         const borderStyle = {
-            top: topBorder,
-            bottom: bottomBorder,
-            left: leftBorder,
-            right: rightBorder,
+            top: { style: "thin" },
+            bottom: { style: "thin" },
+            left: { style: "thin" },
+            right: { style: "thin" },
         };
 
-        // viền
+        // Thêm viền cho bảng dữ liệu
         for (let row = 8; row <= 8 + data.length; row++) {
-            // nếu có tổng cộng thì + 1
-            for (
-                let col = 2;
-                col <= 1 + Object.keys(data[0]).length + 1;
-                col++
-            ) {
-                // nếu thêm cột thì + 1
-                // B = 2, G = 7
+            for (let col = 2; col <= 8; col++) {
                 const cell = infoSheet.getCell(row, col);
                 cell.border = borderStyle;
             }
@@ -671,30 +569,30 @@ function BaoCaoThongKe({ updateData = false, title }) {
             alert("Không có dữ liệu nào trong khoảng thời gian này");
             return;
         }
-        const spaceAdders = 0;
-        // Tạo một workbook mới
-        const wb = new ExcelJS.Workbook();
 
-        // Tạo một worksheet mới cho thông tin thêm
+        const wb = new ExcelJS.Workbook();
         const infoSheet = wb.addWorksheet("Thông tin");
 
+        // Định nghĩa font chữ chung
+        const commonFont = { name: 'Times New Roman', size: 12 };
+
         // Thêm tiêu đề và dữ liệu vào worksheet
-        infoSheet.addRow([]); // Thêm hàng trống
-        infoSheet.addRow([]);
-        infoSheet.addRow([]);
-        infoSheet.addRow([]); // Thêm hàng trống
-        infoSheet.addRow([]);
-        infoSheet.addRow([]); // Thêm hàng trống
-        infoSheet.addRow([]); // Thêm hàng trống
+        infoSheet.addRow([]).font = commonFont; // Thêm hàng trống
+        infoSheet.addRow([]).font = commonFont;
+        infoSheet.addRow([]).font = commonFont;
+        infoSheet.addRow([]).font = commonFont; // Thêm hàng trống
+        infoSheet.addRow([]).font = commonFont;
+        infoSheet.addRow([]).font = commonFont; // Thêm hàng trống
+        infoSheet.addRow([]).font = commonFont; // Thêm hàng trống
         infoSheet.addRow([
             "",
             "STT",
-            "Mã Cá Biệt TB",
-            "Tên TB",
-            "Nguời mượn",
-            "Ngày mượn",
-            "Ngày hẹn trả",
-        ]); // Tiêu đề cột
+            "Mã Cá Biệt Thiết Bị",
+            "Tên Thiết Bị",
+            "Người Mượn",
+            "Ngày Mượn",
+            "Ngày Hẹn Trả",
+        ]).font = { ...commonFont, bold: true }; // Tiêu đề cột
 
         // Thêm dữ liệu vào worksheet
         data.forEach((item, index) => {
@@ -706,85 +604,56 @@ function BaoCaoThongKe({ updateData = false, title }) {
                 item.nguoiMuon,
                 item.ngayMuon,
                 item.ngayHenTra,
-            ]);
+            ]).font = commonFont;
         });
 
-        infoSheet.addRow([]); // Thêm hàng trống
-        infoSheet.addRow([]); // Thêm hàng trống
-        infoSheet.addRow([]); // Thêm hàng trống
-        // infoSheet.addRow(["Nam Định, ngày 5 tháng 8 năm 2024"]);
-        // infoSheet.addRow(["Người lập báo cáo"]);
+        infoSheet.addRow([]).font = commonFont; // Thêm hàng trống
+        infoSheet.addRow([]).font = commonFont; // Thêm hàng trống
+        infoSheet.addRow([]).font = commonFont; // Thêm hàng trống
 
         // Gộp ô và đặt giá trị cho ô đầu tiên trong phạm vi gộp
-        infoSheet.getCell("A" + (2 + spaceAdders)).value =
-            "Phòng Giáo dục & Đào tạo huyện Xuân Trường";
-        infoSheet.mergeCells(
-            "A" + (2 + spaceAdders) + ":H" + (2 + spaceAdders)
-        ); // Gộp ô từ A2 đến G2
+        infoSheet.getCell("A2").value = "Phòng Giáo dục & Đào tạo huyện Xuân Trường";
+        infoSheet.mergeCells("A2:H2");
+        infoSheet.getCell("A2").font = { ...commonFont, bold: true };
+        infoSheet.getCell("A2").alignment = { vertical: "middle", horizontal: "center" };
 
-        infoSheet.getCell("A" + (3 + spaceAdders)).value =
-            "Trường THCS Đặng Xuân Khu";
-        infoSheet.mergeCells(
-            "A" + (3 + spaceAdders) + ":H" + (3 + spaceAdders)
-        ); // Gộp ô từ A3 đến G3
+        infoSheet.getCell("A3").value = "Trường THCS Đặng Xuân Khu";
+        infoSheet.mergeCells("A3:H3");
+        infoSheet.getCell("A3").font = { ...commonFont, bold: true };
+        infoSheet.getCell("A3").alignment = { vertical: "middle", horizontal: "center" };
 
-        infoSheet.getCell("A" + (5 + spaceAdders)).value =
-            "Báo cáo thiết bị đang mượn";
-        infoSheet.mergeCells(
-            "A" + (5 + spaceAdders) + ":H" + (5 + spaceAdders)
-        ); // Gộp ô từ A5 đến G5
+        infoSheet.getCell("A5").value = "Báo cáo thiết bị đang mượn";
+        infoSheet.mergeCells("A5:H5");
+        infoSheet.getCell("A5").font = { ...commonFont, bold: true };
+        infoSheet.getCell("A5").alignment = { vertical: "middle", horizontal: "center" };
 
-        infoSheet.getCell(
-            "A" + (6 + spaceAdders)
-        ).value = `Thời gian: ${request.tuNgay} - ${request.denNgay}`;
-        infoSheet.mergeCells(
-            "A" + (6 + spaceAdders) + ":H" + (6 + spaceAdders)
-        ); // Gộp ô từ A5 đến G5
+        const currentDate = new Date();
+        infoSheet.getCell(`E${data.length + 12}`).value = `Nam Định, ngày ${currentDate.getDate()} tháng ${currentDate.getMonth() + 1} năm ${currentDate.getFullYear()}`;
+        infoSheet.mergeCells(`E${data.length + 12}:G${data.length + 12}`);
+        infoSheet.getCell(`E${data.length + 12}`).font = commonFont;
+        infoSheet.getCell(`E${data.length + 12}`).alignment = { vertical: "middle", horizontal: "center" };
 
-        infoSheet.getCell(
-            `E${data.length + spaceAdders + 12}`
-        ).value = `Nam Định, ngày ${new Date().getDate()} tháng ${new Date().getMonth()} năm ${new Date().getFullYear()}`;
-        infoSheet.mergeCells(
-            `E${data.length + spaceAdders + 12}:G${
-                data.length + spaceAdders + 12
-            }`
-        ); // Gộp ô từ A5 đến G5
+        infoSheet.getCell(`E${data.length + 13}`).value = `Người lập báo cáo`;
+        infoSheet.mergeCells(`E${data.length + 13}:G${data.length + 13}`);
+        infoSheet.getCell(`E${data.length + 13}`).font = commonFont;
+        infoSheet.getCell(`E${data.length + 13}`).alignment = { vertical: "middle", horizontal: "center" };
 
-        infoSheet.getCell(
-            `E${data.length + spaceAdders + 13}`
-        ).value = `Người lập báo cáo`;
-        infoSheet.mergeCells(
-            `E${data.length + spaceAdders + 13}:G${
-                data.length + spaceAdders + 13
-            }`
-        ); // Gộp ô từ A5 đến
+        infoSheet.getCell(`E${data.length + 14}`).value = `Hiền`;
+        infoSheet.mergeCells(`E${data.length + 14}:G${data.length + 14}`);
+        infoSheet.getCell(`E${data.length + 14}`).font = commonFont;
+        infoSheet.getCell(`E${data.length + 14}`).alignment = { vertical: "middle", horizontal: "center" };
 
-        infoSheet.getCell(`E${data.length + spaceAdders + 14}`).value = `Hiền`;
-        infoSheet.mergeCells(
-            `E${data.length + spaceAdders + 14}:G${
-                data.length + spaceAdders + 14
-            }`
-        ); // Gộp ô từ A5 đến G5
+        infoSheet.getCell(`E${data.length + 15}`).value = `Đặng Thu Hiền`;
+        infoSheet.mergeCells(`E${data.length + 15}:G${data.length + 15}`);
+        infoSheet.getCell(`E${data.length + 15}`).font = commonFont;
+        infoSheet.getCell(`E${data.length + 15}`).alignment = { vertical: "middle", horizontal: "center" };
 
-        infoSheet.getCell(
-            `E${data.length + spaceAdders + 15}`
-        ).value = `Đặng Thu Hiền`;
-        infoSheet.mergeCells(
-            `E${data.length + spaceAdders + 15}:G${
-                data.length + spaceAdders + 15
-            }`
-        ); // Gộp ô từ A5 đến
-
-        // infoSheet.getCell('A6').value = "Mã NTB, Tên NTB, Số lượng";
-        // infoSheet.mergeCells('A6:E6'); // Gộp ô từ A6 đến E6
-
-        // Định dạng in đậm cho các ô cụ thể
+        // Định dạng in đậm và căn giữa cho các ô cụ thể
         const boldCells = [
             { col: 1, row: 2 },
             { col: 1, row: 3 },
             { col: 1, row: 5 },
             { col: 1, row: 6 },
-            //
             { col: 5, row: data.length + 12 },
             { col: 5, row: data.length + 13 },
             { col: 5, row: data.length + 14 },
@@ -792,37 +661,25 @@ function BaoCaoThongKe({ updateData = false, title }) {
         ];
         boldCells.forEach(({ col, row }) => {
             const cell = infoSheet.getCell(row, col);
-            cell.font = { bold: true, size: 14 };
+            cell.font = { ...commonFont, bold: true };
             cell.alignment = { vertical: "middle", horizontal: "center" };
         });
 
         // Set column widths cho worksheet
-        // tất cả mọi cột có width là 20
         infoSheet.columns.forEach((column) => {
             column.width = 20;
         });
 
-        const topBorder = { style: "thin" };
-        const bottomBorder = { style: "thin" };
-        const leftBorder = { style: "thin" };
-        const rightBorder = { style: "thin" };
         const borderStyle = {
-            top: topBorder,
-            bottom: bottomBorder,
-            left: leftBorder,
-            right: rightBorder,
+            top: { style: "thin" },
+            bottom: { style: "thin" },
+            left: { style: "thin" },
+            right: { style: "thin" },
         };
 
-        // viền
+        // Thêm viền cho bảng dữ liệu
         for (let row = 8; row <= 8 + data.length; row++) {
-            // nếu có tổng cộng thì + 1
-            for (
-                let col = 2;
-                col <= 1 + Object.keys(data[0]).length + 1;
-                col++
-            ) {
-                // nếu thêm cột thì + 1
-                // B = 2, G = 7
+            for (let col = 2; col <= 7; col++) {
                 const cell = infoSheet.getCell(row, col);
                 cell.border = borderStyle;
             }
@@ -841,153 +698,113 @@ function BaoCaoThongKe({ updateData = false, title }) {
             alert("Không có dữ liệu nào trong khoảng thời gian này");
             return;
         }
-        const spaceAdders = 0;
-        // Tạo một workbook mới
-        const wb = new ExcelJS.Workbook();
 
-        // Tạo một worksheet mới cho thông tin thêm
+        const wb = new ExcelJS.Workbook();
         const infoSheet = wb.addWorksheet("Thông tin");
 
+        // Định nghĩa font chữ chung
+        const commonFont = { name: 'Times New Roman', size: 12 };
+
         // Thêm tiêu đề và dữ liệu vào worksheet
-        infoSheet.addRow([]); // Thêm hàng trống
-        infoSheet.addRow([]);
-        infoSheet.addRow([]);
-        infoSheet.addRow([]); // Thêm hàng trống
-        infoSheet.addRow([]);
-        infoSheet.addRow([]); // Thêm hàng trống
-        infoSheet.addRow([]); // Thêm hàng trống
+        infoSheet.addRow([]).font = commonFont; // Thêm hàng trống
+        infoSheet.addRow([]).font = commonFont;
+        infoSheet.addRow([]).font = commonFont;
+        infoSheet.addRow([]).font = commonFont; // Thêm hàng trống
+        infoSheet.addRow([]).font = commonFont;
+        infoSheet.addRow([]).font = commonFont; // Thêm hàng trống
+        infoSheet.addRow([]).font = commonFont; // Thêm hàng trống
+
         infoSheet.addRow([
             "",
             "STT",
-            "Mã nhóm TB",
-            "Tên nhóm TB",
+            "Mã nhóm Thiết Bị",
+            "Tên nhóm Thiết Bị",
             "Số lượt mượn",
-        ]); // Tiêu đề cột
+        ]).font = { ...commonFont, bold: true }; // Tiêu đề cột
 
-        // Thêm dữ liệu vào worksheet
         let currIndex = 9;
         let stt = 1;
-        data.forEach((item, index) => {
-            infoSheet.getCell("B" + currIndex).value =
-                "Giáo Viên: " + item.tenGV;
+        data.forEach((item) => {
+            infoSheet.getCell("B" + currIndex).value = "Giáo Viên: " + item.tenGV;
             infoSheet.mergeCells("B" + currIndex + ":E" + currIndex);
             const cellTGV = infoSheet.getCell(currIndex, 2);
-            cellTGV.font = { bold: true, color: { argb: "FF0000" } };
+            cellTGV.font = { bold: true, color: { argb: "FF0000" }, name: 'Times New Roman', size: 12 };
             cellTGV.alignment = { vertical: "middle", horizontal: "left" };
-            item.thongTins.forEach((item2, index2) => {
+
+            item.thongTins.forEach((item2) => {
                 infoSheet.addRow([
                     "",
                     stt,
                     item2.maNTB,
                     item2.tenNTB,
                     item2.soLuotMuon,
-                ]);
+                ]).font = commonFont;
                 stt++;
             });
-            infoSheet.getCell(
-                "B" + (currIndex + item.thongTins.length + 1)
-            ).value = "Tổng Cộng";
-            infoSheet.mergeCells(
-                "B" +
-                (currIndex + item.thongTins.length + 1) +
-                ":D" +
-                (currIndex + item.thongTins.length + 1)
-            );
-            infoSheet.getCell(
-                "E" + (currIndex + item.thongTins.length + 1)
-            ).value = item.thongTins.reduce(
-                (acc, item) => acc + item.soLuotMuon,
-                0
-            );
-            const cell = infoSheet.getCell(
-                currIndex + item.thongTins.length + 1,
-                2
-            );
-            cell.font = { bold: true };
+
+            infoSheet.getCell("B" + (currIndex + item.thongTins.length + 1)).value = "Tổng Cộng";
+            infoSheet.mergeCells("B" + (currIndex + item.thongTins.length + 1) + ":D" + (currIndex + item.thongTins.length + 1));
+            infoSheet.getCell("E" + (currIndex + item.thongTins.length + 1)).value = item.thongTins.reduce((acc, item) => acc + item.soLuotMuon, 0);
+            const cell = infoSheet.getCell(currIndex + item.thongTins.length + 1, 2);
+            cell.font = { ...commonFont, bold: true };
             cell.alignment = { vertical: "middle", horizontal: "center" };
-            currIndex += item.thongTins.length + 1 + 1;
+            currIndex += item.thongTins.length + 2;
         });
 
-        infoSheet.addRow([]); // Thêm hàng trống
-        infoSheet.addRow([]); // Thêm hàng trống
-        infoSheet.addRow([]); // Thêm hàng trống
-        // infoSheet.addRow(["Nam Định, ngày 5 tháng 8 năm 2024"]);
-        // infoSheet.addRow(["Người lập báo cáo"]);
+        infoSheet.addRow([]).font = commonFont; // Thêm hàng trống
+        infoSheet.addRow([]).font = commonFont; // Thêm hàng trống
+        infoSheet.addRow([]).font = commonFont; // Thêm hàng trống
 
         // Gộp ô và đặt giá trị cho ô đầu tiên trong phạm vi gộp
-        infoSheet.getCell("A" + (2 + spaceAdders)).value =
-            "Phòng Giáo dục & Đào tạo huyện Xuân Trường";
-        infoSheet.mergeCells(
-            "A" + (2 + spaceAdders) + ":F" + (2 + spaceAdders)
-        ); // Gộp ô từ A2 đến G2
+        infoSheet.getCell("A2").value = "Phòng Giáo dục & Đào tạo huyện Xuân Trường";
+        infoSheet.mergeCells("A2:F2");
+        infoSheet.getCell("A2").font = { ...commonFont, bold: true };
+        infoSheet.getCell("A2").alignment = { vertical: "middle", horizontal: "center" };
 
-        infoSheet.getCell("A" + (3 + spaceAdders)).value =
-            "Trường THCS Đặng Xuân Khu";
-        infoSheet.mergeCells(
-            "A" + (3 + spaceAdders) + ":F" + (3 + spaceAdders)
-        ); // Gộp ô từ A3 đến G3
+        infoSheet.getCell("A3").value = "Trường THCS Đặng Xuân Khu";
+        infoSheet.mergeCells("A3:F3");
+        infoSheet.getCell("A3").font = { ...commonFont, bold: true };
+        infoSheet.getCell("A3").alignment = { vertical: "middle", horizontal: "center" };
 
-        infoSheet.getCell("A" + (5 + spaceAdders)).value =
-            "Báo cáo tình hình mượn thiết bị của giáo viên";
-        infoSheet.mergeCells(
-            "A" + (5 + spaceAdders) + ":F" + (5 + spaceAdders)
-        ); // Gộp ô từ A5 đến G5
+        infoSheet.getCell("A5").value = "Báo cáo tình hình mượn thiết bị của giáo viên";
+        infoSheet.mergeCells("A5:F5");
+        infoSheet.getCell("A5").font = { ...commonFont, bold: true };
+        infoSheet.getCell("A5").alignment = { vertical: "middle", horizontal: "center" };
 
-        infoSheet.getCell(
-            "A" + (6 + spaceAdders)
-        ).value = `Thời gian: ${request.tuNgay} - ${request.denNgay}`;
-        infoSheet.mergeCells(
-            "A" + (6 + spaceAdders) + ":F" + (6 + spaceAdders)
-        ); // Gộp ô từ A5 đến G5
+        infoSheet.getCell("A6").value = `Thời gian: ${request.tuNgay} - ${request.denNgay}`;
+        infoSheet.mergeCells("A6:F6");
+        infoSheet.getCell("A6").font = { ...commonFont, bold: true };
+        infoSheet.getCell("A6").alignment = { vertical: "middle", horizontal: "center" };
 
-        const allDataRows =
-            data.reduce((acc, item) => acc + item.thongTins.length, 0) +
-            data.length * 2;
+        const allDataRows = data.reduce((acc, item) => acc + item.thongTins.length, 0) + data.length * 2;
 
-        infoSheet.getCell(
-            `E${allDataRows + spaceAdders + 12}`
-        ).value = `Nam Định, ngày ${new Date().getDate()} tháng ${new Date().getMonth()} năm ${new Date().getFullYear()}`;
-        infoSheet.mergeCells(
-            `E${allDataRows + spaceAdders + 12}:G${
-                allDataRows + spaceAdders + 12
-            }`
-        ); // Gộp ô từ A5 đến G5
+        const currentDate = new Date();
+        infoSheet.getCell(`E${allDataRows + 12}`).value = `Nam Định, ngày ${currentDate.getDate()} tháng ${currentDate.getMonth() + 1} năm ${currentDate.getFullYear()}`;
+        infoSheet.mergeCells(`E${allDataRows + 12}:G${allDataRows + 12}`);
+        infoSheet.getCell(`E${allDataRows + 12}`).font = commonFont;
+        infoSheet.getCell(`E${allDataRows + 12}`).alignment = { vertical: "middle", horizontal: "center" };
 
-        infoSheet.getCell(
-            `E${allDataRows + spaceAdders + 13}`
-        ).value = `Người lập báo cáo`;
-        infoSheet.mergeCells(
-            `E${allDataRows + spaceAdders + 13}:G${
-                allDataRows + spaceAdders + 13
-            }`
-        ); // Gộp ô từ A5 đến
+        infoSheet.getCell(`E${allDataRows + 13}`).value = `Người lập báo cáo`;
+        infoSheet.mergeCells(`E${allDataRows + 13}:G${allDataRows + 13}`);
+        infoSheet.getCell(`E${allDataRows + 13}`).font = commonFont;
+        infoSheet.getCell(`E${allDataRows + 13}`).alignment = { vertical: "middle", horizontal: "center" };
 
-        infoSheet.getCell(`E${allDataRows + spaceAdders + 14}`).value = `Hiền`;
-        infoSheet.mergeCells(
-            `E${allDataRows + spaceAdders + 14}:G${
-                allDataRows + spaceAdders + 14
-            }`
-        ); // Gộp ô từ A5 đến G5
+        infoSheet.getCell(`E${allDataRows + 14}`).value = `Hiền`;
+        infoSheet.mergeCells(`E${allDataRows + 14}:G${allDataRows + 14}`);
+        infoSheet.getCell(`E${allDataRows + 14}`).font = commonFont;
+        infoSheet.getCell(`E${allDataRows + 14}`).alignment = { vertical: "middle", horizontal: "center" };
 
-        infoSheet.getCell(
-            `E${allDataRows + spaceAdders + 15}`
-        ).value = `Đặng Thu Hiền`;
-        infoSheet.mergeCells(
-            `E${allDataRows + spaceAdders + 15}:G${
-                allDataRows + spaceAdders + 15
-            }`
-        ); // Gộp ô từ A5 đến
+        infoSheet.getCell(`E${allDataRows + 15}`).value = `Đặng Thu Hiền`;
+        infoSheet.mergeCells(`E${allDataRows + 15}:G${allDataRows + 15}`);
+        infoSheet.getCell(`E${allDataRows + 15}`).font = commonFont;
+        infoSheet.getCell(`E${allDataRows + 15}`).alignment = { vertical: "middle", horizontal: "center" };
 
-        // infoSheet.getCell('A6').value = "Mã NTB, Tên NTB, Số lượng";
-        // infoSheet.mergeCells('A6:E6'); // Gộp ô từ A6 đến E6
-
-        // Định dạng in đậm cho các ô cụ thể
+        // Định dạng in đậm và căn giữa cho các ô cụ thể
         const boldCells = [
             { col: 1, row: 2 },
             { col: 1, row: 3 },
             { col: 1, row: 5 },
             { col: 1, row: 6 },
-            // //
             { col: 5, row: allDataRows + 12 },
             { col: 5, row: allDataRows + 13 },
             { col: 5, row: allDataRows + 14 },
@@ -995,37 +812,25 @@ function BaoCaoThongKe({ updateData = false, title }) {
         ];
         boldCells.forEach(({ col, row }) => {
             const cell = infoSheet.getCell(row, col);
-            cell.font = { bold: true, size: 14 };
+            cell.font = { ...commonFont, bold: true };
             cell.alignment = { vertical: "middle", horizontal: "center" };
         });
 
         // Set column widths cho worksheet
-        // tất cả mọi cột có width là 20
         infoSheet.columns.forEach((column) => {
             column.width = 20;
         });
 
-        const topBorder = { style: "thin" };
-        const bottomBorder = { style: "thin" };
-        const leftBorder = { style: "thin" };
-        const rightBorder = { style: "thin" };
         const borderStyle = {
-            top: topBorder,
-            bottom: bottomBorder,
-            left: leftBorder,
-            right: rightBorder,
+            top: { style: "thin" },
+            bottom: { style: "thin" },
+            left: { style: "thin" },
+            right: { style: "thin" },
         };
 
-        // viền
+        // Thêm viền cho bảng dữ liệu
         for (let row = 8; row <= 8 + allDataRows; row++) {
-            // nếu có tổng cộng thì + 1
-            for (
-                let col = 2;
-                col <= 1 + Object.keys(data[0]).length + 2;
-                col++
-            ) {
-                // nếu thêm cột thì + 1
-                // B = 2, G = 7
+            for (let col = 2; col <= 6; col++) {
                 const cell = infoSheet.getCell(row, col);
                 cell.border = borderStyle;
             }
@@ -1039,36 +844,38 @@ function BaoCaoThongKe({ updateData = false, title }) {
         saveAs(blob, "report.xlsx");
     };
 
+
     const op3 = async (data) => {
         if (data.length === 0) {
             alert("Không có dữ liệu nào trong khoảng thời gian này");
             return;
         }
-        const spaceAdders = Object.keys(data[0]).length - 4;
-        // Tạo một workbook mới
-        const wb = new ExcelJS.Workbook();
 
-        // Tạo một worksheet mới cho thông tin thêm
+        const spaceAdders = Object.keys(data[0]).length - 4;
+        const wb = new ExcelJS.Workbook();
         const infoSheet = wb.addWorksheet("Thông tin");
 
+        // Định nghĩa font chữ chung
+        const commonFont = { name: 'Times New Roman', size: 12 };
+
         // Thêm tiêu đề và dữ liệu vào worksheet
-        infoSheet.addRow([]); // Thêm hàng trống
-        infoSheet.addRow([]);
-        infoSheet.addRow([]);
-        infoSheet.addRow([]); // Thêm hàng trống
-        infoSheet.addRow([]);
-        infoSheet.addRow([]); // Thêm hàng trống
-        infoSheet.addRow([]); // Thêm hàng trống
+        infoSheet.addRow([]).font = commonFont; // Thêm hàng trống
+        infoSheet.addRow([]).font = commonFont;
+        infoSheet.addRow([]).font = commonFont;
+        infoSheet.addRow([]).font = commonFont; // Thêm hàng trống
+        infoSheet.addRow([]).font = commonFont;
+        infoSheet.addRow([]).font = commonFont; // Thêm hàng trống
+        infoSheet.addRow([]).font = commonFont; // Thêm hàng trống
+
         infoSheet.addRow([
             "",
             "STT",
-            "Mã Cá Biệt TB",
-            "Tên TB",
-            "Ngày thanh lý",
-            "Lý do thanh lý",
-        ]); // Tiêu đề cột
+            "Mã Cá Biệt Thiết Bị",
+            "Tên Thiết Bị",
+            "Ngày Thanh Lý",
+            "Lý Do Thanh Lý",
+        ]).font = { ...commonFont, bold: true }; // Tiêu đề cột
 
-        // Thêm dữ liệu vào worksheet
         data.forEach((item, index) => {
             infoSheet.addRow([
                 "",
@@ -1077,77 +884,76 @@ function BaoCaoThongKe({ updateData = false, title }) {
                 item.tenTB,
                 item.ngayThanhLy,
                 item.lyDoThanhLy,
-            ]);
+            ]).font = commonFont;
         });
 
-        infoSheet.addRow([]); // Thêm hàng trống
-        infoSheet.addRow([]); // Thêm hàng trống
-        infoSheet.addRow([]); // Thêm hàng trống
-        // infoSheet.addRow(["Nam Định, ngày 5 tháng 8 năm 2024"]);
-        // infoSheet.addRow(["Người lập báo cáo"]);
+        infoSheet.addRow([]).font = commonFont; // Thêm hàng trống
+        infoSheet.addRow([]).font = commonFont; // Thêm hàng trống
+        infoSheet.addRow([]).font = commonFont; // Thêm hàng trống
 
         // Gộp ô và đặt giá trị cho ô đầu tiên trong phạm vi gộp
         infoSheet.getCell("A" + (2 + spaceAdders)).value =
             "Phòng Giáo dục & Đào tạo huyện Xuân Trường";
         infoSheet.mergeCells(
             "A" + (2 + spaceAdders) + ":G" + (2 + spaceAdders)
-        ); // Gộp ô từ A2 đến G2
+        );
+        infoSheet.getCell("A" + (2 + spaceAdders)).font = { ...commonFont, bold: true };
+        infoSheet.getCell("A" + (2 + spaceAdders)).alignment = { vertical: "middle", horizontal: "center" };
 
         infoSheet.getCell("A" + (3 + spaceAdders)).value =
             "Trường THCS Đặng Xuân Khu";
         infoSheet.mergeCells(
             "A" + (3 + spaceAdders) + ":G" + (3 + spaceAdders)
-        ); // Gộp ô từ A3 đến G3
+        );
+        infoSheet.getCell("A" + (3 + spaceAdders)).font = { ...commonFont, bold: true };
+        infoSheet.getCell("A" + (3 + spaceAdders)).alignment = { vertical: "middle", horizontal: "center" };
 
         infoSheet.getCell("A" + (5 + spaceAdders)).value =
             "Thống kê thiết bị thanh lý";
         infoSheet.mergeCells(
             "A" + (5 + spaceAdders) + ":G" + (5 + spaceAdders)
-        ); // Gộp ô từ A5 đến G5
+        );
+        infoSheet.getCell("A" + (5 + spaceAdders)).font = { ...commonFont, bold: true };
+        infoSheet.getCell("A" + (5 + spaceAdders)).alignment = { vertical: "middle", horizontal: "center" };
 
-        infoSheet.getCell(
-            "A" + (6 + spaceAdders)
-        ).value = `Thời gian: ${request.tuNgay} - ${request.denNgay}`;
+        infoSheet.getCell("A" + (6 + spaceAdders)).value =
+            `Thời gian: ${request.tuNgay} - ${request.denNgay}`;
         infoSheet.mergeCells(
             "A" + (6 + spaceAdders) + ":G" + (6 + spaceAdders)
-        ); // Gộp ô từ A5 đến G5
+        );
+        infoSheet.getCell("A" + (6 + spaceAdders)).font = { ...commonFont, bold: true };
+        infoSheet.getCell("A" + (6 + spaceAdders)).alignment = { vertical: "middle", horizontal: "center" };
 
+        const currentDate = new Date();
         infoSheet.getCell(
             `E${data.length + spaceAdders + 12}`
-        ).value = `Nam Định, ngày ${new Date().getDate()} tháng ${new Date().getMonth()} năm ${new Date().getFullYear()}`;
+        ).value = `Nam Định, ngày ${currentDate.getDate()} tháng ${currentDate.getMonth() + 1} năm ${currentDate.getFullYear()}`;
         infoSheet.mergeCells(
-            `E${data.length + spaceAdders + 12}:G${
-                data.length + spaceAdders + 12
-            }`
-        ); // Gộp ô từ A5 đến G5
+            `E${data.length + spaceAdders + 12}:G${data.length + spaceAdders + 12}`
+        );
+        infoSheet.getCell(`E${data.length + spaceAdders + 12}`).font = commonFont;
+        infoSheet.getCell(`E${data.length + spaceAdders + 12}`).alignment = { vertical: "middle", horizontal: "center" };
 
-        infoSheet.getCell(
-            `E${data.length + spaceAdders + 13}`
-        ).value = `Người lập báo cáo`;
+        infoSheet.getCell(`E${data.length + spaceAdders + 13}`).value = `Người lập báo cáo`;
         infoSheet.mergeCells(
-            `E${data.length + spaceAdders + 13}:G${
-                data.length + spaceAdders + 13
-            }`
-        ); // Gộp ô từ A5 đến
+            `E${data.length + spaceAdders + 13}:G${data.length + spaceAdders + 13}`
+        );
+        infoSheet.getCell(`E${data.length + spaceAdders + 13}`).font = commonFont;
+        infoSheet.getCell(`E${data.length + spaceAdders + 13}`).alignment = { vertical: "middle", horizontal: "center" };
 
         infoSheet.getCell(`E${data.length + spaceAdders + 14}`).value = `Hiền`;
         infoSheet.mergeCells(
-            `E${data.length + spaceAdders + 14}:G${
-                data.length + spaceAdders + 14
-            }`
-        ); // Gộp ô từ A5 đến G5
+            `E${data.length + spaceAdders + 14}:G${data.length + spaceAdders + 14}`
+        );
+        infoSheet.getCell(`E${data.length + spaceAdders + 14}`).font = commonFont;
+        infoSheet.getCell(`E${data.length + spaceAdders + 14}`).alignment = { vertical: "middle", horizontal: "center" };
 
-        infoSheet.getCell(
-            `E${data.length + spaceAdders + 15}`
-        ).value = `Đặng Thu Hiền`;
+        infoSheet.getCell(`E${data.length + spaceAdders + 15}`).value = `Đặng Thu Hiền`;
         infoSheet.mergeCells(
-            `E${data.length + spaceAdders + 15}:G${
-                data.length + spaceAdders + 15
-            }`
-        ); // Gộp ô từ A5 đến
-
-        // infoSheet.getCell('A6').value = "Mã NTB, Tên NTB, Số lượng";
-        // infoSheet.mergeCells('A6:E6'); // Gộp ô từ A6 đến E6
+            `E${data.length + spaceAdders + 15}:G${data.length + spaceAdders + 15}`
+        );
+        infoSheet.getCell(`E${data.length + spaceAdders + 15}`).font = commonFont;
+        infoSheet.getCell(`E${data.length + spaceAdders + 15}`).alignment = { vertical: "middle", horizontal: "center" };
 
         // Định dạng in đậm cho các ô cụ thể
         const boldCells = [
@@ -1155,7 +961,6 @@ function BaoCaoThongKe({ updateData = false, title }) {
             { col: 1, row: 3 },
             { col: 1, row: 5 },
             { col: 1, row: 6 },
-            //
             { col: 5, row: data.length + 12 },
             { col: 5, row: data.length + 13 },
             { col: 5, row: data.length + 14 },
@@ -1163,37 +968,25 @@ function BaoCaoThongKe({ updateData = false, title }) {
         ];
         boldCells.forEach(({ col, row }) => {
             const cell = infoSheet.getCell(row, col);
-            cell.font = { bold: true, size: 14 };
+            cell.font = { ...commonFont, bold: true };
             cell.alignment = { vertical: "middle", horizontal: "center" };
         });
 
         // Set column widths cho worksheet
-        // tất cả mọi cột có width là 20
         infoSheet.columns.forEach((column) => {
             column.width = 20;
         });
 
-        const topBorder = { style: "thin" };
-        const bottomBorder = { style: "thin" };
-        const leftBorder = { style: "thin" };
-        const rightBorder = { style: "thin" };
         const borderStyle = {
-            top: topBorder,
-            bottom: bottomBorder,
-            left: leftBorder,
-            right: rightBorder,
+            top: { style: "thin" },
+            bottom: { style: "thin" },
+            left: { style: "thin" },
+            right: { style: "thin" },
         };
 
-        // viền
+        // Thêm viền cho bảng dữ liệu
         for (let row = 8; row <= 8 + data.length; row++) {
-            // nếu có tổng cộng thì + 1
-            for (
-                let col = 2;
-                col <= 1 + Object.keys(data[0]).length + 1;
-                col++
-            ) {
-                // nếu thêm cột thì + 1
-                // B = 2, G = 7
+            for (let col = 2; col <= 6; col++) {
                 const cell = infoSheet.getCell(row, col);
                 cell.border = borderStyle;
             }
@@ -1207,36 +1000,38 @@ function BaoCaoThongKe({ updateData = false, title }) {
         saveAs(blob, "report.xlsx");
     };
 
+
     const op2 = async (data) => {
         if (data.length === 0) {
             alert("Không có dữ liệu nào trong khoảng thời gian này");
             return;
         }
-        const spaceAdders = Object.keys(data[0]).length - 4;
-        // Tạo một workbook mới
-        const wb = new ExcelJS.Workbook();
 
-        // Tạo một worksheet mới cho thông tin thêm
+        const spaceAdders = Object.keys(data[0]).length - 4;
+        const wb = new ExcelJS.Workbook();
         const infoSheet = wb.addWorksheet("Thông tin");
 
+        // Định nghĩa font chữ chung
+        const commonFont = { name: 'Times New Roman', size: 12 };
+
         // Thêm tiêu đề và dữ liệu vào worksheet
-        infoSheet.addRow([]); // Thêm hàng trống
-        infoSheet.addRow([]);
-        infoSheet.addRow([]);
-        infoSheet.addRow([]); // Thêm hàng trống
-        infoSheet.addRow([]);
-        infoSheet.addRow([]); // Thêm hàng trống
-        infoSheet.addRow([]); // Thêm hàng trống
+        infoSheet.addRow([]).font = commonFont; // Thêm hàng trống
+        infoSheet.addRow([]).font = commonFont;
+        infoSheet.addRow([]).font = commonFont;
+        infoSheet.addRow([]).font = commonFont; // Thêm hàng trống
+        infoSheet.addRow([]).font = commonFont;
+        infoSheet.addRow([]).font = commonFont; // Thêm hàng trống
+        infoSheet.addRow([]).font = commonFont; // Thêm hàng trống
+
         infoSheet.addRow([
             "",
             "STT",
-            "Tên NTB",
-            "ĐVT",
-            "Tổng số lượng tăng",
-            "Tổng giá trị",
-        ]); // Tiêu đề cột
+            "Tên nhóm thiết bị",
+            "Đơn Vị Tính",
+            "Tổng Số Lượng Tăng",
+            "Tổng Giá Trị",
+        ]).font = { ...commonFont, bold: true }; // Tiêu đề cột
 
-        // Thêm dữ liệu vào worksheet
         data.forEach((item, index) => {
             infoSheet.addRow([
                 "",
@@ -1245,93 +1040,98 @@ function BaoCaoThongKe({ updateData = false, title }) {
                 item.donViTinh,
                 item.tongSoLuongTang,
                 item.tongGiaTri,
-            ]);
+            ]).font = commonFont;
         });
 
-        infoSheet.addRow([]); // Thêm hàng trống
-        infoSheet.addRow([]); // Thêm hàng trống
-        infoSheet.addRow([]); // Thêm hàng trống
-        // infoSheet.addRow(["Nam Định, ngày 5 tháng 8 năm 2024"]);
-        // infoSheet.addRow(["Người lập báo cáo"]);
+        infoSheet.addRow([]).font = commonFont; // Thêm hàng trống
+        infoSheet.addRow([]).font = commonFont; // Thêm hàng trống
+        infoSheet.addRow([]).font = commonFont; // Thêm hàng trống
 
         // Gộp ô và đặt giá trị cho ô đầu tiên trong phạm vi gộp
         infoSheet.getCell("A" + (2 + spaceAdders)).value =
             "Phòng Giáo dục & Đào tạo huyện Xuân Trường";
         infoSheet.mergeCells(
             "A" + (2 + spaceAdders) + ":G" + (2 + spaceAdders)
-        ); // Gộp ô từ A2 đến G2
+        );
+        infoSheet.getCell("A" + (2 + spaceAdders)).font = { ...commonFont, bold: true };
+        infoSheet.getCell("A" + (2 + spaceAdders)).alignment = { vertical: "middle", horizontal: "center" };
 
         infoSheet.getCell("A" + (3 + spaceAdders)).value =
             "Trường THCS Đặng Xuân Khu";
         infoSheet.mergeCells(
             "A" + (3 + spaceAdders) + ":G" + (3 + spaceAdders)
-        ); // Gộp ô từ A3 đến G3
+        );
+        infoSheet.getCell("A" + (3 + spaceAdders)).font = { ...commonFont, bold: true };
+        infoSheet.getCell("A" + (3 + spaceAdders)).alignment = { vertical: "middle", horizontal: "center" };
 
         infoSheet.getCell("A" + (5 + spaceAdders)).value =
             "Thống kê số lượng thiết bị tăng theo nhóm thiết bị";
         infoSheet.mergeCells(
             "A" + (5 + spaceAdders) + ":G" + (5 + spaceAdders)
-        ); // Gộp ô từ A5 đến G5
+        );
+        infoSheet.getCell("A" + (5 + spaceAdders)).font = { ...commonFont, bold: true };
+        infoSheet.getCell("A" + (5 + spaceAdders)).alignment = { vertical: "middle", horizontal: "center" };
 
-        infoSheet.getCell(
-            "A" + (6 + spaceAdders)
-        ).value = `Thời gian: ${request.tuNgay} - ${request.denNgay}`;
+        infoSheet.getCell("A" + (6 + spaceAdders)).value =
+            `Thời gian: ${request.tuNgay} - ${request.denNgay}`;
         infoSheet.mergeCells(
             "A" + (6 + spaceAdders) + ":G" + (6 + spaceAdders)
-        ); // Gộp ô từ A5 đến G5
+        );
+        infoSheet.getCell("A" + (6 + spaceAdders)).font = { ...commonFont, bold: true };
+        infoSheet.getCell("A" + (6 + spaceAdders)).alignment = { vertical: "middle", horizontal: "center" };
 
+        const currentDate = new Date();
         infoSheet.getCell(
             `E${data.length + spaceAdders + 12}`
-        ).value = `Nam Định, ngày ${new Date().getDate()} tháng ${new Date().getMonth()} năm ${new Date().getFullYear()}`;
+        ).value = `Nam Định, ngày ${currentDate.getDate()} tháng ${currentDate.getMonth() + 1} năm ${currentDate.getFullYear()}`;
         infoSheet.mergeCells(
-            `E${data.length + spaceAdders + 12}:G${
-                data.length + spaceAdders + 12
-            }`
-        ); // Gộp ô từ A5 đến G5
+            `E${data.length + spaceAdders + 12}:G${data.length + spaceAdders + 12}`
+        );
+        infoSheet.getCell(`E${data.length + spaceAdders + 12}`).font = commonFont;
+        infoSheet.getCell(`E${data.length + spaceAdders + 12}`).alignment = { vertical: "middle", horizontal: "center" };
 
-        infoSheet.getCell(
-            `E${data.length + spaceAdders + 13}`
-        ).value = `Người lập báo cáo`;
+        infoSheet.getCell(`E${data.length + spaceAdders + 13}`).value = `Người lập báo cáo`;
         infoSheet.mergeCells(
-            `E${data.length + spaceAdders + 13}:G${
-                data.length + spaceAdders + 13
-            }`
-        ); // Gộp ô từ A5 đến
+            `E${data.length + spaceAdders + 13}:G${data.length + spaceAdders + 13}`
+        );
+        infoSheet.getCell(`E${data.length + spaceAdders + 13}`).font = commonFont;
+        infoSheet.getCell(`E${data.length + spaceAdders + 13}`).alignment = { vertical: "middle", horizontal: "center" };
 
         infoSheet.getCell(`E${data.length + spaceAdders + 14}`).value = `Hiền`;
         infoSheet.mergeCells(
-            `E${data.length + spaceAdders + 14}:G${
-                data.length + spaceAdders + 14
-            }`
-        ); // Gộp ô từ A5 đến G5
+            `E${data.length + spaceAdders + 14}:G${data.length + spaceAdders + 14}`
+        );
+        infoSheet.getCell(`E${data.length + spaceAdders + 14}`).font = commonFont;
+        infoSheet.getCell(`E${data.length + spaceAdders + 14}`).alignment = { vertical: "middle", horizontal: "center" };
 
-        infoSheet.getCell(
-            `E${data.length + spaceAdders + 15}`
-        ).value = `Đặng Thu Hiền`;
+        infoSheet.getCell(`E${data.length + spaceAdders + 15}`).value = `Đặng Thu Hiền`;
         infoSheet.mergeCells(
-            `E${data.length + spaceAdders + 15}:G${
-                data.length + spaceAdders + 15
-            }`
-        ); // Gộp ô từ A5 đến
+            `E${data.length + spaceAdders + 15}:G${data.length + spaceAdders + 15}`
+        );
+        infoSheet.getCell(`E${data.length + spaceAdders + 15}`).font = commonFont;
+        infoSheet.getCell(`E${data.length + spaceAdders + 15}`).alignment = { vertical: "middle", horizontal: "center" };
 
-        // tổng cộng
+        // Tổng cộng
         infoSheet.getCell(`B${data.length + 9}`).value = "Tổng cộng";
-        infoSheet.mergeCells(`B${data.length + 9}:D${data.length + 9}`); // Gộp ô từ A5 đến
+        infoSheet.mergeCells(`B${data.length + 9}:D${data.length + 9}`);
+        infoSheet.getCell(`B${data.length + 9}`).font = { ...commonFont, bold: true };
+        infoSheet.getCell(`B${data.length + 9}`).alignment = { vertical: "middle", horizontal: "center" };
 
-        // tổng số lượng tăng
+        // Tổng số lượng tăng
         infoSheet.getCell(`E${data.length + 9}`).value = data.reduce(
             (acc, item) => acc + item.tongSoLuongTang,
             0
         );
+        infoSheet.getCell(`E${data.length + 9}`).font = commonFont;
+        infoSheet.getCell(`E${data.length + 9}`).alignment = { vertical: "middle", horizontal: "center" };
 
-        // tổng giá trị
+        // Tổng giá trị
         infoSheet.getCell(`F${data.length + 9}`).value = data.reduce(
             (acc, item) => acc + item.tongSoLuongTang * item.tongGiaTri,
             0
         );
-
-        // infoSheet.getCell('A6').value = "Mã NTB, Tên NTB, Số lượng";
-        // infoSheet.mergeCells('A6:E6'); // Gộp ô từ A6 đến E6
+        infoSheet.getCell(`F${data.length + 9}`).font = commonFont;
+        infoSheet.getCell(`F${data.length + 9}`).alignment = { vertical: "middle", horizontal: "center" };
 
         // Định dạng in đậm cho các ô cụ thể
         const boldCells = [
@@ -1339,8 +1139,7 @@ function BaoCaoThongKe({ updateData = false, title }) {
             { col: 1, row: 3 },
             { col: 1, row: 5 },
             { col: 1, row: 6 },
-            { col: 2, row: data.length + 9 }, // tổng cộng
-            //
+            { col: 2, row: data.length + 9 }, // Tổng cộng
             { col: 5, row: data.length + 12 },
             { col: 5, row: data.length + 13 },
             { col: 5, row: data.length + 14 },
@@ -1348,37 +1147,25 @@ function BaoCaoThongKe({ updateData = false, title }) {
         ];
         boldCells.forEach(({ col, row }) => {
             const cell = infoSheet.getCell(row, col);
-            cell.font = { bold: true, size: 14 };
+            cell.font = { ...commonFont, bold: true };
             cell.alignment = { vertical: "middle", horizontal: "center" };
         });
 
         // Set column widths cho worksheet
-        // tất cả mọi cột có width là 20
         infoSheet.columns.forEach((column) => {
             column.width = 20;
         });
 
-        const topBorder = { style: "thin" };
-        const bottomBorder = { style: "thin" };
-        const leftBorder = { style: "thin" };
-        const rightBorder = { style: "thin" };
         const borderStyle = {
-            top: topBorder,
-            bottom: bottomBorder,
-            left: leftBorder,
-            right: rightBorder,
+            top: { style: "thin" },
+            bottom: { style: "thin" },
+            left: { style: "thin" },
+            right: { style: "thin" },
         };
 
-        // viền
+        // Thêm viền cho bảng dữ liệu
         for (let row = 8; row <= 8 + data.length + 1; row++) {
-            // nếu có tổng cộng thì + 1
-            for (
-                let col = 2;
-                col <= 1 + Object.keys(data[0]).length + 1;
-                col++
-            ) {
-                // nếu thêm cột thì + 1
-                // B = 2, G = 7
+            for (let col = 2; col <= 6; col++) {
                 const cell = infoSheet.getCell(row, col);
                 cell.border = borderStyle;
             }
@@ -1392,32 +1179,38 @@ function BaoCaoThongKe({ updateData = false, title }) {
         saveAs(blob, "report.xlsx");
     };
 
-    const op1 = async (data) => {
-        const spaceAdders = Object.keys(data[0]).length - 5;
-        // Tạo một workbook mới
-        const wb = new ExcelJS.Workbook();
 
-        // Tạo một worksheet mới cho thông tin thêm
+    const op1 = async (data) => {
+        if (data.length === 0) {
+            alert("Không có dữ liệu nào trong khoảng thời gian này");
+            return;
+        }
+
+        const spaceAdders = Object.keys(data[0]).length - 5;
+        const wb = new ExcelJS.Workbook();
         const infoSheet = wb.addWorksheet("Thông tin");
 
+        // Định nghĩa font chữ chung
+        const commonFont = { name: 'Times New Roman', size: 12 };
+
         // Thêm tiêu đề và dữ liệu vào worksheet
-        infoSheet.addRow([]); // Thêm hàng trống
-        infoSheet.addRow([]);
-        infoSheet.addRow([]);
-        infoSheet.addRow([]); // Thêm hàng trống
-        infoSheet.addRow([]);
-        infoSheet.addRow([]); // Thêm hàng trống
-        infoSheet.addRow([]); // Thêm hàng trống
+        infoSheet.addRow([]).font = commonFont; // Thêm hàng trống
+        infoSheet.addRow([]).font = commonFont;
+        infoSheet.addRow([]).font = commonFont;
+        infoSheet.addRow([]).font = commonFont; // Thêm hàng trống
+        infoSheet.addRow([]).font = commonFont;
+        infoSheet.addRow([]).font = commonFont; // Thêm hàng trống
+        infoSheet.addRow([]).font = commonFont; // Thêm hàng trống
+
         infoSheet.addRow([
             "",
-            "Mã NTB",
-            "Tên NTB",
-            "Tổng Số lượng",
-            "Số TB dùng được",
+            "Mã nhóm thiết bị",
+            "Tên nhóm thiết bị",
+            "Tổng số lượng",
+            "Số thiết bị dùng được",
             "Số thiết bị hỏng",
-        ]); // Tiêu đề cột
+        ]).font = { ...commonFont, bold: true }; // Tiêu đề cột
 
-        // Thêm dữ liệu vào worksheet
         data.forEach((item) => {
             infoSheet.addRow([
                 "",
@@ -1426,92 +1219,98 @@ function BaoCaoThongKe({ updateData = false, title }) {
                 item.tongSoLuong,
                 item.dungDuoc,
                 item.hong,
-            ]);
+            ]).font = commonFont;
         });
 
-        infoSheet.addRow([]); // Thêm hàng trống
-        infoSheet.addRow([]); // Thêm hàng trống
-        infoSheet.addRow([]); // Thêm hàng trống
-        // infoSheet.addRow(["Nam Định, ngày 5 tháng 8 năm 2024"]);
-        // infoSheet.addRow(["Người lập báo cáo"]);
+        infoSheet.addRow([]).font = commonFont; // Thêm hàng trống
+        infoSheet.addRow([]).font = commonFont; // Thêm hàng trống
+        infoSheet.addRow([]).font = commonFont; // Thêm hàng trống
 
         // Gộp ô và đặt giá trị cho ô đầu tiên trong phạm vi gộp
         infoSheet.getCell("A" + (2 + spaceAdders)).value =
             "Phòng Giáo dục & Đào tạo huyện Xuân Trường";
         infoSheet.mergeCells(
             "A" + (2 + spaceAdders) + ":G" + (2 + spaceAdders)
-        ); // Gộp ô từ A2 đến G2
+        );
+        infoSheet.getCell("A" + (2 + spaceAdders)).font = { ...commonFont, bold: true };
+        infoSheet.getCell("A" + (2 + spaceAdders)).alignment = { vertical: "middle", horizontal: "center" };
 
         infoSheet.getCell("A" + (3 + spaceAdders)).value =
             "Trường THCS Đặng Xuân Khu";
         infoSheet.mergeCells(
             "A" + (3 + spaceAdders) + ":G" + (3 + spaceAdders)
-        ); // Gộp ô từ A3 đến G3
+        );
+        infoSheet.getCell("A" + (3 + spaceAdders)).font = { ...commonFont, bold: true };
+        infoSheet.getCell("A" + (3 + spaceAdders)).alignment = { vertical: "middle", horizontal: "center" };
 
         infoSheet.getCell("A" + (5 + spaceAdders)).value =
             "Thống kê số lượng thiết bị theo nhóm thiết bị";
         infoSheet.mergeCells(
             "A" + (5 + spaceAdders) + ":G" + (5 + spaceAdders)
-        ); // Gộp ô từ A5 đến G5
+        );
+        infoSheet.getCell("A" + (5 + spaceAdders)).font = { ...commonFont, bold: true };
+        infoSheet.getCell("A" + (5 + spaceAdders)).alignment = { vertical: "middle", horizontal: "center" };
 
+        const currentDate = new Date();
         infoSheet.getCell(
             `E${data.length + spaceAdders + 12}`
-        ).value = `Nam Định, ngày ${new Date().getDate()} tháng ${new Date().getMonth()} năm ${new Date().getFullYear()}`;
+        ).value = `Nam Định, ngày ${currentDate.getDate()} tháng ${currentDate.getMonth() + 1} năm ${currentDate.getFullYear()}`;
         infoSheet.mergeCells(
-            `E${data.length + spaceAdders + 12}:G${
-                data.length + spaceAdders + 12
-            }`
-        ); // Gộp ô từ A5 đến G5
+            `E${data.length + spaceAdders + 12}:G${data.length + spaceAdders + 12}`
+        );
+        infoSheet.getCell(`E${data.length + spaceAdders + 12}`).font = commonFont;
+        infoSheet.getCell(`E${data.length + spaceAdders + 12}`).alignment = { vertical: "middle", horizontal: "center" };
 
-        infoSheet.getCell(
-            `E${data.length + spaceAdders + 13}`
-        ).value = `Người lập báo cáo`;
+        infoSheet.getCell(`E${data.length + spaceAdders + 13}`).value = `Người lập báo cáo`;
         infoSheet.mergeCells(
-            `E${data.length + spaceAdders + 13}:G${
-                data.length + spaceAdders + 13
-            }`
-        ); // Gộp ô từ A5 đến
+            `E${data.length + spaceAdders + 13}:G${data.length + spaceAdders + 13}`
+        );
+        infoSheet.getCell(`E${data.length + spaceAdders + 13}`).font = commonFont;
+        infoSheet.getCell(`E${data.length + spaceAdders + 13}`).alignment = { vertical: "middle", horizontal: "center" };
 
         infoSheet.getCell(`E${data.length + spaceAdders + 14}`).value = `Hiền`;
         infoSheet.mergeCells(
-            `E${data.length + spaceAdders + 14}:G${
-                data.length + spaceAdders + 14
-            }`
-        ); // Gộp ô từ A5 đến G5
+            `E${data.length + spaceAdders + 14}:G${data.length + spaceAdders + 14}`
+        );
+        infoSheet.getCell(`E${data.length + spaceAdders + 14}`).font = commonFont;
+        infoSheet.getCell(`E${data.length + spaceAdders + 14}`).alignment = { vertical: "middle", horizontal: "center" };
 
-        infoSheet.getCell(
-            `E${data.length + spaceAdders + 15}`
-        ).value = `Đặng Thu Hiền`;
+        infoSheet.getCell(`E${data.length + spaceAdders + 15}`).value = `Đặng Thu Hiền`;
         infoSheet.mergeCells(
-            `E${data.length + spaceAdders + 15}:G${
-                data.length + spaceAdders + 15
-            }`
-        ); // Gộp ô từ A5 đến
+            `E${data.length + spaceAdders + 15}:G${data.length + spaceAdders + 15}`
+        );
+        infoSheet.getCell(`E${data.length + spaceAdders + 15}`).font = commonFont;
+        infoSheet.getCell(`E${data.length + spaceAdders + 15}`).alignment = { vertical: "middle", horizontal: "center" };
 
-        // tổng cộng
+        // Tổng cộng
         infoSheet.getCell(`B${data.length + 9}`).value = "Tổng cộng";
-        infoSheet.mergeCells(`B${data.length + 9}:C${data.length + 9}`); // Gộp ô từ A5 đến
+        infoSheet.mergeCells(`B${data.length + 9}:C${data.length + 9}`);
+        infoSheet.getCell(`B${data.length + 9}`).font = { ...commonFont, bold: true };
+        infoSheet.getCell(`B${data.length + 9}`).alignment = { vertical: "middle", horizontal: "center" };
 
-        // tổng số lượng
+        // Tổng số lượng
         infoSheet.getCell(`D${data.length + 9}`).value = data.reduce(
             (acc, item) => acc + item.tongSoLuong,
             0
         );
+        infoSheet.getCell(`D${data.length + 9}`).font = commonFont;
+        infoSheet.getCell(`D${data.length + 9}`).alignment = { vertical: "middle", horizontal: "center" };
 
-        // tổng số lượng dùng được
+        // Tổng số thiết bị dùng được
         infoSheet.getCell(`E${data.length + 9}`).value = data.reduce(
             (acc, item) => acc + item.dungDuoc,
             0
         );
+        infoSheet.getCell(`E${data.length + 9}`).font = commonFont;
+        infoSheet.getCell(`E${data.length + 9}`).alignment = { vertical: "middle", horizontal: "center" };
 
-        // tổng số lượng hỏng
+        // Tổng số thiết bị hỏng
         infoSheet.getCell(`F${data.length + 9}`).value = data.reduce(
             (acc, item) => acc + item.hong,
             0
         );
-
-        // infoSheet.getCell('A6').value = "Mã NTB, Tên NTB, Số lượng";
-        // infoSheet.mergeCells('A6:E6'); // Gộp ô từ A6 đến E6
+        infoSheet.getCell(`F${data.length + 9}`).font = commonFont;
+        infoSheet.getCell(`F${data.length + 9}`).alignment = { vertical: "middle", horizontal: "center" };
 
         // Định dạng in đậm cho các ô cụ thể
         const boldCells = [
@@ -1519,8 +1318,7 @@ function BaoCaoThongKe({ updateData = false, title }) {
             { col: 1, row: 3 },
             { col: 1, row: 5 },
             { col: 1, row: 6 },
-            { col: 2, row: data.length + 9 }, // tổng cộng
-            //
+            { col: 2, row: data.length + 9 }, // Tổng cộng
             { col: 5, row: data.length + 12 },
             { col: 5, row: data.length + 13 },
             { col: 5, row: data.length + 14 },
@@ -1528,32 +1326,25 @@ function BaoCaoThongKe({ updateData = false, title }) {
         ];
         boldCells.forEach(({ col, row }) => {
             const cell = infoSheet.getCell(row, col);
-            cell.font = { bold: true, size: 14 };
+            cell.font = { ...commonFont, bold: true };
             cell.alignment = { vertical: "middle", horizontal: "center" };
         });
 
         // Set column widths cho worksheet
-        // tất cả mọi cột có width là 20
         infoSheet.columns.forEach((column) => {
             column.width = 20;
         });
 
-        const topBorder = { style: "thin" };
-        const bottomBorder = { style: "thin" };
-        const leftBorder = { style: "thin" };
-        const rightBorder = { style: "thin" };
         const borderStyle = {
-            top: topBorder,
-            bottom: bottomBorder,
-            left: leftBorder,
-            right: rightBorder,
+            top: { style: "thin" },
+            bottom: { style: "thin" },
+            left: { style: "thin" },
+            right: { style: "thin" },
         };
 
-        // viền
+        // Thêm viền cho bảng dữ liệu
         for (let row = 8; row <= 8 + data.length + 1; row++) {
-            // nếu có tổng cộng thì + 1
-            for (let col = 2; col <= 1 + Object.keys(data[0]).length; col++) {
-                // B = 2, G = 7
+            for (let col = 2; col <= 6; col++) {
                 const cell = infoSheet.getCell(row, col);
                 cell.border = borderStyle;
             }
@@ -1566,6 +1357,7 @@ function BaoCaoThongKe({ updateData = false, title }) {
         });
         saveAs(blob, "report.xlsx");
     };
+
 
     /*
     const excel = async (data) => {

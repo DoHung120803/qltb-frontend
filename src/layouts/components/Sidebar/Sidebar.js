@@ -7,7 +7,7 @@ import {
     QuanLyThietBiIcon,
 } from "~/components/Icons";
 import DashBoard from "./DashBoard";
-import DashBoardItem from "./DashBoard/DashBoardItem";
+import DashBoardItem from "~/layouts/components/Sidebar/DashBoard/DashBoardItem";
 import config from "~/config";
 import { useState } from "react";
 
