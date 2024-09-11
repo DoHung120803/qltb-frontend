@@ -221,25 +221,28 @@ function Table({
                                                 </>
                                             )}
 
-                                            {isMuonTraThietBi && data.trangThai === "Chưa mượn" && (
+{isMuonTraThietBi && (
                                                 <>
-                                                    <Link to={linkUpdate} state={data}>
-                                                            <span className={cx("update-icon")}>
-                                                                <PencilIcon />
-                                                                <span className={cx("line-icon")}>
-                                                                    <LineIcon />
-                                                                </span>
-                                                            </span>
-                                                    </Link>
-                                                    <span className={cx("delete-icon")} onClick={() =>
-                                                        handleDelete(data[[fields[0]]])
-                                                    }>
-                                                            <DeleteIcon />
-                                                        </span>
-                                                    <Link to={viewLink} state={{ viewData: data }}>
-                                                            <span className={cx("view-icon")}>
-                                                                <ViewIcon />
-                                                            </span>
+                                                    {data.trangThai === "Chưa mượn" ? (
+                                                        <>
+                                                            <Link to={linkUpdate} state={data}>
+                    <span className={cx("update-icon")}>
+                        <PencilIcon/>
+                        <span className={cx("line-icon")}>
+                            <LineIcon/>
+                        </span>
+                    </span>
+                                                            </Link>
+                                                            <span className={cx("delete-icon")}
+                                                                  onClick={() => handleDelete(data[fields[0]])}>
+                    <DeleteIcon/>
+                </span>
+                                                        </>
+                                                    ) : null}
+                                                    <Link to={viewLink} state={{viewData: data}}>
+            <span className={cx("view-icon")}>
+                <ViewIcon/>
+            </span>
                                                     </Link>
                                                 </>
                                             )}

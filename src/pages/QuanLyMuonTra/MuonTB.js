@@ -69,6 +69,13 @@ function MuonTraThietBi() {
         await updateServices.updateMuonTB(loan.maPhieuMuon, {
             trangThai: "Chưa mượn",
         });
+
+        for (let chiTiet of loan.chiTietMuonTBList) {
+            await updateServices.updateStatusTB(chiTiet.maCaBietTB, {
+                trangThai: "Trong kho",
+            });
+        }
+
         handleReload();
     };
 
@@ -77,6 +84,13 @@ function MuonTraThietBi() {
         await updateServices.updateMuonTB(loan.maPhieuMuon, {
             trangThai: "Đang mượn",
         });
+
+        for (let chiTiet of loan.chiTietMuonTBList) {
+            await updateServices.updateStatusTB(chiTiet.maCaBietTB, {
+                trangThai: "Đang mượn",
+            });
+        }
+
         handleReload();
     };
 

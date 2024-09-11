@@ -18,6 +18,18 @@ export const updateThietBi = async (endpoint, id, request) => {
     }
 };
 
+export const updateStatusTB = async (maCaBietTB, updateData) => {
+    try {
+        const response = await httpRequest.put(
+            "/thiet-bi/status/" + maCaBietTB,
+            updateData
+        );
+        return response;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
 export const changeActivating = async (maCaBietTB) => {
     try {
         const response = await httpRequest.patch("thiet-bi" + "/" + maCaBietTB);

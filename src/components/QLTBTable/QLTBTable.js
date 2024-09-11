@@ -165,7 +165,7 @@ function QLTBTable({
                                         //         </td>
                                         //     );
                                         // }
-                                        if (field === "lyDoThanhLy") {
+                                        if (field === "lyDoTL") {
                                             return (
                                                 <td
                                                     className="col-2 p-0"
@@ -177,8 +177,7 @@ function QLTBTable({
                                                         }}
                                                         type="text"
                                                         value={
-                                                            data[field] ||
-                                                            "Thanh lý định kỳ"
+                                                            data[field]
                                                         }
                                                         onChange={(e) => {
                                                             if (

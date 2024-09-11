@@ -57,8 +57,6 @@ function BaoCaoThongKe({ updateData = false, title }) {
     console.log(requestOp8);
 
     const baoCaoKiemKe = async () => {
-        requestOp8.tuNgay = request.tuNgay;
-        requestOp8.denNgay = request.denNgay;
         const response = await baoCaoKiemKeTB(requestOp8);
         op8(response);
     };
@@ -193,7 +191,7 @@ function BaoCaoThongKe({ updateData = false, title }) {
         infoSheet.addRow([]).font = commonFont; // Thêm hàng trống
 
         // Gộp ô và đặt giá trị cho ô đầu tiên trong phạm vi gộp
-        infoSheet.getCell("A2").value = "Phòng Giáo dục & Đào tạo huyện Xuân Trường";
+        infoSheet.getCell("A2").value = "Phòng Giáo dục & Đào tạo Huyện Xuân Trường";
         infoSheet.mergeCells("A2:I2");
         infoSheet.getCell("A2").font = { ...commonFont, bold: true };
         infoSheet.getCell("A2").alignment = { vertical: "middle", horizontal: "center" };
@@ -203,12 +201,11 @@ function BaoCaoThongKe({ updateData = false, title }) {
         infoSheet.getCell("A3").font = { ...commonFont, bold: true };
         infoSheet.getCell("A3").alignment = { vertical: "middle", horizontal: "center" };
 
-        infoSheet.getCell("A5").value = "Báo cáo thiết bị mượn quá hạn";
+        infoSheet.getCell("A5").value = "Báo cáo kiểm kê thiết bị";
         infoSheet.mergeCells("A5:I5");
         infoSheet.getCell("A5").font = { ...commonFont, bold: true };
         infoSheet.getCell("A5").alignment = { vertical: "middle", horizontal: "center" };
 
-        infoSheet.getCell("A6").value = `Thời gian: ${request.tuNgay} - ${request.denNgay}`;
         infoSheet.mergeCells("A6:I6");
         infoSheet.getCell("A6").font = commonFont;
         infoSheet.getCell("A6").alignment = { vertical: "middle", horizontal: "center" };
@@ -229,7 +226,7 @@ function BaoCaoThongKe({ updateData = false, title }) {
         infoSheet.getCell(`E${data.length + 14}`).font = commonFont;
         infoSheet.getCell(`E${data.length + 14}`).alignment = { vertical: "middle", horizontal: "center" };
 
-        infoSheet.getCell(`E${data.length + 15}`).value = `Đặng Thu Hiền`;
+        infoSheet.getCell(`E${data.length + 15}`).value = `Đặng Thị Thu Hiền`;
         infoSheet.mergeCells(`E${data.length + 15}:H${data.length + 15}`);
         infoSheet.getCell(`E${data.length + 15}`).font = commonFont;
         infoSheet.getCell(`E${data.length + 15}`).alignment = { vertical: "middle", horizontal: "center" };
@@ -324,7 +321,7 @@ function BaoCaoThongKe({ updateData = false, title }) {
         infoSheet.addRow([]).font = commonFont; // Thêm hàng trống
 
         // Gộp ô và đặt giá trị cho ô đầu tiên trong phạm vi gộp
-        infoSheet.getCell("A2").value = "Phòng Giáo dục & Đào tạo huyện Xuân Trường";
+        infoSheet.getCell("A2").value = "Phòng Giáo dục & Đào tạo Huyện Xuân Trường";
         infoSheet.mergeCells("A2:G2");
         infoSheet.getCell("A2").font = { ...commonFont, bold: true };
         infoSheet.getCell("A2").alignment = { vertical: "middle", horizontal: "center" };
@@ -355,7 +352,7 @@ function BaoCaoThongKe({ updateData = false, title }) {
         infoSheet.getCell(`E${data.length + 14}`).font = commonFont;
         infoSheet.getCell(`E${data.length + 14}`).alignment = { vertical: "middle", horizontal: "center" };
 
-        infoSheet.getCell(`E${data.length + 15}`).value = `Đặng Thu Hiền`;
+        infoSheet.getCell(`E${data.length + 15}`).value = `Đặng Thị Thu Hiền`;
         infoSheet.mergeCells(`E${data.length + 15}:G${data.length + 15}`);
         infoSheet.getCell(`E${data.length + 15}`).font = commonFont;
         infoSheet.getCell(`E${data.length + 15}`).alignment = { vertical: "middle", horizontal: "center" };
@@ -439,6 +436,9 @@ function BaoCaoThongKe({ updateData = false, title }) {
             return;
         }
 
+        // Define currentDate at the beginning of the function
+        const currentDate = new Date();
+
         const wb = new ExcelJS.Workbook();
         const infoSheet = wb.addWorksheet("Thông tin");
 
@@ -461,11 +461,14 @@ function BaoCaoThongKe({ updateData = false, title }) {
             "Người Mượn",
             "Ngày Mượn",
             "Ngày Hẹn Trả",
-            "Quá Hạn",
+            "Số Ngày Quá Hạn",
         ]).font = { ...commonFont, bold: true }; // Tiêu đề cột
 
         // Thêm dữ liệu vào worksheet
         data.forEach((item, index) => {
+            const ngayHenTra = new Date(item.ngayHenTra);
+            const daysOverdue = Math.max(0, Math.ceil((currentDate - ngayHenTra) / (1000 * 60 * 60 * 24)));
+
             infoSheet.addRow([
                 "",
                 index + 1,
@@ -474,7 +477,7 @@ function BaoCaoThongKe({ updateData = false, title }) {
                 item.nguoiMuon,
                 item.ngayMuon,
                 item.ngayHenTra,
-                item.quaHan ? "Có" : "Không",
+                daysOverdue > 0 ? daysOverdue : "Không",
             ]).font = commonFont;
         });
 
@@ -498,7 +501,7 @@ function BaoCaoThongKe({ updateData = false, title }) {
         infoSheet.getCell("A5").font = { ...commonFont, bold: true };
         infoSheet.getCell("A5").alignment = { vertical: "middle", horizontal: "center" };
 
-        const currentDate = new Date();
+        // Sử dụng currentDate để điền thông tin ngày tháng
         infoSheet.getCell(`E${data.length + 12}`).value = `Nam Định, ngày ${currentDate.getDate()} tháng ${currentDate.getMonth() + 1} năm ${currentDate.getFullYear()}`;
         infoSheet.mergeCells(`E${data.length + 12}:H${data.length + 12}`);
         infoSheet.getCell(`E${data.length + 12}`).font = commonFont;
@@ -514,7 +517,7 @@ function BaoCaoThongKe({ updateData = false, title }) {
         infoSheet.getCell(`E${data.length + 14}`).font = commonFont;
         infoSheet.getCell(`E${data.length + 14}`).alignment = { vertical: "middle", horizontal: "center" };
 
-        infoSheet.getCell(`E${data.length + 15}`).value = `Đặng Thu Hiền`;
+        infoSheet.getCell(`E${data.length + 15}`).value = `Đặng Thị Thu Hiền`;
         infoSheet.mergeCells(`E${data.length + 15}:H${data.length + 15}`);
         infoSheet.getCell(`E${data.length + 15}`).font = commonFont;
         infoSheet.getCell(`E${data.length + 15}`).alignment = { vertical: "middle", horizontal: "center" };
@@ -563,6 +566,9 @@ function BaoCaoThongKe({ updateData = false, title }) {
         });
         saveAs(blob, "report.xlsx");
     };
+    
+
+
 
     const op5 = async (data) => {
         if (data.length === 0) {
@@ -612,7 +618,7 @@ function BaoCaoThongKe({ updateData = false, title }) {
         infoSheet.addRow([]).font = commonFont; // Thêm hàng trống
 
         // Gộp ô và đặt giá trị cho ô đầu tiên trong phạm vi gộp
-        infoSheet.getCell("A2").value = "Phòng Giáo dục & Đào tạo huyện Xuân Trường";
+        infoSheet.getCell("A2").value = "Phòng Giáo dục & Đào tạo Huyện Xuân Trường";
         infoSheet.mergeCells("A2:H2");
         infoSheet.getCell("A2").font = { ...commonFont, bold: true };
         infoSheet.getCell("A2").alignment = { vertical: "middle", horizontal: "center" };
@@ -643,7 +649,7 @@ function BaoCaoThongKe({ updateData = false, title }) {
         infoSheet.getCell(`E${data.length + 14}`).font = commonFont;
         infoSheet.getCell(`E${data.length + 14}`).alignment = { vertical: "middle", horizontal: "center" };
 
-        infoSheet.getCell(`E${data.length + 15}`).value = `Đặng Thu Hiền`;
+        infoSheet.getCell(`E${data.length + 15}`).value = `Đặng Thị Thu Hiền`;
         infoSheet.mergeCells(`E${data.length + 15}:G${data.length + 15}`);
         infoSheet.getCell(`E${data.length + 15}`).font = commonFont;
         infoSheet.getCell(`E${data.length + 15}`).alignment = { vertical: "middle", horizontal: "center" };
@@ -756,7 +762,7 @@ function BaoCaoThongKe({ updateData = false, title }) {
         infoSheet.addRow([]).font = commonFont; // Thêm hàng trống
 
         // Gộp ô và đặt giá trị cho ô đầu tiên trong phạm vi gộp
-        infoSheet.getCell("A2").value = "Phòng Giáo dục & Đào tạo huyện Xuân Trường";
+        infoSheet.getCell("A2").value = "Phòng Giáo dục & Đào tạo Huyện Xuân Trường";
         infoSheet.mergeCells("A2:F2");
         infoSheet.getCell("A2").font = { ...commonFont, bold: true };
         infoSheet.getCell("A2").alignment = { vertical: "middle", horizontal: "center" };
@@ -794,7 +800,7 @@ function BaoCaoThongKe({ updateData = false, title }) {
         infoSheet.getCell(`E${allDataRows + 14}`).font = commonFont;
         infoSheet.getCell(`E${allDataRows + 14}`).alignment = { vertical: "middle", horizontal: "center" };
 
-        infoSheet.getCell(`E${allDataRows + 15}`).value = `Đặng Thu Hiền`;
+        infoSheet.getCell(`E${allDataRows + 15}`).value = `Đặng Thị Thu Hiền`;
         infoSheet.mergeCells(`E${allDataRows + 15}:G${allDataRows + 15}`);
         infoSheet.getCell(`E${allDataRows + 15}`).font = commonFont;
         infoSheet.getCell(`E${allDataRows + 15}`).alignment = { vertical: "middle", horizontal: "center" };
@@ -883,7 +889,7 @@ function BaoCaoThongKe({ updateData = false, title }) {
                 item.maCaBietTB,
                 item.tenTB,
                 item.ngayThanhLy,
-                item.lyDoThanhLy,
+                item.lyDoTL,
             ]).font = commonFont;
         });
 
@@ -893,7 +899,7 @@ function BaoCaoThongKe({ updateData = false, title }) {
 
         // Gộp ô và đặt giá trị cho ô đầu tiên trong phạm vi gộp
         infoSheet.getCell("A" + (2 + spaceAdders)).value =
-            "Phòng Giáo dục & Đào tạo huyện Xuân Trường";
+            "Phòng Giáo dục & Đào tạo Huyện Xuân Trường";
         infoSheet.mergeCells(
             "A" + (2 + spaceAdders) + ":G" + (2 + spaceAdders)
         );
@@ -948,7 +954,7 @@ function BaoCaoThongKe({ updateData = false, title }) {
         infoSheet.getCell(`E${data.length + spaceAdders + 14}`).font = commonFont;
         infoSheet.getCell(`E${data.length + spaceAdders + 14}`).alignment = { vertical: "middle", horizontal: "center" };
 
-        infoSheet.getCell(`E${data.length + spaceAdders + 15}`).value = `Đặng Thu Hiền`;
+        infoSheet.getCell(`E${data.length + spaceAdders + 15}`).value = `Đặng Thị Thu Hiền`;
         infoSheet.mergeCells(
             `E${data.length + spaceAdders + 15}:G${data.length + spaceAdders + 15}`
         );
@@ -1049,7 +1055,7 @@ function BaoCaoThongKe({ updateData = false, title }) {
 
         // Gộp ô và đặt giá trị cho ô đầu tiên trong phạm vi gộp
         infoSheet.getCell("A" + (2 + spaceAdders)).value =
-            "Phòng Giáo dục & Đào tạo huyện Xuân Trường";
+            "Phòng Giáo dục & Đào tạo Huyện Xuân Trường";
         infoSheet.mergeCells(
             "A" + (2 + spaceAdders) + ":G" + (2 + spaceAdders)
         );
@@ -1104,7 +1110,7 @@ function BaoCaoThongKe({ updateData = false, title }) {
         infoSheet.getCell(`E${data.length + spaceAdders + 14}`).font = commonFont;
         infoSheet.getCell(`E${data.length + spaceAdders + 14}`).alignment = { vertical: "middle", horizontal: "center" };
 
-        infoSheet.getCell(`E${data.length + spaceAdders + 15}`).value = `Đặng Thu Hiền`;
+        infoSheet.getCell(`E${data.length + spaceAdders + 15}`).value = `Đặng Thị Thu Hiền`;
         infoSheet.mergeCells(
             `E${data.length + spaceAdders + 15}:G${data.length + spaceAdders + 15}`
         );
@@ -1228,7 +1234,7 @@ function BaoCaoThongKe({ updateData = false, title }) {
 
         // Gộp ô và đặt giá trị cho ô đầu tiên trong phạm vi gộp
         infoSheet.getCell("A" + (2 + spaceAdders)).value =
-            "Phòng Giáo dục & Đào tạo huyện Xuân Trường";
+            "Phòng Giáo dục & Đào tạo Huyện Xuân Trường";
         infoSheet.mergeCells(
             "A" + (2 + spaceAdders) + ":G" + (2 + spaceAdders)
         );
@@ -1275,7 +1281,7 @@ function BaoCaoThongKe({ updateData = false, title }) {
         infoSheet.getCell(`E${data.length + spaceAdders + 14}`).font = commonFont;
         infoSheet.getCell(`E${data.length + spaceAdders + 14}`).alignment = { vertical: "middle", horizontal: "center" };
 
-        infoSheet.getCell(`E${data.length + spaceAdders + 15}`).value = `Đặng Thu Hiền`;
+        infoSheet.getCell(`E${data.length + spaceAdders + 15}`).value = `Đặng Thị Thu Hiền`;
         infoSheet.mergeCells(
             `E${data.length + spaceAdders + 15}:G${data.length + spaceAdders + 15}`
         );
@@ -1406,7 +1412,7 @@ function BaoCaoThongKe({ updateData = false, title }) {
 
         // Gộp ô và đặt giá trị cho ô đầu tiên trong phạm vi gộp
         infoSheet.getCell("A2").value =
-            "Phòng Giáo dục & Đào tạo huyện Xuân Trường";
+            "Phòng Giáo dục & Đào tạo Huyện Xuân Trường";
         infoSheet.mergeCells("A2:G2"); // Gộp ô từ A2 đến G2
 
         infoSheet.getCell("A3").value = "Trường THCS Đặng Xuân Khu";
@@ -1427,7 +1433,7 @@ function BaoCaoThongKe({ updateData = false, title }) {
         infoSheet.getCell(`E${data.length + 14}`).value = `Hiền`;
         infoSheet.mergeCells(`E${data.length + 14}:G${data.length + 14}`); // Gộp ô từ A5 đến G5
 
-        infoSheet.getCell(`E${data.length + 15}`).value = `Đặng Thu Hiền`;
+        infoSheet.getCell(`E${data.length + 15}`).value = `Đặng Thị Thu Hiền`;
         infoSheet.mergeCells(`E${data.length + 15}:G${data.length + 15}`); // Gộp ô từ A5 đến
 
         // tổng cộng

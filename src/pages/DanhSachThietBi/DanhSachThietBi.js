@@ -41,8 +41,10 @@ function DanhSachThietBi() {
     const [totalItems, setTotalItems] = useState(0);
     const [isSearching, setIsSearching] = useState(false);
     const [reload, setReload] = useState(false);
+    localStorage.setItem("khai-bao", "true");
 
-    const isKhaiBao = localStorage.getItem("khai-bao") === true;
+    const isKhaiBao = localStorage.getItem("khai-bao") === "true";
+    
 
     const handleReload = () => {
         setReload(!reload);

@@ -33,7 +33,7 @@ function GhiGiam({ updateDataThanhLy = false, title }) {
         "khoPhong",
         "trangThai",
         "tinhTrang",
-        "lyDoThanhLy",
+        "lyDoTL",
     ];
 
     const requestDefault = {
