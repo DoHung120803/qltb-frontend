@@ -50,12 +50,14 @@ function ThemPhieuTra() {
         };
         getGVs();
 
-        // Set tình trạng trả mặc định là "Đã tiêu hao" cho thiết bị tiêu hao
+        // Thiết lập tình trạng trả mặc định cho các thiết bị
         const devicesWithTinhTrangTra = viewData.chiTietTraTBList.map((device) => {
             if (device.thietBiTieuHao) {
+                // Thiết bị tiêu hao thì mặc định là "Đã tiêu hao"
                 return { ...device, tinhTrangTra: "Đã tiêu hao" };
             }
-            return device;
+            // Thiết bị bình thường, giữ nguyên tình trạng trả hoặc để trống
+            return { ...device, tinhTrangTra: device.tinhTrangTra || "Dùng được" };
         });
         setSelectedDevices(devicesWithTinhTrangTra);
     }, [viewData.chiTietTraTBList]);
@@ -163,27 +165,24 @@ function ThemPhieuTra() {
                             if (field === "tinhTrangTra") {
                                 return (
                                     <td key={colIndex}>
-                                        <select
-                                            value={device[field]}
-                                            onChange={(e) =>
-                                                handleDeviceChange(
-                                                    e,
-                                                    rowIndex,
-                                                    field
-                                                )
-                                            }
-                                            disabled={device.thietBiTieuHao} // Disable dropdown nếu thiết bị là thietBiTieuHao
-                                        >
-                                            <option value="Dùng được">
-                                                Dùng được
-                                            </option>
-                                            <option value="Hỏng">
-                                                Hỏng
-                                            </option>
-                                            <option value="Đã tiêu hao">
-                                                Đã tiêu hao
-                                            </option>
-                                        </select>
+                                        {device.thietBiTieuHao ? (
+
+                                            <select
+                                                value={device[field]}
+                                                onChange={(e) => handleDeviceChange(e, rowIndex, field)}
+                                                disabled={device.thietBiTieuHao}
+                                            >
+                                                <option value="Đã tiêu hao">Đã tiêu hao</option>
+                                            </select>
+                                        ) : (
+                                            <select
+                                                value={device[field]}
+                                                onChange={(e) => handleDeviceChange(e, rowIndex, field)}
+                                            >
+                                                <option value="Dùng được">Dùng được</option>
+                                                <option value="Hỏng">Hỏng</option>
+                                            </select>
+                                        )}
                                     </td>
                                 );
                             }
@@ -192,14 +191,8 @@ function ThemPhieuTra() {
                                     <input
                                         type="text"
                                         value={device[field]}
-                                        onChange={(e) =>
-                                            handleDeviceChange(
-                                                e,
-                                                rowIndex,
-                                                field
-                                            )
-                                        }
-                                        readOnly={field !== "ghiChu"}  // Disable input nếu không phải ghi chú
+                                        onChange={(e) => handleDeviceChange(e, rowIndex, field)}
+                                        readOnly={field !== "ghiChu"}
                                     />
                                 </td>
                             );
@@ -210,7 +203,6 @@ function ThemPhieuTra() {
             </table>
 
             <div className="row mt-5 gap-3 m-0">
-                {/* Nút Thêm xuất hiện khi tạo mới phiếu trả */}
                 <div
                     className={cx(
                         "create-btn",
@@ -222,7 +214,6 @@ function ThemPhieuTra() {
                     </div>
                 </div>
 
-                {/* Nút Quay lại */}
                 <div
                     className={cx(
                         "cancel-btn",
@@ -233,7 +224,6 @@ function ThemPhieuTra() {
                     Hủy
                 </div>
             </div>
-
         </div>
     );
 }

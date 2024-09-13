@@ -1,11 +1,11 @@
 import classNames from "classnames/bind";
-import { Link } from "react-router-dom";
+import {Link} from "react-router-dom";
 import styles from "./Table.module.scss";
-import { DeleteIcon, LineIcon, PencilIcon, ViewIcon } from "../Icons"; // Đảm bảo các biểu tượng được import đúng
+import {DeleteIcon, LineIcon, PencilIcon, ViewIcon} from "../Icons"; // Đảm bảo các biểu tượng được import đúng
 import * as deleteServices from "~/services/deleteServices";
-import { useState } from "react";
+import {useState} from "react";
 import config from "~/config";
-import { suaChuaTB, timThayTB } from "~/services/updateServices";
+import {suaChuaTB, timThayTB} from "~/services/updateServices";
 
 const cx = classNames.bind(styles);
 
@@ -97,8 +97,9 @@ function Table({
     };
 
     return (
-        <div className={cx("p-0", { "chon-TBKB-custom": chonTBKBCustom, "qldm-table": qldm })}>
-            <form name="container-form" method="post" action="/courses/handle-form-actions" className={cx("mt-4 container-fluid p-0")}>
+        <div className={cx("p-0", {"chon-TBKB-custom": chonTBKBCustom, "qldm-table": qldm})}>
+            <form name="container-form" method="post" action="/courses/handle-form-actions"
+                  className={cx("mt-4 container-fluid p-0")}>
                 <table className={cx("table-container", "table mt-5 col-12")}>
                     <thead>
                     <tr className="table-primary">
@@ -117,9 +118,11 @@ function Table({
                                     return (
                                         <td key={index}>
                                             {data.hong ? (
-                                                <div onClick={() => handleSuaChuaTB(data)} className="btn btn-primary">Sửa chữa</div>
+                                                <div onClick={() => handleSuaChuaTB(data)}
+                                                     className="btn btn-primary">Sửa chữa</div>
                                             ) : (
-                                                <div onClick={() => handleTimThayTB(data)} className="btn btn-primary">Tìm thấy</div>
+                                                <div onClick={() => handleTimThayTB(data)}
+                                                     className="btn btn-primary">Tìm thấy</div>
                                             )}
                                         </td>
                                     );
@@ -132,27 +135,30 @@ function Table({
                                 if (field === "dangHoatDong") {
                                     return (
                                         <td key={index}>
-                                            <input className="col-8 ms-auto" type="checkbox" checked={data[field]} onChange={(e) => {
-                                                handleCheckBox(field, _index);
-                                                handleReRender();
-                                            }} />
+                                            <input className="col-8 ms-auto" type="checkbox" checked={data[field]}
+                                                   onChange={(e) => {
+                                                       handleCheckBox(field, _index);
+                                                       handleReRender();
+                                                   }}/>
                                         </td>
                                     );
                                 }
                                 if (field === "thietBiTieuHao") {
                                     return (
                                         <td key={index}>
-                                            <input className="col-8 ms-auto" type="checkbox" checked={data[field]} onChange={(e) => {
-                                                handleCheckBox(field, _index);
-                                                handleReRender();
-                                            }} />
+                                            <input className="col-8 ms-auto" type="checkbox" checked={data[field]}
+                                                   onChange={(e) => {
+                                                       handleCheckBox(field, _index);
+                                                       handleReRender();
+                                                   }}/>
                                         </td>
                                     );
                                 }
                                 if (field === "#") {
                                     return (
                                         <td key={index}>
-                                            <input onClick={(e) => handleSelectedDevices(e, data)} type="checkbox" className="checkbox-row" />
+                                            <input onClick={(e) => handleSelectedDevices(e, data)} type="checkbox"
+                                                   className="checkbox-row"/>
                                         </td>
                                     );
                                 }
@@ -177,19 +183,23 @@ function Table({
                                                 request: JSON.parse(localStorage.getItem("choDuyetList"))[data.maPhieuTang],
                                                 maPhieuTang: data.maPhieuTang,
                                             }}>
-                                                <div style={{ marginRight: "5px" }} className="btn btn-primary">Duyệt</div>
+                                                <div style={{marginRight: "5px"}} className="btn btn-primary">Duyệt
+                                                </div>
                                             </Link>
-                                            <div onClick={() => huyTangTBHandler(data.maPhieuTang)} className="btn btn-danger">Hủy</div>
+                                            <div onClick={() => huyTangTBHandler(data.maPhieuTang)}
+                                                 className="btn btn-danger">Hủy
+                                            </div>
                                         </div>
                                     ) : (
                                         tangThietBi && (
                                             <>
-                                                    <span className={cx("delete-icon")} onClick={() => handleDelete(data[fields[0]])}>
-                                                        <DeleteIcon />
+                                                    <span className={cx("delete-icon")}
+                                                          onClick={() => handleDelete(data[fields[0]])}>
+                                                        <DeleteIcon/>
                                                     </span>
-                                                <Link to={viewLink} state={{ viewData: data }}>
+                                                <Link to={viewLink} state={{viewData: data}}>
                                                         <span className={cx("view-icon")}>
-                                                            <ViewIcon />
+                                                            <ViewIcon/>
                                                         </span>
                                                 </Link>
                                             </>
@@ -202,26 +212,26 @@ function Table({
                                                 <>
                                                     <Link to={linkUpdate} state={data}>
                                                             <span className={cx("update-icon")}>
-                                                                <PencilIcon />
+                                                                <PencilIcon/>
                                                                 <span className={cx("line-icon")}>
-                                                                    <LineIcon />
+                                                                    <LineIcon/>
                                                                 </span>
                                                             </span>
                                                     </Link>
                                                     <span className={cx("delete-icon")} onClick={() =>
                                                         handleDelete(data[[fields[0]]])
                                                     }>
-                                                            <DeleteIcon />
+                                                            <DeleteIcon/>
                                                         </span>
-                                                    <Link to={viewLink} state={{ viewData: data }}>
+                                                    <Link to={viewLink} state={{viewData: data}}>
                                                             <span className={cx("view-icon")}>
-                                                                <ViewIcon />
+                                                                <ViewIcon/>
                                                             </span>
                                                     </Link>
                                                 </>
                                             )}
 
-{isMuonTraThietBi && (
+                                            {isMuonTraThietBi && (
                                                 <>
                                                     {data.trangThai === "Chưa mượn" ? (
                                                         <>
@@ -247,10 +257,11 @@ function Table({
                                                 </>
                                             )}
 
+
                                             {isLichSuTra && (
-                                                <Link to={viewLink} state={{ viewData: data }}>
+                                                <Link to={viewLink} state={{viewData: data}}>
                                                         <span className={cx("view-icon")}>
-                                                            <ViewIcon />
+                                                            <ViewIcon/>
                                                         </span>
                                                 </Link>
                                             )}
